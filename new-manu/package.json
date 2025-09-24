@@ -21,7 +21,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "node server/index.js"
+    "server": "node server/index.js",
+    "dev": "concurrently \"npm run server\" \"npm start\"",
+    "start:prod": "NODE_ENV=production node server/index.js"
   },
   "proxy": "http://localhost:5001",
   "eslintConfig": {
@@ -50,5 +52,12 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
     "concurrently": "^9.1.2"
+  }
+  ,
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "node-fetch": "^2.7.0"
   }
 }
