@@ -127,22 +127,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         // eslint-disable-next-line
     }, [currentStep, currentQuestion]);
 
-    const handleManualSubmit = () => {
-        if (!companyData?.company_name || !companyData?.comp_address) {
-            alert('Please fill all required company details.');
-            return;
-        }
-        setManualFillRequired(false);
-        setMessages(prev => [...prev, {
-            id: Date.now(),
-            type: 'bot',
-            content: 'Thanks for providing your company information. Let\'s continue.',
-            timestamp: new Date()
-        }]);
-        setCurrentStep('data_collection');
-        setAwaitingInput(true);
-        setCurrentQuestion(0);
-    }
+    // removed unused handleManualSubmit
 
 
 

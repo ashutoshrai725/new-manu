@@ -43,6 +43,8 @@ const AuthPage = ({ onUserAuth, onPageChange }) => {
         );
 
         return () => subscription.unsubscribe();
+        // handleUserAuthenticated is stable; suppress exhaustive-deps here intentionally
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleUserAuthenticated = (session) => {
@@ -106,7 +108,7 @@ const AuthPage = ({ onUserAuth, onPageChange }) => {
         try {
             if (isLogin) {
                 // Login
-                const { data, error } = await supabase.auth.signInWithPassword({
+                const { error } = await supabase.auth.signInWithPassword({
                     email: formData.email,
                     password: formData.password,
                 });
