@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import './AIAgent2Page.css';
 
-const API_KEY = "AIzaSyBj9AInwAeHJG8QLVcTmdHxh7AGaTe4si4";
+const API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
 
 const AIAgent2Page = ({ onPageChange }) => {
