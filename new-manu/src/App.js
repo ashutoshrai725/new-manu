@@ -4,7 +4,6 @@ import './App.css';
 import LandingPage from './components/LandingPage/LandingPage';
 import AuthPage from './components/Auth/AuthPage';
 import DocumentUploadPage from './components/Upload/DocumentUploadPage';
-import HeroSection from './components/LandingPage/HeroSection';
 import AIAgentPage from './components/AIAgent/AIAgentPage'; // ← NEW IMPORT
 import AIAgent2Page from './components/AIAgent/AIAgent2Page';
 

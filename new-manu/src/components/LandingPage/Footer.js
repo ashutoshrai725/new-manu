@@ -35,10 +35,10 @@ const Footer = () => {
                     <div>
                         <h3 className="text-lg font-semibold mb-4 text-manu-green">Services</h3>
                         <ul className="space-y-2">
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Import Documentation</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Export Documentation</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">AI Document Processing</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Compliance Check</a></li>
+                            <li><button className="text-gray-400 hover:text-white transition-colors">Import Documentation</button></li>
+                            <li><button className="text-gray-400 hover:text-white transition-colors">Export Documentation</button></li>
+                            <li><button className="text-gray-400 hover:text-white transition-colors">AI Document Processing</button></li>
+                            <li><button className="text-gray-400 hover:text-white transition-colors">Compliance Check</button></li>
                         </ul>
                     </div>
 
@@ -46,10 +46,10 @@ const Footer = () => {
                     <div>
                         <h3 className="text-lg font-semibold mb-4 text-manu-green">Company</h3>
                         <ul className="space-y-2">
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Help</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                            <li><button className="text-gray-400 hover:text-white transition-colors">About Us</button></li>
+                            <li><button className="text-gray-400 hover:text-white transition-colors">Contact Us</button></li>
+                            <li><button className="text-gray-400 hover:text-white transition-colors">Help</button></li>
+                            <li><button className="text-gray-400 hover:text-white transition-colors">Privacy Policy</button></li>
                         </ul>
                     </div>
                 </div>

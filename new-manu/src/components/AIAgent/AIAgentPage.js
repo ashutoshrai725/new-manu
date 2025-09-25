@@ -38,6 +38,87 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
     const [products, setProducts] = useState([]);
 
+    // --- Persist chat state per user in localStorage ---
+    const storageKey = `manudocs.aiagent.chat.${user?.id || 'guest'}`;
+
+    // Load saved chat state on mount or when user changes
+    useEffect(() => {
+        try {
+            const raw = typeof window !== 'undefined' ? localStorage.getItem(storageKey) : null;
+            if (raw) {
+                const saved = JSON.parse(raw);
+                if (saved) {
+                    setMessages(saved.messages || []);
+                    setCurrentStep(saved.currentStep || 'loading');
+                    setInitialized(Boolean(saved.initialized));
+                    setSelectedTemplates(saved.selectedTemplates || []);
+                    setCompanyData(saved.companyData || null);
+                    setUserInputs(saved.userInputs || {});
+                    setCurrentQuestion(saved.currentQuestion || 0);
+                    setAwaitingInput(Boolean(saved.awaitingInput));
+                    setGeneratedDocuments(saved.generatedDocuments || []);
+                    setActiveDocIndex(saved.activeDocIndex || 0);
+                    setManualFillRequired(Boolean(saved.manualFillRequired));
+                    setProductEntryStep(saved.productEntryStep || 0);
+                    setCurrentProduct(saved.currentProduct || { item: '', description: '', hsCode: '', quantity: '', unitPrice: '' });
+                    setShowSuggestions(Boolean(saved.showSuggestions));
+                    setFilteredItems(saved.filteredItems || []);
+                    setProducts(saved.products || []);
+                }
+            }
+        } catch (_e) {
+            // ignore corrupt state
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user?.id]);
+
+    // Save chat state whenever significant pieces change
+    useEffect(() => {
+        try {
+            const stateToSave = {
+                messages,
+                currentStep,
+                initialized,
+                selectedTemplates,
+                companyData,
+                userInputs,
+                currentQuestion,
+                awaitingInput,
+                generatedDocuments,
+                activeDocIndex,
+                manualFillRequired,
+                productEntryStep,
+                currentProduct,
+                showSuggestions,
+                filteredItems,
+                products
+            };
+            if (typeof window !== 'undefined') {
+                localStorage.setItem(storageKey, JSON.stringify(stateToSave));
+            }
+        } catch (_e) {
+            // best-effort persistence
+        }
+    }, [
+        messages,
+        currentStep,
+        initialized,
+        selectedTemplates,
+        companyData,
+        userInputs,
+        currentQuestion,
+        awaitingInput,
+        generatedDocuments,
+        activeDocIndex,
+        manualFillRequired,
+        productEntryStep,
+        currentProduct,
+        showSuggestions,
+        filteredItems,
+        products,
+        storageKey
+    ]);
+
 
     useEffect(() => {
         if (currentStep === 'data_collection' && awaitingInput === false) {
@@ -46,22 +127,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         // eslint-disable-next-line
     }, [currentStep, currentQuestion]);
 
-    const handleManualSubmit = () => {
-        if (!companyData?.company_name || !companyData?.comp_address) {
-            alert('Please fill all required company details.');
-            return;
-        }
-        setManualFillRequired(false);
-        setMessages(prev => [...prev, {
-            id: Date.now(),
-            type: 'bot',
-            content: 'Thanks for providing your company information. Let\'s continue.',
-            timestamp: new Date()
-        }]);
-        setCurrentStep('data_collection');
-        setAwaitingInput(true);
-        setCurrentQuestion(0);
-    }
+    // removed unused handleManualSubmit
 
 
 
@@ -85,6 +151,18 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
     useEffect(() => {
         if (initialized) return;
+
+        // If saved state exists and indicates initialized, skip re-initialization
+        try {
+            const raw = typeof window !== 'undefined' ? localStorage.getItem(storageKey) : null;
+            if (raw) {
+                const saved = JSON.parse(raw);
+                if (saved?.initialized) {
+                    setInitialized(true);
+                    return;
+                }
+            }
+        } catch (_e) {}
 
         if (!documentsUploaded) {
             setMessages([{
@@ -119,7 +197,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             setInitialized(true);
         }, 1000);
 
-    }, [documentsUploaded, initialized]);
+    }, [documentsUploaded, initialized, storageKey]);
 
     const fetchCompanyData = async () => {
         try {
