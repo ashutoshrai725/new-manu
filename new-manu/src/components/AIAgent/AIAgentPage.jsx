@@ -1,24 +1,21 @@
-// src/components/AIAgent/AIAgentPage.js
-
-import { ITEM_DATABASE } from './itemDatabase';
-
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { ArrowLeft, MessageCircle, FileText, Download, Upload } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, MessageCircle, FileText } from 'lucide-react';
-import { createClient } from '@supabase/supabase-js';
 import Header from '../LandingPage/Header';
-import { generateDocuments } from '../LandingPage/TemplateEngine'; // ← PROPER IMPORT
+import { generateDocuments } from '../LandingPage/TemplateEngine';
+import { ITEM_DATABASE } from './itemDatabase';
 
-
+// Initialize Supabase client
 const supabase = createClient(
     process.env.REACT_APP_SUPABASE_URL,
     process.env.REACT_APP_SUPABASE_ANON_KEY
 );
 
 const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true }) => {
+    // State management
     const [messages, setMessages] = useState([]);
     const [currentStep, setCurrentStep] = useState('loading');
     const [initialized, setInitialized] = useState(false);
@@ -27,78 +24,110 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     const [userInputs, setUserInputs] = useState({});
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [awaitingInput, setAwaitingInput] = useState(false);
-    const [generatedDocuments, setGeneratedDocuments] = useState([]); // ← ADDED STATE
+    const [generatedDocuments, setGeneratedDocuments] = useState([]);
     const [activeDocIndex, setActiveDocIndex] = useState(0);
     const [manualFillRequired, setManualFillRequired] = useState(false);
-
-    const [productEntryStep, setProductEntryStep] = useState(0); // 0: item, 1: qty, 2: price
-    const [currentProduct, setCurrentProduct] = useState({ item: '', description: '', hsCode: '', quantity: '', unitPrice: '' });
+    
+    // Product entry states
+    const [productEntryStep, setProductEntryStep] = useState(0);
+    const [currentProduct, setCurrentProduct] = useState({ 
+        item: '', 
+        description: '', 
+        hsCode: '', 
+        quantity: '', 
+        unitPrice: '' 
+    });
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filteredItems, setFilteredItems] = useState([]);
-
     const [products, setProducts] = useState([]);
 
-    // --- Persist chat state per user in localStorage ---
-    const storageKey = `manudocs.aiagent.chat.${user?.id || 'guest'}`;
+    // Storage key for persistence
+    const storageKey = useMemo(() => `manudocs.aiagent.chat.${user?.id || 'guest'}`, [user?.id]);
+
+    // Questions configuration
+    const questions = useMemo(() => [
+        { field: 'buyer_company', question: 'What is the buyer\'s company name?', type: 'text' },
+        { field: 'buyer_address', question: 'What is the buyer\'s complete address with country?', type: 'textarea' },
+        { field: 'products', question: 'Please add your products one by one.', type: 'products' },
+        { field: 'currency', question: 'What currency would you like to use?', type: 'select', options: ['USD', 'EUR', 'INR', 'GBP'] },
+        { field: 'port_loading', question: 'Which is the Port of Loading?', type: 'text' },
+        { field: 'port_discharge', question: 'Which is the Port of Discharge?', type: 'text' },
+        { field: 'transport_mode', question: 'What is the mode of transport?', type: 'select', options: ['Sea', 'Air', 'Road'] },
+        { field: 'credit_note_amount', question: 'What is the amount for the Credit Note?', type: 'text' },
+        { field: 'debit_note_amount', question: 'What is the amount for the Debit Note?', type: 'text' },
+    ], []);
 
     // Load saved chat state on mount or when user changes
     useEffect(() => {
-        try {
-            const raw = typeof window !== 'undefined' ? localStorage.getItem(storageKey) : null;
-            if (raw) {
-                const saved = JSON.parse(raw);
-                if (saved) {
-                    setMessages(saved.messages || []);
-                    setCurrentStep(saved.currentStep || 'loading');
-                    setInitialized(Boolean(saved.initialized));
-                    setSelectedTemplates(saved.selectedTemplates || []);
-                    setCompanyData(saved.companyData || null);
-                    setUserInputs(saved.userInputs || {});
-                    setCurrentQuestion(saved.currentQuestion || 0);
-                    setAwaitingInput(Boolean(saved.awaitingInput));
-                    setGeneratedDocuments(saved.generatedDocuments || []);
-                    setActiveDocIndex(saved.activeDocIndex || 0);
-                    setManualFillRequired(Boolean(saved.manualFillRequired));
-                    setProductEntryStep(saved.productEntryStep || 0);
-                    setCurrentProduct(saved.currentProduct || { item: '', description: '', hsCode: '', quantity: '', unitPrice: '' });
-                    setShowSuggestions(Boolean(saved.showSuggestions));
-                    setFilteredItems(saved.filteredItems || []);
-                    setProducts(saved.products || []);
+        const loadSavedState = () => {
+            try {
+                const raw = typeof window !== 'undefined' ? localStorage.getItem(storageKey) : null;
+                if (raw) {
+                    const saved = JSON.parse(raw);
+                    if (saved) {
+                        setMessages(saved.messages || []);
+                        setCurrentStep(saved.currentStep || 'loading');
+                        setInitialized(Boolean(saved.initialized));
+                        setSelectedTemplates(saved.selectedTemplates || []);
+                        setCompanyData(saved.companyData || null);
+                        setUserInputs(saved.userInputs || {});
+                        setCurrentQuestion(saved.currentQuestion || 0);
+                        setAwaitingInput(Boolean(saved.awaitingInput));
+                        setGeneratedDocuments(saved.generatedDocuments || []);
+                        setActiveDocIndex(saved.activeDocIndex || 0);
+                        setManualFillRequired(Boolean(saved.manualFillRequired));
+                        setProductEntryStep(saved.productEntryStep || 0);
+                        setCurrentProduct(saved.currentProduct || { 
+                            item: '', 
+                            description: '', 
+                            hsCode: '', 
+                            quantity: '', 
+                            unitPrice: '' 
+                        });
+                        setShowSuggestions(Boolean(saved.showSuggestions));
+                        setFilteredItems(saved.filteredItems || []);
+                        setProducts(saved.products || []);
+                    }
                 }
+            } catch (error) {
+                console.warn('Error loading saved chat state:', error);
             }
-        } catch (_e) {
-            // ignore corrupt state
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user?.id]);
+        };
+
+        loadSavedState();
+    }, [storageKey]);
 
     // Save chat state whenever significant pieces change
     useEffect(() => {
-        try {
-            const stateToSave = {
-                messages,
-                currentStep,
-                initialized,
-                selectedTemplates,
-                companyData,
-                userInputs,
-                currentQuestion,
-                awaitingInput,
-                generatedDocuments,
-                activeDocIndex,
-                manualFillRequired,
-                productEntryStep,
-                currentProduct,
-                showSuggestions,
-                filteredItems,
-                products
-            };
-            if (typeof window !== 'undefined') {
-                localStorage.setItem(storageKey, JSON.stringify(stateToSave));
+        const saveState = () => {
+            try {
+                const stateToSave = {
+                    messages,
+                    currentStep,
+                    initialized,
+                    selectedTemplates,
+                    companyData,
+                    userInputs,
+                    currentQuestion,
+                    awaitingInput,
+                    generatedDocuments,
+                    activeDocIndex,
+                    manualFillRequired,
+                    productEntryStep,
+                    currentProduct,
+                    showSuggestions,
+                    filteredItems,
+                    products
+                };
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem(storageKey, JSON.stringify(stateToSave));
+                }
+            } catch (error) {
+                console.warn('Error saving chat state:', error);
             }
-        } catch (_e) {
-            // best-effort persistence
-        }
+        };
+
+        saveState();
     }, [
         messages,
         currentStep,
@@ -124,31 +153,9 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         if (currentStep === 'data_collection' && awaitingInput === false) {
             askNextQuestion();
         }
-        // eslint-disable-next-line
     }, [currentStep, currentQuestion]);
 
-    // removed unused handleManualSubmit
-
-
-
-
-    // Questions to ask user
-    const questions = [
-        { field: 'buyer_company', question: 'What is the buyer\'s company name?', type: 'text' },
-        { field: 'buyer_address', question: 'What is the buyer\'s complete address with country?', type: 'textarea' },
-        { field: 'products', question: 'Please add your products one by one.', type: 'products' },
-
-        { field: 'currency', question: 'What currency would you like to use?', type: 'select', options: ['USD', 'EUR', 'INR', 'GBP'] },
-        { field: 'port_loading', question: 'Which is the Port of Loading?', type: 'text' },
-        { field: 'port_discharge', question: 'Which is the Port of Discharge?', type: 'text' },
-        { field: 'transport_mode', question: 'What is the mode of transport?', type: 'select', options: ['Sea', 'Air', 'Road'] },
-
-        { field: 'credit_note_amount', question: 'What is the amount for the Credit Note?', type: 'text' },
-
-
-        { field: 'debit_note_amount', question: 'What is the amount for the Debit Note?', type: 'text' },
-    ];
-
+    // Initialize the chat on component mount
     useEffect(() => {
         if (initialized) return;
 
@@ -209,46 +216,63 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 timestamp: new Date()
             }]);
 
+            // First try to fetch existing profile without .single() to avoid error when no rows exist
             const { data, error } = await supabase
                 .from('user_profiles')
                 .select('*')
                 .eq('user_id', user.id)
-                .single();
+                .limit(1);
 
-            if (error || !data) {
-                console.error('Error fetching company data:', error);
-                // Set flag to show manual fill UI
-                setManualFillRequired(true);
+            // Check if we got data
+            if (error) {
+                console.error('Supabase query error:', error);
+                throw error;
+            }
 
+            if (!data || data.length === 0) {
+                // No user profile found, use fallback data or prompt for manual entry
+                console.log('No user profile found for user:', user.id);
+                
+                // Try to use basic user info as fallback
+                const fallbackData = {
+                    company_name: user?.user_metadata?.company_name || user?.company_name || 'Your Company',
+                    comp_reg_address: user?.user_metadata?.address || user?.address || 'Your Company Address',
+                    email: user?.email || 'contact@company.com'
+                };
+
+                setCompanyData(fallbackData);
                 setMessages(prev => [...prev, {
                     id: Date.now(),
                     type: 'bot',
-                    content: 'We could not retrieve your company information automatically. Please fill it manually below.',
-                    manualFill: true,
+                    content: `📝 Using basic information. You can update details later:\n\n• Company: ${fallbackData.company_name}\n• Address: ${fallbackData.comp_reg_address}\n\nLet's continue with the questions.`,
                     timestamp: new Date()
                 }]);
-                return null;
+
+                return fallbackData;
             }
 
-            setCompanyData(data);
+            // Use the found profile data
+            const profileData = data[0];
+            setCompanyData(profileData);
 
             setMessages(prev => [...prev, {
                 id: Date.now(),
                 type: 'bot',
-                content: `✅ Company info loaded:\n\n• Company: ${data.company_name}\n\n• Address: ${data.comp_reg_address} \n\n
-                Now, please answer some questions.`,
+                content: `✅ Company info loaded:\n\n• Company: ${profileData.company_name}\n• Address: ${profileData.comp_reg_address}\n\nNow, please answer some questions.`,
                 timestamp: new Date()
             }]);
 
-            return data;
+            return profileData;
 
         } catch (error) {
             console.error('Supabase fetch error:', error);
+            
+            // Fallback to manual entry on any error
             setManualFillRequired(true);
             setMessages(prev => [...prev, {
                 id: Date.now(),
                 type: 'bot',
-                content: 'There was an error fetching your company info. Please enter the details manually below.',
+                content: 'We could not retrieve your company information automatically. Please fill it manually below.',
                 manualFill: true,
                 timestamp: new Date()
             }]);
