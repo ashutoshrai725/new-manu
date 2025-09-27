@@ -1,4 +1,4 @@
-// src/components/Upload/DocumentUploadPage.js
+// src/components/Upload/DocumentUploadPage.jsx
 import React, { useState } from 'react';
 import { ArrowLeft, Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import Header from '../LandingPage/Header';
@@ -7,12 +7,12 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
     const [uploadStatus, setUploadStatus] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    // Step management - KEY ADDITION
+    // Step management
     const [currentStep, setCurrentStep] = useState(1); // 1: Aadhar, 2: Company, 3: Completed
     const [aadharCompleted, setAadharCompleted] = useState(false);
     const [companyCompleted, setCompanyCompleted] = useState(false);
 
-    // Aadhar Upload Function - MODIFIED
+    // Aadhar Upload Function
     const handleAadharUpload = async (file) => {
         setLoading(true);
         setUploadStatus('uploading');
@@ -35,7 +35,6 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
             if (response.ok) {
                 setUploadStatus('success');
                 setAadharCompleted(true);
-                console.log('Aadhar uploaded successfully');
 
                 // Move to next step after 2 seconds
                 setTimeout(() => {
@@ -46,14 +45,13 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
                 throw new Error('Upload failed');
             }
         } catch (error) {
-            console.error('Upload error:', error);
             setUploadStatus('error');
         } finally {
             setLoading(false);
         }
     };
 
-    // Company Document Upload Function - MODIFIED
+    // Company Document Upload Function
     const handleCompanyUpload = async (file) => {
         setLoading(true);
         setUploadStatus('uploading');
@@ -76,7 +74,6 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
             if (response.ok) {
                 setUploadStatus('success');
                 setCompanyCompleted(true);
-                console.log('Company document uploaded successfully');
 
                 // Move to completed step after 2 seconds
                 setTimeout(() => {
@@ -87,7 +84,6 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
                 throw new Error('Upload failed');
             }
         } catch (error) {
-            console.error('Upload error:', error);
             setUploadStatus('error');
         } finally {
             setLoading(false);
@@ -117,7 +113,7 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
                         Back to Home
                     </button>
 
-                    {/* Progress Indicator - NEW */}
+                    {/* Progress Indicator */}
                     <div className="mb-8">
                         <div className="flex items-center space-x-4">
                             <div className={`flex items-center space-x-2 ${currentStep >= 1 ? 'text-blue-600' : 'text-gray-400'}`}>

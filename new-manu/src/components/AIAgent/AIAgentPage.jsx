@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { ArrowLeft, MessageCircle, FileText, Download, Upload } from 'lucide-react';
+import { MessageCircle, FileText } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -40,9 +40,15 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filteredItems, setFilteredItems] = useState([]);
     const [products, setProducts] = useState([]);
+    const [isSendingEmail, setIsSendingEmail] = useState(false);
 
     // Storage key for persistence
     const storageKey = useMemo(() => `manudocs.aiagent.chat.${user?.id || 'guest'}`, [user?.id]);
+
+    // Unique ID generator to avoid duplicate keys
+    const generateUniqueId = useCallback(() => {
+        return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    }, []);
 
     // Questions configuration
     const questions = useMemo(() => [
@@ -87,6 +93,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                         setShowSuggestions(Boolean(saved.showSuggestions));
                         setFilteredItems(saved.filteredItems || []);
                         setProducts(saved.products || []);
+                        setIsSendingEmail(Boolean(saved.isSendingEmail));
                     }
                 }
             } catch (error) {
@@ -117,7 +124,8 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                     currentProduct,
                     showSuggestions,
                     filteredItems,
-                    products
+                    products,
+                    isSendingEmail
                 };
                 if (typeof window !== 'undefined') {
                     localStorage.setItem(storageKey, JSON.stringify(stateToSave));
@@ -145,15 +153,89 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         showSuggestions,
         filteredItems,
         products,
+        isSendingEmail,
         storageKey
     ]);
 
+    // Complete data collection - FIXED VERSION
+    const completeDataCollection = useCallback(async () => {
+        setMessages(prev => [...prev, {
+            id: generateUniqueId(),
+            type: 'bot',
+            content: '🎉 All information collected!\n\nGenerating your documents now...\n\n📄 Templates will be populated with:\n✅ Company data (auto-filled)\n✅ Your provided information\n✅ Professional formatting',
+            timestamp: new Date()
+        }]);
+
+        setCurrentStep('generating');
+
+        // Generate templates using the engine - FIXED
+        try {
+            const generatedDocs = generateDocuments(selectedTemplates, companyData, userInputs);
+            setGeneratedDocuments(generatedDocs);
+
+            setTimeout(() => {
+                setMessages(prev => [...prev, {
+                    id: generateUniqueId(),
+                    type: 'bot',
+                    content: '✅ Documents generated successfully!\n\nYou can preview and download them from the right panel.',
+                    timestamp: new Date(),
+                    showDownloadButton: true
+                }]);
+                setCurrentStep('completed');
+            }, 3000);
+        } catch (error) {
+            console.error('Template generation error:', error);
+            setMessages(prev => [...prev, {
+                id: generateUniqueId(),
+                type: 'bot',
+                content: '❌ Error generating documents. Please try again.',
+                timestamp: new Date()
+            }]);
+        }
+    }, [selectedTemplates, companyData, userInputs, generateUniqueId]);
+
+    // Ask questions one by one
+    const askNextQuestion = useCallback(() => {
+        if (currentQuestion < questions.length) {
+            const question = questions[currentQuestion];
+
+            // If it's the products step, trigger product entry UI
+            if (question.field === 'products') {
+                setMessages(prev => [...prev, {
+                    id: generateUniqueId(),
+                    type: 'bot',
+                    content: `Let's add your products one by one. Start typing the item name below.`,
+                    timestamp: new Date(),
+                    showInput: true,
+                    inputType: 'products',
+                    expectedField: 'products'
+                }]);
+                setAwaitingInput(true);
+                return;
+            }
+
+            // Default question UI
+            setMessages(prev => [...prev, {
+                id: generateUniqueId(),
+                type: 'bot',
+                content: `${currentQuestion + 1}/${questions.length} - ${question.question}`,
+                timestamp: new Date(),
+                showInput: true,
+                inputType: question.type,
+                inputOptions: question.options,
+                expectedField: question.field
+            }]);
+            setAwaitingInput(true);
+        } else {
+            completeDataCollection();
+        }
+    }, [currentQuestion, questions, completeDataCollection, generateUniqueId]);
 
     useEffect(() => {
         if (currentStep === 'data_collection' && awaitingInput === false) {
             askNextQuestion();
         }
-    }, [currentStep, currentQuestion]);
+    }, [currentStep, currentQuestion, awaitingInput, askNextQuestion]);
 
     // Initialize the chat on component mount
     useEffect(() => {
@@ -210,7 +292,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         try {
             setManualFillRequired(false); // reset on every attempt
             setMessages(prev => [...prev, {
-                id: Date.now(),
+                id: generateUniqueId(),
                 type: 'bot',
                 content: '🔄 Fetching your company information...',
                 timestamp: new Date()
@@ -242,7 +324,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
                 setCompanyData(fallbackData);
                 setMessages(prev => [...prev, {
-                    id: Date.now(),
+                    id: generateUniqueId(),
                     type: 'bot',
                     content: `📝 Using basic information. You can update details later:\n\n• Company: ${fallbackData.company_name}\n• Address: ${fallbackData.comp_reg_address}\n\nLet's continue with the questions.`,
                     timestamp: new Date()
@@ -256,7 +338,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             setCompanyData(profileData);
 
             setMessages(prev => [...prev, {
-                id: Date.now(),
+                id: generateUniqueId(),
                 type: 'bot',
                 content: `✅ Company info loaded:\n\n• Company: ${profileData.company_name}\n• Address: ${profileData.comp_reg_address}\n\nNow, please answer some questions.`,
                 timestamp: new Date()
@@ -270,7 +352,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             // Fallback to manual entry on any error
             setManualFillRequired(true);
             setMessages(prev => [...prev, {
-                id: Date.now(),
+                id: generateUniqueId(),
                 type: 'bot',
                 content: 'We could not retrieve your company information automatically. Please fill it manually below.',
                 manualFill: true,
@@ -298,7 +380,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
         setMessages(prev => [...prev,
         {
-            id: Date.now(),
+            id: generateUniqueId(),
             type: 'user',
             content: `Selected: ${selected.map(t => t.name).join(', ')}`,
             timestamp: new Date()
@@ -318,44 +400,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
     };
 
-
-    // Ask questions one by one
-    const askNextQuestion = () => {
-        if (currentQuestion < questions.length) {
-            const question = questions[currentQuestion];
-
-            // If it's the products step, trigger product entry UI
-            if (question.field === 'products') {
-                setMessages(prev => [...prev, {
-                    id: Date.now(),
-                    type: 'bot',
-                    content: `Let's add your products one by one. Start typing the item name below.`,
-                    timestamp: new Date(),
-                    showInput: true,
-                    inputType: 'products',
-                    expectedField: 'products'
-                }]);
-                setAwaitingInput(true);
-                return;
-            }
-
-            // Default question UI
-            setMessages(prev => [...prev, {
-                id: Date.now(),
-                type: 'bot',
-                content: `${currentQuestion + 1}/${questions.length} - ${question.question}`,
-                timestamp: new Date(),
-                showInput: true,
-                inputType: question.type,
-                inputOptions: question.options,
-                expectedField: question.field
-            }]);
-            setAwaitingInput(true);
-        } else {
-            completeDataCollection();
-        }
-    };
-
     // Handle user input
     const handleUserInput = (inputValue, field) => {
         setUserInputs(prev => ({
@@ -364,7 +408,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         }));
 
         setMessages(prev => [...prev, {
-            id: Date.now(),
+            id: generateUniqueId(),
             type: 'user',
             content: inputValue,
             timestamp: new Date()
@@ -373,7 +417,14 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         setCurrentQuestion(prev => prev + 1);
         setAwaitingInput(false);
 
-
+        // Disable the input in the previous message
+        setMessages(prevMessages => 
+            prevMessages.map(msg => 
+                msg.showInput && msg.expectedField === field 
+                    ? { ...msg, showInput: false, inputDisabled: true, userAnswer: inputValue }
+                    : msg
+            )
+        );
     };
 
     const downloadAllPdfs = async () => {
@@ -403,41 +454,121 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         }
     };
 
+    // Function to generate PDF binary data and send via email webhook
+    const sendPdfViaEmail = async () => {
+        if (generatedDocuments.length === 0) {
+            alert("No documents generated to send.");
+            return;
+        }
 
-    // Complete data collection - FIXED VERSION
-    const completeDataCollection = () => {
-        setMessages(prev => [...prev, {
-            id: Date.now(),
-            type: 'bot',
-            content: '🎉 All information collected!\n\nGenerating your documents now...\n\n📄 Templates will be populated with:\n✅ Company data (auto-filled)\n✅ Your provided information\n✅ Professional formatting',
-            timestamp: new Date()
-        }]);
+        setIsSendingEmail(true);
 
-        setCurrentStep('generating');
-
-        // Generate templates using the engine - FIXED
         try {
-            const generatedDocs = generateDocuments(selectedTemplates, companyData, userInputs);
-            setGeneratedDocuments(generatedDocs);
+            const userEmail = user?.email || user?.user_metadata?.email || 'unknown@example.com';
+            console.log('Generating PDFs and sending via email webhook for user:', userEmail);
+            
+            const pdfDataArray = [];
+            
+            // Generate PDF binary data for each document
+            for (const doc of generatedDocuments) {
+                const container = document.createElement('div');
+                container.style.position = 'fixed';
+                container.style.left = '-9999px';
+                container.innerHTML = doc.html;
+                document.body.appendChild(container);
 
-            setTimeout(() => {
-                setMessages(prev => [...prev, {
-                    id: Date.now(),
-                    type: 'bot',
-                    content: '✅ Documents generated successfully!\n\nYou can preview and download them from the right panel.',
-                    timestamp: new Date(),
-                    showDownloadButton: true
-                }]);
-                setCurrentStep('completed');
-            }, 3000);
+                const canvas = await html2canvas(container, { scale: 2 });
+                document.body.removeChild(container);
+
+                const imgData = canvas.toDataURL('image/png');
+
+                const pdf = new jsPDF('p', 'pt', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                
+                // Get PDF as binary data (ArrayBuffer)
+                const pdfArrayBuffer = pdf.output('arraybuffer');
+                
+                // Convert ArrayBuffer to base64 more efficiently (avoiding stack overflow)
+                const uint8Array = new Uint8Array(pdfArrayBuffer);
+                let binaryString = '';
+                const chunkSize = 8192; // Process in chunks to avoid stack overflow
+                
+                for (let i = 0; i < uint8Array.length; i += chunkSize) {
+                    const chunk = uint8Array.subarray(i, i + chunkSize);
+                    binaryString += String.fromCharCode.apply(null, chunk);
+                }
+                
+                const pdfBase64 = btoa(binaryString);
+                
+                pdfDataArray.push({
+                    filename: `${doc.name || 'Document'}.pdf`,
+                    base64Data: pdfBase64,
+                    mimetype: 'application/pdf',
+                    size: pdfArrayBuffer.byteLength,
+                    documentType: doc.type,
+                    documentName: doc.name
+                });
+            }
+
+            // Send to n8n webhook with PDF binary data
+            const webhookUrl = 'http://localhost:5678/webhook-test/60c9760c-650d-471c-9d4f-e7d4e362980f';
+            
+            const payload = {
+                action: 'send_email',
+                userEmail: userEmail,
+                documents: generatedDocuments.map(doc => ({
+                    name: doc.name,
+                    type: doc.type,
+                    content: doc.content
+                })),
+                pdfFiles: pdfDataArray,
+                companyData: companyData,
+                userInputs: userInputs,
+                timestamp: new Date().toISOString()
+            };
+
+            console.log('Sending PDF binary data to webhook:', {
+                ...payload,
+                pdfFiles: payload.pdfFiles.map(pdf => ({
+                    ...pdf,
+                    base64Data: `[${pdf.base64Data.length} characters]` // Don't log the full base64
+                }))
+            });
+            
+            // Add timeout to prevent hanging
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+            
+            const response = await fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+
+            if (response.ok) {
+                alert('✅ PDFs sent successfully via email webhook!');
+                console.log('Successfully sent PDFs to webhook');
+            } else {
+                console.error('Webhook response error:', response.status, response.statusText);
+                alert('❌ Failed to send PDFs via webhook. Check console for details.');
+            }
         } catch (error) {
-            console.error('Template generation error:', error);
-            setMessages(prev => [...prev, {
-                id: Date.now(),
-                type: 'bot',
-                content: '❌ Error generating documents. Please try again.',
-                timestamp: new Date()
-            }]);
+            console.error('Error sending PDFs via webhook:', error);
+            if (error.name === 'AbortError') {
+                alert('❌ Request timed out. Please try again.');
+            } else {
+                alert('❌ Error sending PDFs. Check console for details.');
+            }
+        } finally {
+            setIsSendingEmail(false);
         }
     };
 
@@ -452,15 +583,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
             <div className="pt-16 h-screen flex">
                 {/* Back Button */}
-                <div className="absolute top-10 left-4 z-10">
-                    <button
-                        onClick={() => onPageChange('landing')}
-                        className="flex items-center text-black-600 hover:text-manu-green transition-colors"
-                    >
-                        <ArrowLeft size={20} className="mr-2" />
-                        Back to Home
-                    </button>
-                </div>
+                
 
                 {/* Left Panel - Chat Interface */}
                 <div className="w-1/2 bg-white border-r border-gray-200 flex flex-col">
@@ -736,12 +859,25 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                                         ...prev,
                                                                         products: [currentProduct]
                                                                     }));
+                                                                    
+                                                                    const productSummary = `Added: ${currentProduct.item} | ${currentProduct.description} | ${currentProduct.hsCode} | Qty: ${currentProduct.quantity} | Price: ${currentProduct.unitPrice}`;
+                                                                    
                                                                     setMessages(prev => [...prev, {
-                                                                        id: Date.now(),
+                                                                        id: generateUniqueId(),
                                                                         type: 'user',
-                                                                        content: `Added: ${currentProduct.item} | ${currentProduct.description} | ${currentProduct.hsCode} | Qty: ${currentProduct.quantity} | Price: ${currentProduct.unitPrice}`,
+                                                                        content: productSummary,
                                                                         timestamp: new Date()
                                                                     }]);
+                                                                    
+                                                                    // Disable the products input in the previous message
+                                                                    setMessages(prevMessages => 
+                                                                        prevMessages.map(msg => 
+                                                                            msg.showInput && msg.expectedField === 'products' 
+                                                                                ? { ...msg, showInput: false, inputDisabled: true, userAnswer: productSummary }
+                                                                                : msg
+                                                                        )
+                                                                    );
+                                                                    
                                                                     // Reset for next question
                                                                     setCurrentProduct({ item: '', description: '', hsCode: '', quantity: '', unitPrice: '' });
                                                                     setProductEntryStep(0);
@@ -753,16 +889,20 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                             >
                                                                 Add Product
                                                             </button>
-
-
-
-
-
-
                                                         </>
                                                     )}
                                                 </div>
                                             )}
+                                        </div>
+                                    )}
+
+                                    {/* Show disabled input state with user's answer */}
+                                    {message.inputDisabled && (
+                                        <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                            <div className="text-sm text-gray-600 mb-1">Your answer:</div>
+                                            <div className="text-sm font-medium text-gray-800">
+                                                ✓ {message.userAnswer}
+                                            </div>
                                         </div>
                                     )}
 
@@ -883,12 +1023,28 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                         {currentStep === 'completed' && (
                             <div className="bg-white rounded-lg p-6 shadow-sm h-full">
 
-                                <button
-                                    className="mb-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                                    onClick={downloadAllPdfs}
-                                >
-                                    Download All PDFs
-                                </button>
+                                <div className="flex gap-3 mb-3">
+                                    <button
+                                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
+                                        onClick={downloadAllPdfs}
+                                    >
+                                        <FileText size={16} />
+                                        Download All PDFs
+                                    </button>
+                                    
+                                    <button
+                                        className={`px-4 py-2 text-white rounded flex items-center gap-2 ${
+                                            isSendingEmail 
+                                                ? 'bg-gray-400 cursor-not-allowed' 
+                                                : 'bg-green-600 hover:bg-green-700'
+                                        }`}
+                                        onClick={sendPdfViaEmail}
+                                        disabled={isSendingEmail}
+                                    >
+                                        <MessageCircle size={16} />
+                                        {isSendingEmail ? 'Sending...' : 'Send via Email'}
+                                    </button>
+                                </div>
 
 
                                 {/* Tabs for each template */}

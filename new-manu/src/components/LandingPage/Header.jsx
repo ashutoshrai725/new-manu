@@ -1,0 +1,333 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Menu, X, User, LogOut, Settings } from 'lucide-react';
+
+const Header = ({ user, onLogout }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const profileRef = useRef(null);
+
+    // Close mobile menu when route changes
+    useEffect(() => {
+        setIsMenuOpen(false);
+    }, [location.pathname]);
+
+    // Close profile dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (profileRef.current && !profileRef.current.contains(event.target)) {
+                setIsProfileOpen(false);
+            }
+        };
+
+        if (isProfileOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }
+    }, [isProfileOpen]);
+
+    // Close dropdowns on ESC key
+    useEffect(() => {
+        const handleEscKey = (event) => {
+            if (event.key === 'Escape') {
+                setIsMenuOpen(false);
+                setIsProfileOpen(false);
+            }
+        };
+
+        document.addEventListener('keydown', handleEscKey);
+        return () => {
+            document.removeEventListener('keydown', handleEscKey);
+        };
+    }, []);
+
+    const handleNavigation = (path, requiresAuth = false) => {
+        if (requiresAuth && !user) {
+            navigate('/auth');
+        } else {
+            navigate(path);
+        }
+        setIsMenuOpen(false);
+    };
+
+    const handleMobileMenuToggle = () => {
+        setIsMenuOpen(!isMenuOpen);
+        setIsProfileOpen(false); // Close profile when opening mobile menu
+    };
+
+    const handleProfileToggle = () => {
+        setIsProfileOpen(!isProfileOpen);
+        setIsMenuOpen(false); // Close mobile menu when opening profile
+    };
+
+    const handleLogout = async () => {
+        setIsProfileOpen(false);
+        setIsMenuOpen(false);
+        await onLogout();
+    };
+
+    const handleImageError = (e) => {
+        e.target.style.display = 'none';
+        console.warn('Header logo failed to load');
+    };
+
+    const getUserDisplayName = () => {
+        if (!user) return '';
+        return user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+    };
+
+    const isActiveRoute = (path) => {
+        return location.pathname === path;
+    };
+
+    return (
+        <header className="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 shadow-sm">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center h-16">
+
+                    {/* Logo */}
+                    <div className="flex-shrink-0 flex items-center space-x-3">
+                        <button
+                            onClick={() => navigate('/')}
+                            className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50 rounded-md p-1"
+                        >
+                            <img
+                                src="/logos/manudocs_logo.jpg"
+                                alt="MANUDOCS Logo"
+                                className="h-10 w-auto"
+                                onError={handleImageError}
+                            />
+                            <span className="text-xl font-black text-manu-dark tracking-tight">
+                                ManuDocs
+                            </span>
+                        </button>
+                    </div>
+
+                    {/* Desktop Navigation */}
+                    <nav className="hidden md:flex items-center space-x-6">
+                        <button
+                            onClick={() => handleNavigation('/ai-agent', true)}
+                            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50 ${
+                                isActiveRoute('/ai-agent') 
+                                    ? 'text-manu-green bg-green-50' 
+                                    : 'text-manu-dark hover:text-manu-green'
+                            }`}
+                        >
+                            Generate Docs
+                        </button>
+
+                        <button
+                            onClick={() => handleNavigation('/ai-agent-2')}
+                            className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 ${
+                                isActiveRoute('/ai-agent-2')
+                                    ? 'bg-green-600 text-white'
+                                    : 'bg-manu-green text-white hover:bg-green-600'
+                            }`}
+                        >
+                            ASK AI AGENT!!
+                        </button>
+
+                        <button
+                            onClick={() => handleNavigation('/upload', true)}
+                            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50 ${
+                                isActiveRoute('/upload') 
+                                    ? 'text-manu-green bg-green-50' 
+                                    : 'text-manu-dark hover:text-manu-green'
+                            }`}
+                        >
+                            Upload Docs
+                        </button>
+
+                        <button 
+                            onClick={() => handleNavigation('/help')}
+                            className="px-3 py-2 rounded-md text-sm font-medium text-manu-dark hover:text-manu-green transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50"
+                        >
+                            Help
+                        </button>
+
+                        <button 
+                            onClick={() => handleNavigation('/contact')}
+                            className="px-3 py-2 rounded-md text-sm font-medium text-manu-dark hover:text-manu-green transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50"
+                        >
+                            Contact Us
+                        </button>
+                    </nav>
+
+                    {/* Right Side - Auth or Profile */}
+                    <div className="hidden md:block">
+                        {!user ? (
+                            <button
+                                onClick={() => navigate('/auth')}
+                                className="bg-manu-green text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
+                            >
+                                Sign Up / Login
+                            </button>
+                        ) : (
+                            <div className="relative" ref={profileRef}>
+                                <button
+                                    onClick={handleProfileToggle}
+                                    className="flex items-center space-x-3 bg-gray-100 rounded-full px-4 py-2 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50"
+                                    aria-expanded={isProfileOpen}
+                                    aria-haspopup="true"
+                                >
+                                    <div className="w-8 h-8 bg-manu-green rounded-full flex items-center justify-center">
+                                        <User size={16} className="text-white" />
+                                    </div>
+                                    <span className="text-sm font-medium text-manu-dark max-w-32 truncate">
+                                        {getUserDisplayName()}
+                                    </span>
+                                </button>
+
+                                {/* Profile Dropdown */}
+                                {isProfileOpen && (
+                                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                                        {/* User Info */}
+                                        <div className="px-4 py-3 border-b border-gray-100">
+                                            <p className="text-sm font-medium text-gray-900 truncate">
+                                                {getUserDisplayName()}
+                                            </p>
+                                            <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                                            {user.user_metadata?.phone && (
+                                                <p className="text-xs text-gray-500">{user.user_metadata.phone}</p>
+                                            )}
+                                        </div>
+
+                                        {/* Menu Items */}
+                                        <button 
+                                            onClick={() => {
+                                                setIsProfileOpen(false);
+                                                navigate('/profile');
+                                            }}
+                                            className="flex items-center space-x-3 w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:bg-gray-50"
+                                        >
+                                            <Settings size={16} />
+                                            <span>Profile & Settings</span>
+                                        </button>
+
+                                        <hr className="my-1" />
+
+                                        <button
+                                            onClick={handleLogout}
+                                            className="flex items-center space-x-3 w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 focus:outline-none focus:bg-red-50"
+                                        >
+                                            <LogOut size={16} />
+                                            <span>Sign out</span>
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden">
+                        <button
+                            onClick={handleMobileMenuToggle}
+                            className="text-manu-dark hover:text-manu-green p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50"
+                            aria-expanded={isMenuOpen}
+                            aria-label="Toggle menu"
+                        >
+                            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Mobile Menu */}
+                {isMenuOpen && (
+                    <div className="md:hidden">
+                        <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg rounded-lg mt-2 border border-gray-100">
+                            <button
+                                onClick={() => handleNavigation('/ai-agent', true)}
+                                className={`block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                                    isActiveRoute('/ai-agent') 
+                                        ? 'text-manu-green bg-green-50' 
+                                        : 'text-manu-dark hover:text-manu-green hover:bg-gray-50'
+                                }`}
+                            >
+                                Generate Docs
+                            </button>
+
+                            <button
+                                onClick={() => handleNavigation('/ai-agent-2')}
+                                className={`block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                                    isActiveRoute('/ai-agent-2')
+                                        ? 'bg-green-600 text-white'
+                                        : 'bg-manu-green text-white hover:bg-green-600'
+                                }`}
+                            >
+                                ASK AI AGENT!!
+                            </button>
+
+                            <button
+                                onClick={() => handleNavigation('/upload', true)}
+                                className={`block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                                    isActiveRoute('/upload') 
+                                        ? 'text-manu-green bg-green-50' 
+                                        : 'text-manu-dark hover:text-manu-green hover:bg-gray-50'
+                                }`}
+                            >
+                                Upload Docs
+                            </button>
+
+                            <button 
+                                onClick={() => handleNavigation('/help')}
+                                className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-manu-dark hover:text-manu-green hover:bg-gray-50 transition-colors duration-200"
+                            >
+                                Help
+                            </button>
+
+                            <button 
+                                onClick={() => handleNavigation('/contact')}
+                                className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-manu-dark hover:text-manu-green hover:bg-gray-50 transition-colors duration-200"
+                            >
+                                Contact Us
+                            </button>
+
+                            {/* Mobile Auth Section */}
+                            <div className="border-t border-gray-200 pt-2 mt-2">
+                                {!user ? (
+                                    <button
+                                        onClick={() => handleNavigation('/auth')}
+                                        className="block w-full text-left px-3 py-2 bg-manu-green text-white rounded-lg hover:bg-green-600 text-sm font-medium transition-colors duration-200"
+                                    >
+                                        Sign Up / Login
+                                    </button>
+                                ) : (
+                                    <div>
+                                        <div className="px-3 py-2">
+                                            <p className="text-sm font-medium text-gray-900 truncate">
+                                                {getUserDisplayName()}
+                                            </p>
+                                            <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => {
+                                                setIsMenuOpen(false);
+                                                navigate('/profile');
+                                            }}
+                                            className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                                        >
+                                            Profile & Settings
+                                        </button>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="block w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200"
+                                        >
+                                            Sign out
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </header>
+    );
+};
+
+export default Header;
