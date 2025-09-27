@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, Play, Pause } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-
-const HeroSection = ({ isMobile, onPageChange, user }) => {
+const HeroSection = ({ isMobile, user }) => {
+    const navigate = useNavigate();
     const [isPlaying, setIsPlaying] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [showAuthPrompt, setShowAuthPrompt] = useState(false);
@@ -16,16 +17,24 @@ const HeroSection = ({ isMobile, onPageChange, user }) => {
                 videoRef.current.pause();
                 setIsPlaying(false);
             } else {
-                setTimeout(() => {
-                    if (videoRef.current) { // Double check
-                        videoRef.current.play().catch(() => {
-                            setIsPlaying(false);
-                        });
+                // Delay to ensure DOM is ready
+                const timer = setTimeout(() => {
+                    if (videoRef.current) {
+                        videoRef.current.play()
+                            .then(() => {
+                                setIsPlaying(true);
+                            })
+                            .catch((error) => {
+                                console.warn('Video autoplay failed:', error);
+                                setIsPlaying(false);
+                            });
                     }
                 }, 500);
+
+                return () => clearTimeout(timer);
             }
         }
-    }, [isMobile, user]);
+    }, [isMobile]);
 
     const toggleVideo = () => {
         if (videoRef.current) {
@@ -33,11 +42,14 @@ const HeroSection = ({ isMobile, onPageChange, user }) => {
                 videoRef.current.pause();
                 setIsPlaying(false);
             } else {
-                videoRef.current.play().then(() => {
-                    setIsPlaying(true);
-                }).catch(() => {
-                    setIsPlaying(false);
-                });
+                videoRef.current.play()
+                    .then(() => {
+                        setIsPlaying(true);
+                    })
+                    .catch((error) => {
+                        console.warn('Video play failed:', error);
+                        setIsPlaying(false);
+                    });
             }
         }
     };
@@ -45,14 +57,74 @@ const HeroSection = ({ isMobile, onPageChange, user }) => {
     const handleSearchClick = () => {
         if (user) {
             // If logged in, go to AI agent
-            onPageChange('ai-agent');
+            navigate('/ai-agent');
         } else {
             // If not logged in, show auth prompt
             setShowAuthPrompt(true);
-            setTimeout(() => {
-                onPageChange('auth');
+            const timer = setTimeout(() => {
+                navigate('/auth');
+                setShowAuthPrompt(false);
             }, 1500);
+
+            // Cleanup timer if component unmounts
+            return () => clearTimeout(timer);
         }
+    };
+
+    const handleNavigation = (path, requiresAuth = false) => {
+        if (requiresAuth && !user) {
+            navigate('/auth');
+        } else {
+            navigate(path);
+        }
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSearchClick();
+        }
+    };
+
+    const getUserDisplayName = () => {
+        if (!user) return '';
+        return user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+    };
+
+    const handleImageError = (e) => {
+        e.target.style.display = 'none';
+        const fallback = e.target.parentElement.querySelector('.e-cha-fallback');
+        if (fallback) {
+            fallback.style.display = 'flex';
+        }
+        console.warn('E-CHA agent image failed to load');
+    };
+
+    const closeAuthPrompt = () => {
+        setShowAuthPrompt(false);
+    };
+
+    // Animation variants
+    const containerVariants = {
+        hidden: { opacity: 0, x: -50 },
+        visible: { 
+            opacity: 1, 
+            x: 0,
+            transition: { duration: 0.8 }
+        }
+    };
+
+    const rightSideVariants = {
+        hidden: { opacity: 0, x: 50 },
+        visible: { 
+            opacity: 1, 
+            x: 0,
+            transition: { duration: 0.8, delay: 0.2 }
+        }
+    };
+
+    const floatingAnimation = {
+        animate: { y: [0, -10, 0] },
+        transition: { duration: 2, repeat: Infinity, ease: "easeInOut" }
     };
 
     return (
@@ -67,14 +139,22 @@ const HeroSection = ({ isMobile, onPageChange, user }) => {
                         muted
                         playsInline
                         poster="/images/hero-fallback.jpg"
+                        onError={() => {
+                            console.warn('Hero video failed to load');
+                        }}
                     >
-                        <source src="videos/hero-video-ship.mp4" type="video/mp4" />
+                        <source src="/videos/hero-video-ship.mp4" type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 ) : (
                     <div
                         className="w-full h-full bg-cover bg-center opacity-30"
-                        style={{ backgroundImage: 'url(/images/hero-fallback.jpg)' }}
+                        style={{ 
+                            backgroundImage: 'url(/images/hero-fallback.jpg)',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat'
+                        }}
                     />
                 )}
 
@@ -82,7 +162,8 @@ const HeroSection = ({ isMobile, onPageChange, user }) => {
                 {!isMobile && (
                     <button
                         onClick={toggleVideo}
-                        className="absolute bottom-4 right-4 z-10 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+                        className="absolute bottom-4 right-4 z-10 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                        aria-label={isPlaying ? "Pause video" : "Play video"}
                     >
                         {isPlaying ? <Pause size={20} /> : <Play size={20} />}
                     </button>
@@ -95,9 +176,9 @@ const HeroSection = ({ isMobile, onPageChange, user }) => {
 
                     {/* Left Side - Text Content */}
                     <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8 }}
+                        initial="hidden"
+                        animate="visible"
+                        variants={containerVariants}
                         className="text-white space-y-6"
                     >
                         {/* Welcome message for logged in users */}
@@ -105,10 +186,11 @@ const HeroSection = ({ isMobile, onPageChange, user }) => {
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-manu-green/10 border border-manu-green/30 rounded-lg  mb-6 mt-[80px]"
+                                transition={{ delay: 0.5 }}
+                                className="bg-manu-green/20 border border-manu-green/30 rounded-lg p-4 mb-6"
                             >
-                                <p className="text-manu-green text-sm ">
-                                    👋 Welcome back, {user.user_metadata?.full_name || user.email}!
+                                <p className="text-manu-green text-sm font-medium">
+                                    👋 Welcome back, {getUserDisplayName()}!
                                 </p>
                             </motion.div>
                         )}
@@ -121,28 +203,28 @@ const HeroSection = ({ isMobile, onPageChange, user }) => {
                             for Global Trade
                         </h1>
 
-                        <p className="text-lg md:text-xl text-gray-300 max-w-lg">
+                        <p className="text-lg md:text-xl text-gray-300 max-w-lg leading-relaxed">
                             Transform your export documentation process with AI. Upload invoices,
                             extract data automatically, and generate professional export documents in minutes.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4">
                             <button
-                                onClick={() => user ? onPageChange('upload') : onPageChange('auth')}
-                                className="bg-manu-green text-white px-8 py-3 rounded-lg hover:bg-green-600 transition-colors font-semibold"
+                                onClick={() => handleNavigation('/upload', true)}
+                                className="bg-manu-green text-white px-8 py-3 rounded-lg hover:bg-green-600 transition-colors duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
                             >
                                 {user ? 'Upload Documents' : 'Get Started Free'}
                             </button>
                             <button
-                                onClick={() => user ? onPageChange('ai-agent') : onPageChange('auth')}
-                                className="border-2 border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-manu-dark transition-colors font-semibold"
+                                onClick={() => handleNavigation('/ai-agent', true)}
+                                className="border-2 border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-manu-dark transition-colors duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
                             >
                                 {user ? 'Generate Documents' : 'Watch Demo'}
                             </button>
 
                             <button
-                                onClick={() => onPageChange('ai-agent-2')}
-                                className="bg-manu-green text-white px-8 py-3 rounded-lg hover:bg-green-600 transition-colors font-semibold"
+                                onClick={() => handleNavigation('/ai-agent-2')}
+                                className="bg-gradient-to-r from-manu-green to-green-600 text-white px-8 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 shadow-lg"
                             >
                                 ASK AI AGENT!
                             </button>
@@ -151,46 +233,41 @@ const HeroSection = ({ isMobile, onPageChange, user }) => {
                         {/* Stats */}
                         <div className="grid grid-cols-3 gap-6 pt-8">
                             <div className="text-center">
-                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-8 mt-[-40px]">100%</div>
-                                <div className="text-sm text-gray-300 mb-8 mt-[-40px]">Accuracy Rate</div>
+                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-2">100%</div>
+                                <div className="text-sm text-gray-300">Accuracy Rate</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-8 mt-[-40px]">3 Min</div>
-                                <div className="text-sm text-gray-300 mb-8 mt-[-40px]">Avg. Processing</div>
+                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-2">3 Min</div>
+                                <div className="text-sm text-gray-300">Avg. Processing</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-8 mt-[-40px]">1000+</div>
-                                <div className="text-sm text-gray-300 mb-8 mt-[-40px]">Documents Generated</div>
+                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-2">1000+</div>
+                                <div className="text-sm text-gray-300">Documents Generated</div>
                             </div>
                         </div>
                     </motion.div>
 
                     {/* Right Side - E-CHA AI Agent */}
                     <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
+                        initial="hidden"
+                        animate="visible"
+                        variants={rightSideVariants}
                         className="flex justify-center"
                     >
                         <div className="relative">
                             {/* E-CHA Character */}
                             <motion.div
-                                animate={{ y: [0, -10, 0] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                                animate={floatingAnimation.animate}
+                                transition={floatingAnimation.transition}
                                 className="relative"
                             >
                                 {/* AI Agent Image */}
-                                <motion.img
+                                <img
                                     src="/images/e-cha-agent.png"
-                                    alt="E-CHA AI Agent"
+                                    alt="E-CHA AI Agent - Your intelligent document processing assistant"
                                     className="w-80 h-80 md:w-96 md:h-96 object-contain drop-shadow-2xl"
-                                    animate={{ y: [0, -10, 0] }}
-                                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                                    onError={(e) => {
-                                        e.target.style.display = 'none';
-                                        const fallback = e.target.parentElement.querySelector('.e-cha-fallback');
-                                        if (fallback) fallback.style.display = 'flex';
-                                    }}
+                                    onError={handleImageError}
+                                    loading="eager"
                                 />
 
                                 {/* Fallback placeholder */}
@@ -203,27 +280,29 @@ const HeroSection = ({ isMobile, onPageChange, user }) => {
                                 </div>
 
                                 {/* Floating Search Bar */}
-                                <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2">
+                                <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 w-full max-w-sm px-4">
                                     <motion.div
                                         whileHover={{ scale: 1.05 }}
-                                        className="bg-white/90 backdrop-blur-md rounded-full p-3 shadow-2xl min-w-[300px]"
+                                        className="bg-white/90 backdrop-blur-md rounded-full p-3 shadow-2xl"
                                     >
                                         <div className="flex items-center space-x-3">
-                                            <Search className="text-manu-green" size={20} />
+                                            <Search className="text-manu-green flex-shrink-0" size={20} />
                                             <input
                                                 type="text"
                                                 value={searchQuery}
                                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                                placeholder={user ? "generate invoice??" : "Try E-CHA - Sign up first!"}
-                                                className="flex-1 bg-transparent outline-none text-manu-dark placeholder-gray-500"
+                                                placeholder={user ? "Generate invoice..." : "Try E-CHA - Sign up first!"}
+                                                className="flex-1 bg-transparent outline-none text-manu-dark placeholder-gray-500 text-sm"
                                                 onClick={handleSearchClick}
+                                                onKeyDown={handleKeyDown}
                                                 readOnly
                                             />
                                             <motion.button
                                                 whileHover={{ scale: 1.1 }}
                                                 whileTap={{ scale: 0.9 }}
                                                 onClick={handleSearchClick}
-                                                className="bg-manu-green text-white p-2 rounded-full hover:bg-green-600 transition-colors"
+                                                className="bg-manu-green text-white p-2 rounded-full hover:bg-green-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 flex-shrink-0"
+                                                aria-label="Search or access AI agent"
                                             >
                                                 <Search size={16} />
                                             </motion.button>
@@ -258,21 +337,26 @@ const HeroSection = ({ isMobile, onPageChange, user }) => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center"
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+                    onClick={closeAuthPrompt}
                 >
                     <motion.div
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className="bg-white rounded-lg p-8 text-center max-w-md mx-4"
+                        exit={{ scale: 0.8, opacity: 0 }}
+                        className="bg-white rounded-lg p-8 text-center max-w-md mx-4 shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
                     >
                         <div className="text-4xl mb-4">🤖</div>
                         <h3 className="text-xl font-bold text-manu-dark mb-2">
                             Hello! I'm E-CHA
                         </h3>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-gray-600 mb-6">
                             To help you with document processing, please sign up or log in first.
                         </p>
-                        <div className="w-full bg-manu-green h-2 rounded-full animate-pulse"></div>
+                        <div className="w-full bg-manu-green h-2 rounded-full animate-pulse mb-4"></div>
+                        <p className="text-sm text-gray-500">Redirecting to authentication...</p>
                     </motion.div>
                 </motion.div>
             )}

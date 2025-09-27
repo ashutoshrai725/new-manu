@@ -1,10 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, MessageCircle, FileText, Download, Upload } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
+import Header from '../LandingPage/Header';
 import './AIAgent2Page.css';
 
 const API_URL = `/api/ai/gemini`;
 
-const AIAgent2Page = () => {
+const AIAgent2Page = ({ user, onPageChange, onLogout, documentsUploaded = true }) => {
     const navigate = useNavigate();
     const [messages, setMessages] = useState([
         { text: "Hello! I am the MANUDOCS AI Agent. Ask me anything, and I'll provide a concise, genuine answer.", sender: "ai" }
@@ -71,32 +77,41 @@ const AIAgent2Page = () => {
     };
 
     return (
-        <div className="ai2-container" style={{ position: 'relative' }}>
-            {/* Back to Home Button */}
-            <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
-                <button
-                    onClick={handleBackToHome}
-                    style={{
-                        background: '#528a64',
-                        color: '#fff',
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        border: 'none',
-                        fontWeight: 'bold',
-                        cursor: 'pointer',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                        transition: 'all 0.2s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                        e.target.style.background = '#456b57';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.target.style.background = '#528a64';
-                    }}
-                >
-                    ← Home
-                </button>
-            </div>
+        <div className="min-h-screen bg-gray-50">
+            <Header
+                user={user}
+                onPageChange={onPageChange}
+                onLogout={onLogout}
+                documentsUploaded={documentsUploaded}
+            />
+        
+            <div className="ai2-container" style={{ position: 'relative', paddingTop: '45px' }}>
+            
+                <div style={{ position: 'absolute', top: 100, left: 20, zIndex: 10 }}>
+                    <button
+                        onClick={handleBackToHome}
+                        style={{
+                            allignItems: 'center',  display: 'flex',
+                            background: '#528a64',
+                            color: '#fff',
+                            padding: '8px 16px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                            transition: 'all 0.2s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                            e.target.style.background = '#456b57';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.background = '#528a64';
+                        }}
+                    >
+                        ← Home
+                    </button>
+                </div>
 
             <div className="ai2-header">
                 <div className="ai2-logo">
@@ -154,6 +169,7 @@ const AIAgent2Page = () => {
                     {loading ? 'Sending...' : 'Send'}
                 </button>
             </div>
+        </div>
         </div>
     );
 };
