@@ -16,29 +16,51 @@ app.get('/api/health', (_req, res) => {
 // Example secure endpoint that uses a server-only secret
 app.get('/api/config/supabase', (_req, res) => {
   const projectUrl = process.env.SUPABASE_PROJECT_URL;
-  // Do NOT send service role key to client. Only send non-sensitive items.
-  if (!projectUrl) return res.status(500).json({ error: 'Server config missing' });
+  if (!projectUrl) {
+    console.error('ERROR: SUPABASE_PROJECT_URL missing');
+    return res.status(500).json({ error: 'Server config missing' });
+  }
   res.json({ url: projectUrl });
 });
 
 // Proxy Gemini requests securely (server holds the API key)
 app.post('/api/ai/gemini', async (req, res) => {
   try {
+    console.log('Received POST to /api/ai/gemini with body:', req.body);
+
     const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) return res.status(500).json({ error: 'GEMINI_API_KEY missing on server' });
+    if (!apiKey) {
+      console.error('ERROR: GEMINI_API_KEY missing on server');
+      return res.status(500).json({ error: 'GEMINI_API_KEY missing on server' });
+    }
 
     const { contents, systemInstruction } = req.body || {};
-    if (!contents) return res.status(400).json({ error: 'contents required' });
+    if (!contents) {
+      console.error('ERROR: "contents" missing in request body');
+      return res.status(400).json({ error: 'contents required' });
+    }
 
-    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=' + apiKey;
+    const url =
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=' +
+      apiKey;
+
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents, systemInstruction })
+      body: JSON.stringify({ contents, systemInstruction }),
     });
+
     const data = await response.json();
-    res.status(response.ok ? 200 : response.status).json(data);
+
+    if (!response.ok) {
+      console.error('Gemini API returned error:', data);
+      return res.status(response.status).json(data);
+    }
+
+    console.log('Gemini API response:', data);
+    res.status(200).json(data);
   } catch (err) {
+    console.error('Exception in /api/ai/gemini:', err);
     res.status(500).json({ error: 'Gemini proxy error', details: err.message });
   }
 });

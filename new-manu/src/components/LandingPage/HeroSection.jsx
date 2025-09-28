@@ -106,8 +106,8 @@ const HeroSection = ({ isMobile, user }) => {
     // Animation variants
     const containerVariants = {
         hidden: { opacity: 0, x: -50 },
-        visible: { 
-            opacity: 1, 
+        visible: {
+            opacity: 1,
             x: 0,
             transition: { duration: 0.8 }
         }
@@ -115,8 +115,8 @@ const HeroSection = ({ isMobile, user }) => {
 
     const rightSideVariants = {
         hidden: { opacity: 0, x: 50 },
-        visible: { 
-            opacity: 1, 
+        visible: {
+            opacity: 1,
             x: 0,
             transition: { duration: 0.8, delay: 0.2 }
         }
@@ -149,7 +149,7 @@ const HeroSection = ({ isMobile, user }) => {
                 ) : (
                     <div
                         className="w-full h-full bg-cover bg-center opacity-30"
-                        style={{ 
+                        style={{
                             backgroundImage: 'url(/images/hero-fallback.jpg)',
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
@@ -233,15 +233,15 @@ const HeroSection = ({ isMobile, user }) => {
                         {/* Stats */}
                         <div className="grid grid-cols-3 gap-6 pt-8">
                             <div className="text-center">
-                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-2">100%</div>
+                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-2 -mt-3">100%</div>
                                 <div className="text-sm text-gray-300">Accuracy Rate</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-2">3 Min</div>
+                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-2 -mt-3">3 Min</div>
                                 <div className="text-sm text-gray-300">Avg. Processing</div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-2">1000+</div>
+                                <div className="text-2xl md:text-3xl font-bold text-manu-green mb-2 -mt-3">1000+</div>
                                 <div className="text-sm text-gray-300">Documents Generated</div>
                             </div>
                         </div>
@@ -263,7 +263,7 @@ const HeroSection = ({ isMobile, user }) => {
                             >
                                 {/* AI Agent Image */}
                                 <img
-                                    src="/images/e-cha-agent.png"
+                                    src="https://i.postimg.cc/sxfmMMsk/20250928-1634-image.png"
                                     alt="E-CHA AI Agent - Your intelligent document processing assistant"
                                     className="w-80 h-80 md:w-96 md:h-96 object-contain drop-shadow-2xl"
                                     onError={handleImageError}

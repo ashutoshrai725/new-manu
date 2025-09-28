@@ -5,32 +5,32 @@ const BackedBySection = () => {
     const partners = [
         {
             name: 'IIT MADRAS',
-            logo: '/logos/IIT Madras_.png',
+            logo: 'https://i.postimg.cc/CZmcV5vk/iitm.png',
             description: 'NIRF 1 Ranked Institute'
         },
         {
             name: 'BITS Pilani',
-            logo: '/logos/BITS-Pilani-Logo.png',
+            logo: 'https://i.postimg.cc/bG3mjr6t/BITS-Pilani-Logo.png',
             description: 'Premier Engineering Institute'
         },
         {
             name: 'IIT PATNA',
-            logo: '/logos/IIT PATNA.jpeg',
+            logo: 'https://i.postimg.cc/qtj1dqmC/IIT-PATNA.jpg',
             description: 'Top Indian Institute of Technology'
         },
         {
             name: 'PIEDS',
-            logo: '/logos/pieds logo.jpeg',
+            logo: 'https://i.postimg.cc/CB5mM0tz/pieds-logo.jpg',
             description: 'Incubation Program'
         },
         {
             name: 'RKIC',
-            logo: '/logos/rkic-placeholder.png',
+            logo: 'https://i.postimg.cc/N9FpGtVy/rkic.jpg',
             description: 'Rakesh Kapoor Innovation Centre'
         },
         {
             name: 'IOI',
-            logo: '/logos/IOIB.jpg',
+            logo: 'https://i.postimg.cc/phrqVv7T/IOI-B.jpg',
             description: 'Innovation Centre Bengaluru'
         }
     ];
@@ -44,24 +44,24 @@ const BackedBySection = () => {
     };
 
     const cardVariants = {
-        hidden: { 
-            opacity: 0, 
-            y: 30 
+        hidden: {
+            opacity: 0,
+            y: 30
         },
-        visible: { 
-            opacity: 1, 
-            y: 0 
+        visible: {
+            opacity: 1,
+            y: 0
         }
     };
 
     const containerVariants = {
-        hidden: { 
-            opacity: 0, 
-            y: 30 
+        hidden: {
+            opacity: 0,
+            y: 30
         },
-        visible: { 
-            opacity: 1, 
-            y: 0 
+        visible: {
+            opacity: 1,
+            y: 0
         }
     };
 
@@ -91,13 +91,13 @@ const BackedBySection = () => {
                             initial="hidden"
                             whileInView="visible"
                             variants={cardVariants}
-                            transition={{ 
-                                duration: 0.6, 
+                            transition={{
+                                duration: 0.6,
                                 delay: index * 0.1,
                                 ease: "easeOut"
                             }}
                             viewport={{ once: true, margin: "-50px" }}
-                            whileHover={{ 
+                            whileHover={{
                                 scale: 1.05,
                                 transition: { duration: 0.2 }
                             }}

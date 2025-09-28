@@ -69,7 +69,7 @@ const AuthPage = ({ onUserAuth }) => {
             full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name,
             provider: session.user.app_metadata?.provider
         };
-        
+
         onUserAuth(userData);
         // Navigate to home page after authentication
         navigate('/');
@@ -175,8 +175,8 @@ const AuthPage = ({ onUserAuth }) => {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: process.env.NODE_ENV === 'development' 
-                        ? 'http://localhost:3000' 
+                    redirectTo: process.env.NODE_ENV === 'development'
+                        ? 'http://localhost:3000'
                         : `${window.location.origin}`
                 }
             });
@@ -225,7 +225,7 @@ const AuthPage = ({ onUserAuth }) => {
                 {/* Header */}
                 <div className="text-center">
                     <img
-                        src="/logos/manudocs_logo.jpg"
+                        src="https://i.postimg.cc/qhqjBrYN/mnuverse.jpg"
                         alt="MANUDOCS Logo"
                         className="h-12 w-auto mx-auto mb-4"
                         onError={(e) => {

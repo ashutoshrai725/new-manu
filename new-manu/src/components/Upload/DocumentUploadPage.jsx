@@ -104,14 +104,7 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
             <div className="pt-16">
                 <div className="max-w-4xl mx-auto px-4 py-8">
 
-                    {/* Back Button */}
-                    <button
-                        onClick={() => onPageChange('landing')}
-                        className="flex items-center text-manu-green hover:text-green-600 mb-6"
-                    >
-                        <ArrowLeft size={20} className="mr-2" />
-                        Back to Home
-                    </button>
+
 
                     {/* Progress Indicator */}
                     <div className="mb-8">

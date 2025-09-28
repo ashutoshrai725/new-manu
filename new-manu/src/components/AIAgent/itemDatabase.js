@@ -10,8 +10,8 @@ export const ITEM_DATABASE = [
         "hsCode": "710239"
     },
     {
-        "name": "Pharmaceutical Products",
-        "description": "Medicaments consisting of mixed or unmixed products",
+        "name": "Pharmaceutical Products, Pharmaceutical packed products",
+        "description": "Medicaments consisting of mixed or unmixed products, Pharmaceutical goods in bulk and retail packs",
         "hsCode": "300490"
     },
     {
@@ -20,8 +20,8 @@ export const ITEM_DATABASE = [
         "hsCode": "100630"
     },
     {
-        "name": "Organic Chemicals",
-        "description": "Various organic chemicals including alcohols, acids",
+        "name": "Organic Chemicals, Methanol",
+        "description": "Various organic chemicals including alcohols, acids, Methanol and alcohols",
         "hsCode": "290511"
     },
     {
@@ -40,8 +40,8 @@ export const ITEM_DATABASE = [
         "hsCode": "610910"
     },
     {
-        "name": "Electrical Machinery",
-        "description": "Electric motors and generators",
+        "name": "Electrical Machinery, Electric motors and generators",
+        "description": "Electric motors and generators, Electric motors of an output not exceeding 750 W",
         "hsCode": "850110"
     },
     {
@@ -50,9 +50,9 @@ export const ITEM_DATABASE = [
         "hsCode": "420100"
     },
     {
-        "name": "Marine Products",
-        "description": "Fish, crustaceans, molluscs and other aquatic invertebrates",
-        "hsCode": "030611"
+        "name": "Marine Products, Fish and Seafood, Frozen crabs",
+        "description": "Fish, crustaceans, molluscs and other aquatic invertebrates, Frozen shrimps and prawns, Frozen crabs",
+        "hsCode": "030617"
     },
     {
         "name": "Machinery including computers",
@@ -65,8 +65,8 @@ export const ITEM_DATABASE = [
         "hsCode": "090240"
     },
     {
-        "name": "Plastic and Articles Thereof",
-        "description": "Polymers of ethylene, propylene etc.",
+        "name": "Plastic and Articles Thereof, Polymers of ethylene",
+        "description": "Polymers of ethylene, propylene etc., Polyethylene in primary forms",
         "hsCode": "390110"
     },
     {
@@ -90,8 +90,8 @@ export const ITEM_DATABASE = [
         "hsCode": "170199"
     },
     {
-        "name": "Ceramic Products and Glassware",
-        "description": "Articles of ceramics and glassware",
+        "name": "Ceramic Products and Glassware, Ceramic products",
+        "description": "Articles of ceramics and glassware, Ceramic tiles, sanitary fixtures, domestic ware",
         "hsCode": "690790"
     },
     {
@@ -105,8 +105,8 @@ export const ITEM_DATABASE = [
         "hsCode": "090111"
     },
     {
-        "name": "Spices",
-        "description": "Chillies and peppers",
+        "name": "Spices, Chillies and peppers, dried",
+        "description": "Chillies and peppers, Dried red chillies",
         "hsCode": "090420"
     },
     {
@@ -130,11 +130,6 @@ export const ITEM_DATABASE = [
         "hsCode": "710812"
     },
     {
-        "name": "Fish and Seafood",
-        "description": "Frozen shrimps and prawns",
-        "hsCode": "030617"
-    },
-    {
         "name": "Tanning or Dyeing Extracts",
         "description": "Tanning extracts of vegetable origin",
         "hsCode": "320130"
@@ -155,8 +150,8 @@ export const ITEM_DATABASE = [
         "hsCode": "340111"
     },
     {
-        "name": "Rubber Products",
-        "description": "New pneumatic tyres of rubber",
+        "name": "Rubber Products, Machinery, New pneumatic tyres",
+        "description": "New pneumatic tyres of rubber, Pneumatic tires, New rubber pneumatic tyres",
         "hsCode": "401110"
     },
     {
@@ -206,7 +201,7 @@ export const ITEM_DATABASE = [
     },
     {
         "name": "Paper and Paperboard",
-        "description": "Uncoated paper and paperboard",
+        "description": "Uncoated paper and paperboard, Uncoated paper for printing and writing",
         "hsCode": "480100"
     },
     {
@@ -235,13 +230,13 @@ export const ITEM_DATABASE = [
         "hsCode": "551329"
     },
     {
-        "name": "Plastic Products",
-        "description": "Polypropylene polymers",
+        "name": "Plastic Products, Organic Chemicals, Plastic Articles, Polymers of propylene",
+        "description": "Polypropylene polymers, Polypropylene polymers, Polymers of propylene, Polypropylene polymers",
         "hsCode": "390210"
     },
     {
-        "name": "Leather Products",
-        "description": "Leather footwear with outer soles of rubber or plastics",
+        "name": "Leather Products, Footwear, Footwear with uppers of leather",
+        "description": "Leather footwear with outer soles of rubber or plastics, Footwear with uppers of leather, Footwear with outer soles of leather",
         "hsCode": "640319"
     },
     {
@@ -250,18 +245,18 @@ export const ITEM_DATABASE = [
         "hsCode": "030743"
     },
     {
-        "name": "Furniture",
-        "description": "Furniture of plastics",
+        "name": "Furniture, Plastic furniture",
+        "description": "Furniture of plastics, Plastic furniture",
         "hsCode": "940169"
     },
     {
-        "name": "Electrical Equipment",
-        "description": "Electric accumulators sealed",
+        "name": "Electrical Equipment, Electric accumulators, Batteries, electric accumulators",
+        "description": "Electric accumulators sealed, Electric accumulators, including sealed ones, Batteries, electric accumulators",
         "hsCode": "850720"
     },
     {
-        "name": "Jewellery",
-        "description": "Gold jewelry",
+        "name": "Jewellery, Silver jewellery, Precious and semi-precious stones mounted or unset",
+        "description": "Gold jewelry, Silver jewellery, Precious and semi-precious stones mounted or unset",
         "hsCode": "711319"
     },
     {
@@ -270,8 +265,8 @@ export const ITEM_DATABASE = [
         "hsCode": "271111"
     },
     {
-        "name": "Machinery",
-        "description": "Turbojets and turbopropellers",
+        "name": "Machinery, Turbojets, turbopropellers and other gas turbines",
+        "description": "Turbojets and turbopropellers, Turbojet engines and related parts",
         "hsCode": "841111"
     },
     {
@@ -280,8 +275,8 @@ export const ITEM_DATABASE = [
         "hsCode": "190190"
     },
     {
-        "name": "Dairy",
-        "description": "Butter of milk or cream",
+        "name": "Dairy, Butter and other fats",
+        "description": "Butter of milk or cream, Butter and other fats from milk",
         "hsCode": "040510"
     },
     {
@@ -335,8 +330,8 @@ export const ITEM_DATABASE = [
         "hsCode": "510610"
     },
     {
-        "name": "Leather Goods",
-        "description": "Leather handbags and similar containers",
+        "name": "Leather Goods, Leather handbags and cases",
+        "description": "Leather handbags and similar containers, Leather handbags, travel goods",
         "hsCode": "420222"
     },
     {
@@ -350,8 +345,8 @@ export const ITEM_DATABASE = [
         "hsCode": "842139"
     },
     {
-        "name": "Jewellery",
-        "description": "Imitation jewelry",
+        "name": "Jewellery, Imitation jewellery",
+        "description": "Imitation jewelry, Imitation jewellery",
         "hsCode": "711719"
     },
     {
@@ -365,8 +360,8 @@ export const ITEM_DATABASE = [
         "hsCode": "940390"
     },
     {
-        "name": "Electrical Machinery",
-        "description": "Electric transformers",
+        "name": "Electrical Machinery, Electric transformers",
+        "description": "Electric transformers, Transformers and static converters",
         "hsCode": "850423"
     },
     {
@@ -385,13 +380,13 @@ export const ITEM_DATABASE = [
         "hsCode": "871120"
     },
     {
-        "name": "Printed Products",
-        "description": "Printed books, brochures and leaflets",
+        "name": "Printed Products, Books and printed materials",
+        "description": "Printed books, brochures and leaflets, Books, brochures, leaflets with printing",
         "hsCode": "490199"
     },
     {
-        "name": "Textile Fabrics",
-        "description": "Knitted or crocheted cotton fabrics",
+        "name": "Textile Fabrics, Knitted or crocheted cotton fabrics",
+        "description": "Knitted or crocheted cotton fabrics, Knitted or crocheted cotton fabrics",
         "hsCode": "600610"
     },
     {
@@ -400,8 +395,8 @@ export const ITEM_DATABASE = [
         "hsCode": "340290"
     },
     {
-        "name": "Precious Metals and Stones",
-        "description": "Gold in semi-manufactured forms",
+        "name": "Precious Metals and Stones, Jewellery",
+        "description": "Gold in semi-manufactured forms, Precious metals and stones in unwrought forms",
         "hsCode": "710811"
     },
     {
@@ -415,13 +410,13 @@ export const ITEM_DATABASE = [
         "hsCode": "091011"
     },
     {
-        "name": "Coffee, Tea, Mate and Spices",
-        "description": "Green tea (not fermented)",
+        "name": "Coffee, Tea, Mate and Spices, Tea",
+        "description": "Green tea (not fermented), Green tea, not fermented",
         "hsCode": "090220"
     },
     {
-        "name": "Dairy Products",
-        "description": "Cheese and curd",
+        "name": "Dairy Products, Cheese and curd",
+        "description": "Cheese and curd, Cheese, curd and fresh cheese",
         "hsCode": "040630"
     },
     {
@@ -430,8 +425,8 @@ export const ITEM_DATABASE = [
         "hsCode": "853229"
     },
     {
-        "name": "Textile Yarn",
-        "description": "Synthetic filament yarn",
+        "name": "Textile Yarn, Textile Products, Man-made filaments, synthetic",
+        "description": "Synthetic filament yarn, Synthetic filament yarn, Polyester filament yarn",
         "hsCode": "540233"
     },
     {
@@ -450,8 +445,8 @@ export const ITEM_DATABASE = [
         "hsCode": "520942"
     },
     {
-        "name": "Footwear",
-        "description": "Footwear with uppers of textile materials",
+        "name": "Footwear, Footwear with outer soles of rubber",
+        "description": "Footwear with uppers of textile materials, Footwear with rubber soles and leather uppers",
         "hsCode": "640590"
     },
     {
@@ -475,8 +470,8 @@ export const ITEM_DATABASE = [
         "hsCode": "650400"
     },
     {
-        "name": "Animal/Vegetable Fats",
-        "description": "Coconut oil",
+        "name": "Animal/Vegetable Fats, Coconut oil, Oils and fats derived from fruits",
+        "description": "Coconut oil, Coconut (copra) oil, Coconut oil, palm kernel oil, olive oil",
         "hsCode": "151311"
     },
     {
@@ -500,8 +495,8 @@ export const ITEM_DATABASE = [
         "hsCode": "030110"
     },
     {
-        "name": "Machinery",
-        "description": "Agricultural machinery",
+        "name": "Machinery, Agricultural Machines, Agricultural implements, Parts of machinery",
+        "description": "Agricultural machinery, Harvester binders and strappers, Agricultural implements, Parts for agricultural machinery",
         "hsCode": "843390"
     },
     {
@@ -520,8 +515,8 @@ export const ITEM_DATABASE = [
         "hsCode": "711311"
     },
     {
-        "name": "Textiles",
-        "description": "Cotton woven fabrics, printed",
+        "name": "Textiles, Cotton Fabrics",
+        "description": "Cotton woven fabrics, printed, Woven cotton fabrics, printed",
         "hsCode": "521041"
     },
     {
@@ -540,8 +535,8 @@ export const ITEM_DATABASE = [
         "hsCode": "210690"
     },
     {
-        "name": "Furniture",
-        "description": "Mattresses of cellular rubber/plastics",
+        "name": "Furniture, Mattresses of cellular rubber/plastics",
+        "description": "Mattresses of cellular rubber/plastics, Mattresses of cellular rubber",
         "hsCode": "940430"
     },
     {
@@ -560,19 +555,9 @@ export const ITEM_DATABASE = [
         "hsCode": "843810"
     },
     {
-        "name": "Electrical Machinery and Equipment",
-        "description": "Electric motors of an output not exceeding 750 W",
-        "hsCode": "850110"
-    },
-    {
         "name": "Live Animals",
         "description": "Live poultry",
         "hsCode": "010590"
-    },
-    {
-        "name": "Jewellery",
-        "description": "Precious metals and stones in unwrought forms",
-        "hsCode": "711311"
     },
     {
         "name": "Rubber Articles",
@@ -595,18 +580,18 @@ export const ITEM_DATABASE = [
         "hsCode": "551520"
     },
     {
-        "name": "Rubber Products",
-        "description": "Rubber tubes and hoses",
+        "name": "Rubber Products, Rubber tubes and hoses",
+        "description": "Rubber tubes and hoses, Rubber tubes, pipes and hoses",
         "hsCode": "400931"
     },
     {
-        "name": "Machinery",
-        "description": "Parts of gas turbines",
+        "name": "Machinery, Gas turbines, other than turbojets",
+        "description": "Parts of gas turbines, Gas turbines, other than turbojets",
         "hsCode": "841191"
     },
     {
-        "name": "Electrical Equipment",
-        "description": "Electrical relays and switches",
+        "name": "Electrical Equipment, Electrical switches, connectors",
+        "description": "Electrical relays and switches, Electrical switches and connectors",
         "hsCode": "853650"
     },
     {
@@ -618,11 +603,6 @@ export const ITEM_DATABASE = [
         "name": "Vehicles",
         "description": "Tractors",
         "hsCode": "870190"
-    },
-    {
-        "name": "Jewellery",
-        "description": "Silver jewellery",
-        "hsCode": "711319"
     },
     {
         "name": "Textile Yarn",
@@ -640,11 +620,6 @@ export const ITEM_DATABASE = [
         "hsCode": "270111"
     },
     {
-        "name": "Tea",
-        "description": "Green tea, not fermented",
-        "hsCode": "090220"
-    },
-    {
         "name": "Miscellaneous Manufactured Articles",
         "description": "Brooms and brushes",
         "hsCode": "960320"
@@ -658,11 +633,6 @@ export const ITEM_DATABASE = [
         "name": "Organic Chemicals",
         "description": "Polyethylene terephthalate",
         "hsCode": "390760"
-    },
-    {
-        "name": "Plastic Articles",
-        "description": "Polymers of propylene",
-        "hsCode": "390210"
     },
     {
         "name": "Pharmaceutical Products",
@@ -680,16 +650,6 @@ export const ITEM_DATABASE = [
         "hsCode": "420290"
     },
     {
-        "name": "Marine Products",
-        "description": "Frozen crabs",
-        "hsCode": "030617"
-    },
-    {
-        "name": "Machinery",
-        "description": "Pneumatic tires",
-        "hsCode": "401110"
-    },
-    {
         "name": "Vehicles",
         "description": "Parts of motorcycles",
         "hsCode": "871499"
@@ -698,21 +658,6 @@ export const ITEM_DATABASE = [
         "name": "Jewellery",
         "description": "Platinum jewellery",
         "hsCode": "711490"
-    },
-    {
-        "name": "Footwear",
-        "description": "Footwear with plastic uppers",
-        "hsCode": "640590"
-    },
-    {
-        "name": "Furniture",
-        "description": "Mattresses of cellular rubber",
-        "hsCode": "940430"
-    },
-    {
-        "name": "Textile Products",
-        "description": "Synthetic filament yarn",
-        "hsCode": "540233"
     },
     {
         "name": "Plastic Articles",
@@ -740,19 +685,9 @@ export const ITEM_DATABASE = [
         "hsCode": "843139"
     },
     {
-        "name": "Electrical Equipment",
-        "description": "Batteries, electric accumulators",
-        "hsCode": "850720"
-    },
-    {
         "name": "Textiles",
         "description": "Knitted or crocheted fabrics",
         "hsCode": "600690"
-    },
-    {
-        "name": "Cotton Fabrics",
-        "description": "Woven cotton fabrics, printed",
-        "hsCode": "521041"
     },
     {
         "name": "Aluminum Products",
@@ -760,8 +695,8 @@ export const ITEM_DATABASE = [
         "hsCode": "760611"
     },
     {
-        "name": "Pharmaceutical Products",
-        "description": "Medicaments containing penicillins or derivatives",
+        "name": "Pharmaceutical Products, Medicaments containing penicillins, Antibiotics",
+        "description": "Medicaments containing penicillins or derivatives, Pharmaceutical penicillin preparations, Medicaments containing antibiotics",
         "hsCode": "300420"
     },
     {
@@ -780,24 +715,9 @@ export const ITEM_DATABASE = [
         "hsCode": "030499"
     },
     {
-        "name": "Machinery",
-        "description": "Gas turbines, other than turbojets",
-        "hsCode": "841191"
-    },
-    {
         "name": "Rubber Articles",
         "description": "Rubber surgical gloves",
         "hsCode": "401519"
-    },
-    {
-        "name": "Footwear",
-        "description": "Footwear with uppers of leather",
-        "hsCode": "640319"
-    },
-    {
-        "name": "Jewellery",
-        "description": "Precious and semi-precious stones mounted or unset",
-        "hsCode": "711319"
     },
     {
         "name": "Vegetable Products",
@@ -815,13 +735,13 @@ export const ITEM_DATABASE = [
         "hsCode": "853620"
     },
     {
-        "name": "Plastic Articles",
-        "description": "Plastic plates, sheets, film",
+        "name": "Plastic Articles, Plastic plates, sheets, film",
+        "description": "Plastic plates, sheets, film, Plastic sheets and films, unworked",
         "hsCode": "392010"
     },
     {
-        "name": "Spices",
-        "description": "Turmeric, dried",
+        "name": "Spices, Turmeric, dried",
+        "description": "Turmeric, dried, Dried turmeric",
         "hsCode": "091030"
     },
     {
@@ -838,11 +758,6 @@ export const ITEM_DATABASE = [
         "name": "Chemical Products",
         "description": "Inorganic compounds of copper",
         "hsCode": "283329"
-    },
-    {
-        "name": "Furniture",
-        "description": "Plastic furniture",
-        "hsCode": "940169"
     },
     {
         "name": "Essential Oils",
@@ -865,8 +780,8 @@ export const ITEM_DATABASE = [
         "hsCode": "390410"
     },
     {
-        "name": "Leather Goods",
-        "description": "Leather garment",
+        "name": "Leather Goods, Leather garment",
+        "description": "Leather garment, Leather clothing",
         "hsCode": "420330"
     },
     {
@@ -875,39 +790,14 @@ export const ITEM_DATABASE = [
         "hsCode": "040221"
     },
     {
-        "name": "Agricultural Machines",
-        "description": "Harvester binders and strappers",
-        "hsCode": "843390"
-    },
-    {
         "name": "Electrical Machines",
         "description": "Electric generating sets",
         "hsCode": "850211"
     },
     {
-        "name": "Jewellery",
-        "description": "Imitation jewellery",
-        "hsCode": "711719"
-    },
-    {
         "name": "Marine Products",
         "description": "Dry and salted fish",
         "hsCode": "030597"
-    },
-    {
-        "name": "Footwear",
-        "description": "Footwear with outer soles of leather",
-        "hsCode": "640319"
-    },
-    {
-        "name": "Machinery",
-        "description": "Agricultural implements",
-        "hsCode": "843390"
-    },
-    {
-        "name": "Organic Chemicals",
-        "description": "Polypropylene",
-        "hsCode": "390210"
     },
     {
         "name": "Textile Yarn",
@@ -1020,16 +910,6 @@ export const ITEM_DATABASE = [
         "hsCode": "070930"
     },
     {
-        "name": "Chillies and peppers, dried",
-        "description": "Dried red chillies",
-        "hsCode": "090420"
-    },
-    {
-        "name": "Turmeric, dried",
-        "description": "Dried turmeric",
-        "hsCode": "091030"
-    },
-    {
         "name": "Coriander, dried",
         "description": "Coriander (cilantro) seeds, dried",
         "hsCode": "091020"
@@ -1100,16 +980,6 @@ export const ITEM_DATABASE = [
         "hsCode": "520811"
     },
     {
-        "name": "Knitted or crocheted cotton fabrics",
-        "description": "Knitted or crocheted cotton fabrics",
-        "hsCode": "600610"
-    },
-    {
-        "name": "Man-made filaments, synthetic",
-        "description": "Polyester filament yarn",
-        "hsCode": "540233"
-    },
-    {
         "name": "Readymade garments of cotton",
         "description": "Men's or boys' cotton shirts",
         "hsCode": "610510"
@@ -1130,44 +1000,19 @@ export const ITEM_DATABASE = [
         "hsCode": "080250"
     },
     {
-        "name": "Coconut oil",
-        "description": "Coconut (copra) oil",
-        "hsCode": "151311"
-    },
-    {
         "name": "Prepared spices and condiments",
         "description": "Mixed spices and curry powders",
         "hsCode": "210390"
     },
     {
         "name": "Fruit juices",
-        "description": "Mango juice and pulp",
+        "description": "Mango juice and pulp, Mango juice, apple juice, citrus juice",
         "hsCode": "200989"
-    },
-    {
-        "name": "Methanol",
-        "description": "Methanol and alcohols",
-        "hsCode": "290511"
     },
     {
         "name": "Acetone",
         "description": "Acetone solvent",
         "hsCode": "291411"
-    },
-    {
-        "name": "Medicaments containing penicillins",
-        "description": "Pharmaceutical penicillin preparations",
-        "hsCode": "300420"
-    },
-    {
-        "name": "Antibiotics",
-        "description": "Medicaments containing antibiotics",
-        "hsCode": "300420"
-    },
-    {
-        "name": "Pharmaceutical packed products",
-        "description": "Pharmaceutical goods in bulk and retail packs",
-        "hsCode": "300490"
     },
     {
         "name": "Granite, crude or roughly trimmed",
@@ -1195,39 +1040,9 @@ export const ITEM_DATABASE = [
         "hsCode": "841370"
     },
     {
-        "name": "Parts of machinery",
-        "description": "Parts for agricultural machinery",
-        "hsCode": "843139"
-    },
-    {
-        "name": "Turbojets, turbopropellers and other gas turbines",
-        "description": "Turbojet engines and related parts",
-        "hsCode": "841111"
-    },
-    {
         "name": "Industrial furnaces and ovens",
         "description": "Furnaces and ovens for industrial use",
         "hsCode": "841710"
-    },
-    {
-        "name": "Electric motors and generators",
-        "description": "Electric motors of an output not exceeding 750 W",
-        "hsCode": "850110"
-    },
-    {
-        "name": "Electric transformers",
-        "description": "Transformers and static converters",
-        "hsCode": "850423"
-    },
-    {
-        "name": "Electric accumulators",
-        "description": "Electric accumulators, including sealed ones",
-        "hsCode": "850720"
-    },
-    {
-        "name": "Electrical switches, connectors",
-        "description": "Electrical switches and connectors",
-        "hsCode": "853650"
     },
     {
         "name": "Insulated wire and cable",
@@ -1235,49 +1050,9 @@ export const ITEM_DATABASE = [
         "hsCode": "854449"
     },
     {
-        "name": "Polymers of ethylene",
-        "description": "Polyethylene in primary forms",
-        "hsCode": "390110"
-    },
-    {
-        "name": "Polymers of propylene",
-        "description": "Polypropylene polymers",
-        "hsCode": "390210"
-    },
-    {
-        "name": "Plastic plates, sheets, film",
-        "description": "Plastic sheets and films, unworked",
-        "hsCode": "392010"
-    },
-    {
-        "name": "Rubber tubes and hoses",
-        "description": "Rubber tubes, pipes and hoses",
-        "hsCode": "400931"
-    },
-    {
-        "name": "New pneumatic tyres",
-        "description": "New rubber pneumatic tyres",
-        "hsCode": "401110"
-    },
-    {
-        "name": "Footwear with outer soles of rubber",
-        "description": "Footwear with rubber soles and leather uppers",
-        "hsCode": "640590"
-    },
-    {
-        "name": "Leather handbags and cases",
-        "description": "Leather handbags, travel goods",
-        "hsCode": "420222"
-    },
-    {
         "name": "Leather dressed, tanned",
         "description": "Tanned or dressed leather for footwear",
         "hsCode": "410724"
-    },
-    {
-        "name": "Leather garment",
-        "description": "Leather clothing",
-        "hsCode": "420330"
     },
     {
         "name": "Gloves, mittens and mitts",
@@ -1305,16 +1080,6 @@ export const ITEM_DATABASE = [
         "hsCode": "040291"
     },
     {
-        "name": "Butter and other fats",
-        "description": "Butter and other fats from milk",
-        "hsCode": "040510"
-    },
-    {
-        "name": "Cheese and curd",
-        "description": "Cheese, curd and fresh cheese",
-        "hsCode": "040630"
-    },
-    {
         "name": "Honey",
         "description": "Natural honey",
         "hsCode": "040900"
@@ -1340,19 +1105,9 @@ export const ITEM_DATABASE = [
         "hsCode": "080222"
     },
     {
-        "name": "Fruit juice",
-        "description": "Mango juice, apple juice, citrus juice",
-        "hsCode": "200989"
-    },
-    {
         "name": "Seaweed, fresh or dried",
         "description": "Seaweed for consumption or industrial use",
         "hsCode": "121220"
-    },
-    {
-        "name": "Oils and fats derived from fruits",
-        "description": "Coconut oil, palm kernel oil, olive oil",
-        "hsCode": "151311"
     },
     {
         "name": "Medicinal plants and herbs",
@@ -1365,16 +1120,6 @@ export const ITEM_DATABASE = [
         "hsCode": "330129"
     },
     {
-        "name": "Paper and paperboard",
-        "description": "Uncoated paper for printing and writing",
-        "hsCode": "480100"
-    },
-    {
-        "name": "Books and printed materials",
-        "description": "Books, brochures, leaflets with printing",
-        "hsCode": "490199"
-    },
-    {
         "name": "Instant noodles",
         "description": "Prepared instant noodles, pasta products",
         "hsCode": "190219"
@@ -1384,9 +1129,15 @@ export const ITEM_DATABASE = [
         "description": "Hydraulic cement, clinker and clinkers for cement",
         "hsCode": "252310"
     },
-    {
-        "name": "Ceramic products",
-        "description": "Ceramic tiles, sanitary fixtures, domestic ware",
-        "hsCode": "690790"
-    }
+
+
+
+
+
+
+
+
+
+
+
 ];

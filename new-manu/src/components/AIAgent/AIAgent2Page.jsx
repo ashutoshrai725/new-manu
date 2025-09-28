@@ -31,7 +31,7 @@ const AIAgent2Page = ({ user, onPageChange, onLogout, documentsUploaded = true }
     const sendMessage = async () => {
         const userText = input.trim();
         if (!userText || loading) return;
-        
+
         addMessage(userText, 'user');
         setInput('');
         setLoading(true);
@@ -84,14 +84,14 @@ const AIAgent2Page = ({ user, onPageChange, onLogout, documentsUploaded = true }
                 onLogout={onLogout}
                 documentsUploaded={documentsUploaded}
             />
-        
+
             <div className="ai2-container" style={{ position: 'relative', paddingTop: '45px' }}>
-            
+
                 <div style={{ position: 'absolute', top: 100, left: 20, zIndex: 10 }}>
                     <button
                         onClick={handleBackToHome}
                         style={{
-                            allignItems: 'center',  display: 'flex',
+                            allignItems: 'center', display: 'flex',
                             background: '#528a64',
                             color: '#fff',
                             padding: '8px 16px',
@@ -113,63 +113,63 @@ const AIAgent2Page = ({ user, onPageChange, onLogout, documentsUploaded = true }
                     </button>
                 </div>
 
-            <div className="ai2-header">
-                <div className="ai2-logo">
-                    <img 
-                        src="/logos/manudocs_logo.jpg" 
-                        height="70" 
-                        width="60" 
-                        alt="Manudocs Logo"
-                        onError={(e) => {
-                            e.target.style.display = 'none';
-                            console.warn('Logo image failed to load');
-                        }}
-                    />
-                </div>
-                <div className="ai2-title">MANUDOCS AI</div>
-            </div>
-
-            <div className="ai2-chat-box" ref={chatBoxRef}>
-                {messages.map((msg, idx) => (
-                    <div
-                        key={idx}
-                        className={`ai2-message ${msg.sender === 'user' ? 'ai2-user-message' : 'ai2-ai-message'}`}
-                        dangerouslySetInnerHTML={{ 
-                            __html: msg.text.replace(/\n/g, '<br>') 
-                        }}
-                    />
-                ))}
-                {loading && (
-                    <div className="ai2-loading-indicator">
-                        <div className="ai2-dot"></div>
-                        <div className="ai2-dot"></div>
-                        <div className="ai2-dot"></div>
+                <div className="ai2-header">
+                    <div className="ai2-logo">
+                        <img
+                            src="https://i.postimg.cc/qhqjBrYN/mnuverse.jpg"
+                            height="70"
+                            width="60"
+                            alt="Manudocs Logo"
+                            onError={(e) => {
+                                e.target.style.display = 'none';
+                                console.warn('Logo image failed to load');
+                            }}
+                        />
                     </div>
-                )}
-            </div>
+                    <div className="ai2-title">MANUDOCS AI</div>
+                </div>
 
-            <div className="ai2-input-area">
-                <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Type your message..."
-                    onKeyDown={handleKeyDown}
-                    disabled={loading}
-                    maxLength={1000}
-                />
-                <button 
-                    onClick={sendMessage}
-                    disabled={loading || !input.trim()}
-                    style={{
-                        opacity: loading || !input.trim() ? 0.6 : 1,
-                        cursor: loading || !input.trim() ? 'not-allowed' : 'pointer'
-                    }}
-                >
-                    {loading ? 'Sending...' : 'Send'}
-                </button>
+                <div className="ai2-chat-box" ref={chatBoxRef}>
+                    {messages.map((msg, idx) => (
+                        <div
+                            key={idx}
+                            className={`ai2-message ${msg.sender === 'user' ? 'ai2-user-message' : 'ai2-ai-message'}`}
+                            dangerouslySetInnerHTML={{
+                                __html: msg.text.replace(/\n/g, '<br>')
+                            }}
+                        />
+                    ))}
+                    {loading && (
+                        <div className="ai2-loading-indicator">
+                            <div className="ai2-dot"></div>
+                            <div className="ai2-dot"></div>
+                            <div className="ai2-dot"></div>
+                        </div>
+                    )}
+                </div>
+
+                <div className="ai2-input-area">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Type your message..."
+                        onKeyDown={handleKeyDown}
+                        disabled={loading}
+                        maxLength={1000}
+                    />
+                    <button
+                        onClick={sendMessage}
+                        disabled={loading || !input.trim()}
+                        style={{
+                            opacity: loading || !input.trim() ? 0.6 : 1,
+                            cursor: loading || !input.trim() ? 'not-allowed' : 'pointer'
+                        }}
+                    >
+                        {loading ? 'Sending...' : 'Send'}
+                    </button>
+                </div>
             </div>
-        </div>
         </div>
     );
 };

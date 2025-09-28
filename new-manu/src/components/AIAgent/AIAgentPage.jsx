@@ -27,15 +27,15 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     const [generatedDocuments, setGeneratedDocuments] = useState([]);
     const [activeDocIndex, setActiveDocIndex] = useState(0);
     const [manualFillRequired, setManualFillRequired] = useState(false);
-    
+
     // Product entry states
     const [productEntryStep, setProductEntryStep] = useState(0);
-    const [currentProduct, setCurrentProduct] = useState({ 
-        item: '', 
-        description: '', 
-        hsCode: '', 
-        quantity: '', 
-        unitPrice: '' 
+    const [currentProduct, setCurrentProduct] = useState({
+        item: '',
+        description: '',
+        hsCode: '',
+        quantity: '',
+        unitPrice: ''
     });
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filteredItems, setFilteredItems] = useState([]);
@@ -83,12 +83,12 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                         setActiveDocIndex(saved.activeDocIndex || 0);
                         setManualFillRequired(Boolean(saved.manualFillRequired));
                         setProductEntryStep(saved.productEntryStep || 0);
-                        setCurrentProduct(saved.currentProduct || { 
-                            item: '', 
-                            description: '', 
-                            hsCode: '', 
-                            quantity: '', 
-                            unitPrice: '' 
+                        setCurrentProduct(saved.currentProduct || {
+                            item: '',
+                            description: '',
+                            hsCode: '',
+                            quantity: '',
+                            unitPrice: ''
                         });
                         setShowSuggestions(Boolean(saved.showSuggestions));
                         setFilteredItems(saved.filteredItems || []);
@@ -251,7 +251,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                     return;
                 }
             }
-        } catch (_e) {}
+        } catch (_e) { }
 
         if (!documentsUploaded) {
             setMessages([{
@@ -312,26 +312,21 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             }
 
             if (!data || data.length === 0) {
-                // No user profile found, use fallback data or prompt for manual entry
+                // No user profile found - prompt manual fill without defaults
                 console.log('No user profile found for user:', user.id);
-                
-                // Try to use basic user info as fallback
-                const fallbackData = {
-                    company_name: user?.user_metadata?.company_name || user?.company_name || 'Your Company',
-                    comp_reg_address: user?.user_metadata?.address || user?.address || 'Your Company Address',
-                    email: user?.email || 'contact@company.com'
-                };
 
-                setCompanyData(fallbackData);
+                setManualFillRequired(true);
                 setMessages(prev => [...prev, {
                     id: generateUniqueId(),
                     type: 'bot',
-                    content: `📝 Using basic information. You can update details later:\n\n• Company: ${fallbackData.company_name}\n• Address: ${fallbackData.comp_reg_address}\n\nLet's continue with the questions.`,
+                    content: 'We could not find your company information. Please fill it manually below.',
+                    manualFill: true,
                     timestamp: new Date()
                 }]);
 
-                return fallbackData;
+                return null;
             }
+
 
             // Use the found profile data
             const profileData = data[0];
@@ -348,7 +343,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
         } catch (error) {
             console.error('Supabase fetch error:', error);
-            
+
             // Fallback to manual entry on any error
             setManualFillRequired(true);
             setMessages(prev => [...prev, {
@@ -418,9 +413,9 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         setAwaitingInput(false);
 
         // Disable the input in the previous message
-        setMessages(prevMessages => 
-            prevMessages.map(msg => 
-                msg.showInput && msg.expectedField === field 
+        setMessages(prevMessages =>
+            prevMessages.map(msg =>
+                msg.showInput && msg.expectedField === field
                     ? { ...msg, showInput: false, inputDisabled: true, userAnswer: inputValue }
                     : msg
             )
@@ -466,9 +461,9 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         try {
             const userEmail = user?.email || user?.user_metadata?.email || 'unknown@example.com';
             console.log('Generating PDFs and sending via email webhook for user:', userEmail);
-            
+
             const pdfDataArray = [];
-            
+
             // Generate PDF binary data for each document
             for (const doc of generatedDocuments) {
                 const container = document.createElement('div');
@@ -487,22 +482,22 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
                 pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                
+
                 // Get PDF as binary data (ArrayBuffer)
                 const pdfArrayBuffer = pdf.output('arraybuffer');
-                
+
                 // Convert ArrayBuffer to base64 more efficiently (avoiding stack overflow)
                 const uint8Array = new Uint8Array(pdfArrayBuffer);
                 let binaryString = '';
                 const chunkSize = 8192; // Process in chunks to avoid stack overflow
-                
+
                 for (let i = 0; i < uint8Array.length; i += chunkSize) {
                     const chunk = uint8Array.subarray(i, i + chunkSize);
                     binaryString += String.fromCharCode.apply(null, chunk);
                 }
-                
+
                 const pdfBase64 = btoa(binaryString);
-                
+
                 pdfDataArray.push({
                     filename: `${doc.name || 'Document'}.pdf`,
                     base64Data: pdfBase64,
@@ -514,8 +509,8 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             }
 
             // Send to n8n webhook with PDF binary data
-            const webhookUrl = 'http://localhost:5678/webhook-test/60c9760c-650d-471c-9d4f-e7d4e362980f';
-            
+            const webhookUrl = 'https://snobbily-tombless-louisa.ngrok-free.dev/webhook/60c9760c-650d-471c-9d4f-e7d4e362980f';
+
             const payload = {
                 action: 'send_email',
                 userEmail: userEmail,
@@ -537,11 +532,11 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                     base64Data: `[${pdf.base64Data.length} characters]` // Don't log the full base64
                 }))
             });
-            
+
             // Add timeout to prevent hanging
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-            
+
             const response = await fetch(webhookUrl, {
                 method: 'POST',
                 headers: {
@@ -550,7 +545,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 body: JSON.stringify(payload),
                 signal: controller.signal
             });
-            
+
             clearTimeout(timeoutId);
 
             if (response.ok) {
@@ -583,7 +578,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
             <div className="pt-16 h-screen flex">
                 {/* Back Button */}
-                
+
 
                 {/* Left Panel - Chat Interface */}
                 <div className="w-1/2 bg-white border-r border-gray-200 flex flex-col">
@@ -594,7 +589,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                 <MessageCircle className="text-manu-green" size={20} />
                             </div>
                             <div>
-                                <h3 className="font-semibold">E-CHA AI Agent</h3>
+                                <h3 className="font-semibold">E-CHA</h3>
                                 <p className="text-sm opacity-90">Export Document Assistant</p>
                             </div>
                         </div>
@@ -784,20 +779,25 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                         value={currentProduct.item}
                                                         onChange={e => {
                                                             const val = e.target.value;
-                                                            setCurrentProduct({ ...currentProduct, item: val });
-                                                            if (val.length > 0) {
-                                                                setShowSuggestions(true);
-                                                                setFilteredItems(
-                                                                    ITEM_DATABASE.filter(
-                                                                        item =>
-                                                                            item.name.toLowerCase().includes(val.toLowerCase()) ||
-                                                                            item.description.toLowerCase().includes(val.toLowerCase())
-                                                                    )
-                                                                );
-                                                            } else {
-                                                                setShowSuggestions(false);
-                                                            }
+
+                                                            // Show suggestions only if input length > 0
+                                                            setShowSuggestions(val.length > 0);
+
+                                                            // Filter ITEM_DATABASE based on full current input (name or description)
+                                                            const filtered = val.length > 0
+                                                                ? ITEM_DATABASE.filter(item =>
+                                                                    item.name.toLowerCase().includes(val.toLowerCase()) ||
+                                                                    item.description.toLowerCase().includes(val.toLowerCase())
+                                                                )
+                                                                : [];
+
+                                                            // Update filtered items list
+                                                            setFilteredItems(filtered);
+
+                                                            // Update currentProduct state with new item name
+                                                            setCurrentProduct(prev => ({ ...prev, item: val }));
                                                         }}
+
                                                         autoFocus
                                                     />
                                                     {showSuggestions && filteredItems.length > 0 && (
@@ -859,25 +859,25 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                                         ...prev,
                                                                         products: [currentProduct]
                                                                     }));
-                                                                    
+
                                                                     const productSummary = `Added: ${currentProduct.item} | ${currentProduct.description} | ${currentProduct.hsCode} | Qty: ${currentProduct.quantity} | Price: ${currentProduct.unitPrice}`;
-                                                                    
+
                                                                     setMessages(prev => [...prev, {
                                                                         id: generateUniqueId(),
                                                                         type: 'user',
                                                                         content: productSummary,
                                                                         timestamp: new Date()
                                                                     }]);
-                                                                    
+
                                                                     // Disable the products input in the previous message
-                                                                    setMessages(prevMessages => 
-                                                                        prevMessages.map(msg => 
-                                                                            msg.showInput && msg.expectedField === 'products' 
+                                                                    setMessages(prevMessages =>
+                                                                        prevMessages.map(msg =>
+                                                                            msg.showInput && msg.expectedField === 'products'
                                                                                 ? { ...msg, showInput: false, inputDisabled: true, userAnswer: productSummary }
                                                                                 : msg
                                                                         )
                                                                     );
-                                                                    
+
                                                                     // Reset for next question
                                                                     setCurrentProduct({ item: '', description: '', hsCode: '', quantity: '', unitPrice: '' });
                                                                     setProductEntryStep(0);
@@ -1031,13 +1031,12 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                         <FileText size={16} />
                                         Download All PDFs
                                     </button>
-                                    
+
                                     <button
-                                        className={`px-4 py-2 text-white rounded flex items-center gap-2 ${
-                                            isSendingEmail 
-                                                ? 'bg-gray-400 cursor-not-allowed' 
-                                                : 'bg-green-600 hover:bg-green-700'
-                                        }`}
+                                        className={`px-4 py-2 text-white rounded flex items-center gap-2 ${isSendingEmail
+                                            ? 'bg-gray-400 cursor-not-allowed'
+                                            : 'bg-green-600 hover:bg-green-700'
+                                            }`}
                                         onClick={sendPdfViaEmail}
                                         disabled={isSendingEmail}
                                     >
