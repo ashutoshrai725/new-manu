@@ -23,7 +23,7 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
             formData.append('document_type', 'aadhar');
             formData.append('upload_timestamp', new Date().toISOString());
 
-            const webhookUrl = process.env.REACT_APP_N8N_AADHAR_WEBHOOK_URL || 'https://mock-webhook.com/aadhar';
+            const webhookUrl = import.meta.env.VITE_N8N_AADHAR_WEBHOOK_URL || import.meta.env.REACT_APP_N8N_AADHAR_WEBHOOK_URL || 'https://mock-webhook.com/aadhar';
 
             const response = await fetch(webhookUrl, {
                 method: 'POST',
@@ -59,7 +59,7 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
             formData.append('document_type', 'company');
             formData.append('upload_timestamp', new Date().toISOString());
 
-            const webhookUrl = process.env.REACT_APP_N8N_COMPANY_WEBHOOK_URL || 'https://mock-webhook.com/company';
+            const webhookUrl = import.meta.env.VITE_N8N_COMPANY_WEBHOOK_URL || import.meta.env.REACT_APP_N8N_COMPANY_WEBHOOK_URL || 'https://mock-webhook.com/company';
 
             const response = await fetch(webhookUrl, {
                 method: 'POST',
@@ -256,7 +256,7 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
                         )}
 
                         {/* Debug Info (Development only) */}
-                        {process.env.NODE_ENV === 'development' && (
+                        {import.meta.env.MODE === 'development' && (
                             <div className="bg-gray-100 p-4 rounded-lg">
                                 <h3 className="text-sm font-medium text-gray-700 mb-2">Debug Info:</h3>
                                 <div className="text-xs text-gray-600 space-y-1">

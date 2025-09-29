@@ -10,8 +10,8 @@ import { ITEM_DATABASE } from './itemDatabase';
 
 // Initialize Supabase client
 const supabase = createClient(
-    process.env.REACT_APP_SUPABASE_URL,
-    process.env.REACT_APP_SUPABASE_ANON_KEY
+    import.meta.env.VITE_SUPABASE_URL || import.meta.env.REACT_APP_SUPABASE_URL,
+    import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.REACT_APP_SUPABASE_ANON_KEY
 );
 
 const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true }) => {
