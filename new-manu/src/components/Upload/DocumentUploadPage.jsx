@@ -1,11 +1,10 @@
 // src/components/Upload/DocumentUploadPage.jsx
 import React, { useState } from 'react';
-import { ArrowLeft, Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import Header from '../LandingPage/Header';
 
 const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
     const [uploadStatus, setUploadStatus] = useState(null);
-    const [loading, setLoading] = useState(false);
 
     // Step management
     const [currentStep, setCurrentStep] = useState(1); // 1: Aadhar, 2: Company, 3: Completed
@@ -14,7 +13,6 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
 
     // Aadhar Upload Function
     const handleAadharUpload = async (file) => {
-        setLoading(true);
         setUploadStatus('uploading');
 
         try {
@@ -46,14 +44,11 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
             }
         } catch (error) {
             setUploadStatus('error');
-        } finally {
-            setLoading(false);
         }
     };
 
     // Company Document Upload Function
     const handleCompanyUpload = async (file) => {
-        setLoading(true);
         setUploadStatus('uploading');
 
         try {
@@ -85,8 +80,6 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
             }
         } catch (error) {
             setUploadStatus('error');
-        } finally {
-            setLoading(false);
         }
     };
 
