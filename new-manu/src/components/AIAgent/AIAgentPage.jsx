@@ -27,6 +27,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     const [generatedDocuments, setGeneratedDocuments] = useState([]);
     const [activeDocIndex, setActiveDocIndex] = useState(0);
     const [manualFillRequired, setManualFillRequired] = useState(false);
+    const [showContinueButton, setShowContinueButton] = useState(false);
 
     // Product entry states
     const [productEntryStep, setProductEntryStep] = useState(0);
@@ -82,6 +83,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                         setGeneratedDocuments(saved.generatedDocuments || []);
                         setActiveDocIndex(saved.activeDocIndex || 0);
                         setManualFillRequired(Boolean(saved.manualFillRequired));
+                        setShowContinueButton(Boolean(saved.showContinueButton));
                         setProductEntryStep(saved.productEntryStep || 0);
                         setCurrentProduct(saved.currentProduct || {
                             item: '',
@@ -120,6 +122,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                     generatedDocuments,
                     activeDocIndex,
                     manualFillRequired,
+                    showContinueButton,
                     productEntryStep,
                     currentProduct,
                     showSuggestions,
@@ -148,6 +151,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         generatedDocuments,
         activeDocIndex,
         manualFillRequired,
+        showContinueButton,
         productEntryStep,
         currentProduct,
         showSuggestions,
@@ -157,8 +161,10 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         storageKey
     ]);
 
-    // Complete data collection - FIXED VERSION
+    // Complete data collection
     const completeDataCollection = useCallback(async () => {
+        console.log('completeDataCollection called - starting document generation');
+
         setMessages(prev => [...prev, {
             id: generateUniqueId(),
             type: 'bot',
@@ -168,7 +174,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
         setCurrentStep('generating');
 
-        // Generate templates using the engine - FIXED
+        // Generate templates using the engine
         try {
             const generatedDocs = generateDocuments(selectedTemplates, companyData, userInputs);
             setGeneratedDocuments(generatedDocs);
@@ -194,46 +200,72 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         }
     }, [selectedTemplates, companyData, userInputs, generateUniqueId]);
 
-    // Ask questions one by one
+    // Ask questions one by one - SIMPLIFIED VERSION
     const askNextQuestion = useCallback(() => {
-        if (currentQuestion < questions.length) {
-            const question = questions[currentQuestion];
+        console.log('askNextQuestion called - currentQuestion:', currentQuestion, 'questions length:', questions.length);
 
-            // If it's the products step, trigger product entry UI
-            if (question.field === 'products') {
-                setMessages(prev => [...prev, {
-                    id: generateUniqueId(),
-                    type: 'bot',
-                    content: `Let's add your products one by one. Start typing the item name below.`,
-                    timestamp: new Date(),
-                    showInput: true,
-                    inputType: 'products',
-                    expectedField: 'products'
-                }]);
-                setAwaitingInput(true);
-                return;
-            }
+        // Check if we've completed all questions
+        if (currentQuestion >= questions.length) {
+            console.log('All questions completed, calling completeDataCollection');
+            completeDataCollection();
+            return;
+        }
 
-            // Default question UI
+        const question = questions[currentQuestion];
+        console.log('Asking question:', question.field, 'type:', question.type);
+
+        // If it's the products step, trigger product entry UI
+        if (question.field === 'products') {
             setMessages(prev => [...prev, {
                 id: generateUniqueId(),
                 type: 'bot',
-                content: `${currentQuestion + 1}/${questions.length} - ${question.question}`,
+                content: `Let's add your products one by one. Start typing the item name below.`,
                 timestamp: new Date(),
                 showInput: true,
-                inputType: question.type,
-                inputOptions: question.options,
-                expectedField: question.field
+                inputType: 'products',
+                expectedField: 'products'
             }]);
             setAwaitingInput(true);
-        } else {
-            completeDataCollection();
+            return;
         }
+
+        // Default question UI
+        setMessages(prev => [...prev, {
+            id: generateUniqueId(),
+            type: 'bot',
+            content: `${currentQuestion + 1}/${questions.length} - ${question.question}`,
+            timestamp: new Date(),
+            showInput: true,
+            inputType: question.type,
+            inputOptions: question.options,
+            expectedField: question.field
+        }]);
+        setAwaitingInput(true);
     }, [currentQuestion, questions, completeDataCollection, generateUniqueId]);
 
+    // Handle continue button click
+    const handleContinueClick = useCallback(() => {
+        console.log('Continue button clicked, starting questions');
+        setShowContinueButton(false);
+        setCurrentStep('data_collection');
+        setCurrentQuestion(0);
+        // Don't call askNextQuestion here - let the useEffect handle it
+    }, []);
+
+    // FIXED: Simplified useEffect to handle question flow
     useEffect(() => {
-        if (currentStep === 'data_collection' && awaitingInput === false) {
-            askNextQuestion();
+        console.log('useEffect - currentStep:', currentStep, 'currentQuestion:', currentQuestion, 'awaitingInput:', awaitingInput);
+
+        // Only trigger when we're in data_collection, not awaiting input, and have questions to ask
+        if (currentStep === 'data_collection' && !awaitingInput) {
+            console.log('Conditions met for asking question');
+
+            // Use setTimeout to avoid state update conflicts
+            const timer = setTimeout(() => {
+                askNextQuestion();
+            }, 100);
+
+            return () => clearTimeout(timer);
         }
     }, [currentStep, currentQuestion, awaitingInput, askNextQuestion]);
 
@@ -324,9 +356,10 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                     timestamp: new Date()
                 }]);
 
+                // Show continue button after manual fill
+                setShowContinueButton(true);
                 return null;
             }
-
 
             // Use the found profile data
             const profileData = data[0];
@@ -335,9 +368,13 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             setMessages(prev => [...prev, {
                 id: generateUniqueId(),
                 type: 'bot',
-                content: `✅ Company info loaded:\n\n• Company: ${profileData.company_name}\n• Address: ${profileData.comp_reg_address}\n\nNow, please answer some questions.`,
-                timestamp: new Date()
+                content: `✅ Company info loaded:\n\n• Company: ${profileData.company_name}\n• Address: ${profileData.comp_reg_address}\n\nClick "Continue" to proceed with the questions.`,
+                timestamp: new Date(),
+                showContinueButton: true
             }]);
+
+            // Show continue button
+            setShowContinueButton(true);
 
             return profileData;
 
@@ -353,10 +390,12 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 manualFill: true,
                 timestamp: new Date()
             }]);
+
+            // Show continue button after manual fill
+            setShowContinueButton(true);
             return null;
         }
     }
-
 
     // Handle template selection
     const handleTemplateSelection = async () => {
@@ -381,22 +420,41 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             timestamp: new Date()
         }
         ]);
+
+        // Fetch company data
         await fetchCompanyData();
-
-        setCurrentStep('data_collection');
-
-
-        // Fetch company data and then start questions
-        setCurrentQuestion(0);
-
-
-
-
-
     };
 
-    // Handle user input
-    const handleUserInput = (inputValue, field) => {
+    // Handle manual form submission
+    const handleManualFormSubmit = () => {
+        if (!companyData?.company_name || !companyData?.comp_reg_address) {
+            alert('Please fill in both company name and address');
+            return;
+        }
+
+        setMessages(prev => [...prev, {
+            id: generateUniqueId(),
+            type: 'user',
+            content: `Company: ${companyData.company_name}\nAddress: ${companyData.comp_reg_address}`,
+            timestamp: new Date()
+        }]);
+
+        setMessages(prev => [...prev, {
+            id: generateUniqueId(),
+            type: 'bot',
+            content: `✅ Company info saved:\n\n• Company: ${companyData.company_name}\n• Address: ${companyData.comp_reg_address}\n\nClick "Continue" to proceed with the questions.`,
+            timestamp: new Date(),
+            showContinueButton: true
+        }]);
+
+        setManualFillRequired(false);
+        setShowContinueButton(true);
+    };
+
+    // Handle user input - FIXED VERSION
+    const handleUserInput = useCallback((inputValue, field) => {
+        console.log('handleUserInput called - field:', field, 'value:', inputValue, 'currentQuestion before:', currentQuestion);
+
         setUserInputs(prev => ({
             ...prev,
             [field]: inputValue
@@ -409,9 +467,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             timestamp: new Date()
         }]);
 
-        setCurrentQuestion(prev => prev + 1);
-        setAwaitingInput(false);
-
         // Disable the input in the previous message
         setMessages(prevMessages =>
             prevMessages.map(msg =>
@@ -420,7 +475,18 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                     : msg
             )
         );
-    };
+
+        // Set awaitingInput to false FIRST
+        setAwaitingInput(false);
+
+        // Then increment question - this will trigger the useEffect to ask next question
+        setCurrentQuestion(prev => {
+            const newQuestion = prev + 1;
+            console.log('Setting currentQuestion from', prev, 'to', newQuestion);
+            return newQuestion;
+        });
+
+    }, [currentQuestion, generateUniqueId]);
 
     const downloadAllPdfs = async () => {
         if (generatedDocuments.length === 0) {
@@ -429,7 +495,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         }
         for (const doc of generatedDocuments) {
             const container = document.createElement('div');
-            container.style.position = 'fixed';  // taaki screen pe na dikhe
+            container.style.position = 'fixed';
             container.style.left = '-9999px';
             container.innerHTML = doc.html;
             document.body.appendChild(container);
@@ -577,9 +643,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             />
 
             <div className="pt-16 h-screen flex">
-                {/* Back Button */}
-
-
                 {/* Left Panel - Chat Interface */}
                 <div className="w-1/2 bg-white border-r border-gray-200 flex flex-col">
                     {/* Chat Header */}
@@ -598,11 +661,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                     {/* Chat Messages */}
                     <div className="flex-1 p-4 overflow-y-auto space-y-4">
                         {messages.map((message) => (
-
-
-
-
-
                             <div
                                 key={message.id}
                                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -613,7 +671,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                     }`}>
                                     <div className="whitespace-pre-wrap">{message.content}</div>
 
-                                    {/* Yahan manual fill form add karo */}
+                                    {/* Manual fill form */}
                                     {message.manualFill && manualFillRequired && (
                                         <div className="manual-fill-form p-4 border rounded bg-white mt-4">
                                             <input
@@ -634,10 +692,23 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                 }
                                                 className="mb-2 p-2 border rounded w-full"
                                             />
-
-                                            {/* Add Submit button */}
-
+                                            <button
+                                                onClick={handleManualFormSubmit}
+                                                className="w-full bg-manu-green text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm"
+                                            >
+                                                Submit Company Details
+                                            </button>
                                         </div>
+                                    )}
+
+                                    {/* Continue Button */}
+                                    {message.showContinueButton && showContinueButton && (
+                                        <button
+                                            onClick={handleContinueClick}
+                                            className="mt-3 bg-manu-green text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm"
+                                        >
+                                            Continue to Questions
+                                        </button>
                                     )}
 
                                     {/* Upload Documents Button */}
@@ -883,8 +954,8 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                                     setProductEntryStep(0);
                                                                     setShowSuggestions(false);
                                                                     setFilteredItems([]);
-                                                                    setCurrentQuestion(prev => prev + 1); // Move to next question
                                                                     setAwaitingInput(false);
+                                                                    setCurrentQuestion(prev => prev + 1); // Move to next question
                                                                 }}
                                                             >
                                                                 Add Product
@@ -1060,10 +1131,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                         ))}
                                     </div>
                                 )}
-
-
-
-
 
                                 {/* Preview HTML */}
                                 <div style={{ minHeight: 500 }}>
