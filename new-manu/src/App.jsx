@@ -10,8 +10,8 @@ import AIAgent2Page from './components/AIAgent/AIAgent2Page.jsx';
 import LoadingSpinner from './components/common/LoadingSpinner.jsx'; // You can create this component
 
 const supabase = createClient(
-  process.env.REACT_APP_SUPABASE_URL,
-  process.env.REACT_APP_SUPABASE_ANON_KEY
+  import.meta.env.VITE_SUPABASE_URL || import.meta.env.REACT_APP_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.REACT_APP_SUPABASE_ANON_KEY
 );
 
 // Protected Route Component
