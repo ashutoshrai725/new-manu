@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { MessageCircle, FileText } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import jsPDF from 'jspdf';
@@ -28,6 +28,9 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     const [activeDocIndex, setActiveDocIndex] = useState(0);
     const [manualFillRequired, setManualFillRequired] = useState(false);
     const [showContinueButton, setShowContinueButton] = useState(false);
+    // Refs for auto-scroll
+    const messagesEndRef = useRef(null);
+
 
     // Product entry states
     const [productEntryStep, setProductEntryStep] = useState(0);
@@ -105,6 +108,16 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
         loadSavedState();
     }, [storageKey]);
+
+    // Auto-scroll to bottom when messages change
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+        }
+    }, [messages]);
 
     // Save chat state whenever significant pieces change
     useEffect(() => {
@@ -200,13 +213,13 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         }
     }, [selectedTemplates, companyData, userInputs, generateUniqueId]);
 
-    // Ask questions one by one - SIMPLIFIED VERSION
+    // Ask questions one by one - FIXED VERSION
     const askNextQuestion = useCallback(() => {
         console.log('askNextQuestion called - currentQuestion:', currentQuestion, 'questions length:', questions.length);
 
         // Check if we've completed all questions
         if (currentQuestion >= questions.length) {
-            console.log('All questions completed, calling completeDataCollection');
+            console.log('🎉 All questions completed, calling completeDataCollection');
             completeDataCollection();
             return;
         }
@@ -243,31 +256,99 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         setAwaitingInput(true);
     }, [currentQuestion, questions, completeDataCollection, generateUniqueId]);
 
-    // Handle continue button click
+    // Handle continue button click - FIXED
     const handleContinueClick = useCallback(() => {
         console.log('Continue button clicked, starting questions');
         setShowContinueButton(false);
         setCurrentStep('data_collection');
         setCurrentQuestion(0);
-        // Don't call askNextQuestion here - let the useEffect handle it
-    }, []);
+        setAwaitingInput(false);
 
-    // FIXED: Simplified useEffect to handle question flow
+        // Clear any stuck state by forcing a refresh
+        setTimeout(() => {
+            askNextQuestion();
+        }, 100);
+    }, [askNextQuestion]);
+
+    // FIXED: Enhanced useEffect to handle question flow with navigation recovery AND completion
     useEffect(() => {
         console.log('useEffect - currentStep:', currentStep, 'currentQuestion:', currentQuestion, 'awaitingInput:', awaitingInput);
 
-        // Only trigger when we're in data_collection, not awaiting input, and have questions to ask
-        if (currentStep === 'data_collection' && !awaitingInput) {
-            console.log('Conditions met for asking question');
+        // Check if we're stuck (in data_collection but no questions showing)
+        const isStuck = currentStep === 'data_collection' &&
+            currentQuestion === 0 &&
+            !awaitingInput &&
+            selectedTemplates.length > 0 &&
+            companyData;
 
-            // Use setTimeout to avoid state update conflicts
+        if (isStuck) {
+            console.log('🔄 Detected stuck state after navigation, auto-recovering...');
+            const timer = setTimeout(() => {
+                askNextQuestion();
+            }, 200);
+            return () => clearTimeout(timer);
+        }
+
+        // Check if all questions are completed
+        if (currentStep === 'data_collection' && !awaitingInput && currentQuestion >= questions.length) {
+            console.log('✅ All questions completed, triggering document generation');
+            const timer = setTimeout(() => {
+                completeDataCollection();
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+
+        // Normal flow: trigger when we're in data_collection, not awaiting input, and have questions to ask
+        if (currentStep === 'data_collection' && !awaitingInput && currentQuestion < questions.length) {
+            console.log('✅ Conditions met for asking question');
+
             const timer = setTimeout(() => {
                 askNextQuestion();
             }, 100);
 
             return () => clearTimeout(timer);
         }
-    }, [currentStep, currentQuestion, awaitingInput, askNextQuestion]);
+    }, [currentStep, currentQuestion, awaitingInput, askNextQuestion, questions.length, selectedTemplates, companyData, completeDataCollection]);
+
+    // Detect when user navigates away and comes back - FIX FOR PRODUCTION ISSUE
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                console.log('📱 User returned to page, checking state...');
+
+                // If we're stuck in data_collection without active questions, force recovery
+                if (currentStep === 'data_collection' &&
+                    currentQuestion === 0 &&
+                    !awaitingInput &&
+                    selectedTemplates.length > 0 &&
+                    companyData) {
+
+                    console.log('🚨 Auto-recovering from navigation stuck state');
+
+                    setTimeout(() => {
+                        setMessages(prev => [...prev, {
+                            id: generateUniqueId(),
+                            type: 'bot',
+                            content: '👋 Welcome back! Continuing with your questions...',
+                            timestamp: new Date()
+                        }]);
+
+                        // Force restart the question flow
+                        setAwaitingInput(false);
+                        askNextQuestion();
+                    }, 500);
+                }
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [currentStep, currentQuestion, awaitingInput, selectedTemplates, companyData, askNextQuestion, generateUniqueId]);
+
+
 
     // Initialize the chat on component mount
     useEffect(() => {
@@ -453,7 +534,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
     // Handle user input - FIXED VERSION
     const handleUserInput = useCallback((inputValue, field) => {
-        console.log('handleUserInput called - field:', field, 'value:', inputValue, 'currentQuestion before:', currentQuestion);
+        console.log('handleUserInput called - field:', field, 'value:', inputValue);
 
         setUserInputs(prev => ({
             ...prev,
@@ -476,17 +557,15 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             )
         );
 
-        // Set awaitingInput to false FIRST
+        // Set awaitingInput to false and increment question
         setAwaitingInput(false);
-
-        // Then increment question - this will trigger the useEffect to ask next question
         setCurrentQuestion(prev => {
             const newQuestion = prev + 1;
-            console.log('Setting currentQuestion from', prev, 'to', newQuestion);
+            console.log('📈 Moving from question', prev, 'to', newQuestion);
             return newQuestion;
         });
 
-    }, [currentQuestion, generateUniqueId]);
+    }, [generateUniqueId]);
 
     const downloadAllPdfs = async () => {
         if (generatedDocuments.length === 0) {
@@ -516,6 +595,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     };
 
     // Function to generate PDF binary data and send via email webhook
+    // Function to generate PDF binary data and send via email webhook
     const sendPdfViaEmail = async () => {
         if (generatedDocuments.length === 0) {
             alert("No documents generated to send.");
@@ -526,55 +606,86 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
         try {
             const userEmail = user?.email || user?.user_metadata?.email || 'unknown@example.com';
-            console.log('Generating PDFs and sending via email webhook for user:', userEmail);
+            console.log('Generating combined PDF and sending via email webhook for user:', userEmail);
 
-            const pdfDataArray = [];
+            // Create a single PDF that contains all documents
+            const pdf = new jsPDF('p', 'pt', 'a4');
+            let currentPage = 0;
 
-            // Generate PDF binary data for each document
-            for (const doc of generatedDocuments) {
+            for (let i = 0; i < generatedDocuments.length; i++) {
+                const doc = generatedDocuments[i];
+
+                // Create container for each document
                 const container = document.createElement('div');
                 container.style.position = 'fixed';
                 container.style.left = '-9999px';
+                container.style.width = '794px'; // A4 width in pixels at 96 DPI
+                container.style.padding = '20px';
+                container.style.backgroundColor = 'white';
                 container.innerHTML = doc.html;
                 document.body.appendChild(container);
 
-                const canvas = await html2canvas(container, { scale: 2 });
+                // Convert to canvas
+                const canvas = await html2canvas(container, {
+                    scale: 1.5, // Reduced scale for better performance
+                    useCORS: true,
+                    allowTaint: true,
+                    width: 794, // A4 width
+                    windowWidth: 794
+                });
+
                 document.body.removeChild(container);
 
-                const imgData = canvas.toDataURL('image/png');
+                const imgData = canvas.toDataURL('image/jpeg', 0.7); // Use JPEG with compression
 
-                const pdf = new jsPDF('p', 'pt', 'a4');
                 const pdfWidth = pdf.internal.pageSize.getWidth();
                 const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-                // Get PDF as binary data (ArrayBuffer)
-                const pdfArrayBuffer = pdf.output('arraybuffer');
-
-                // Convert ArrayBuffer to base64 more efficiently (avoiding stack overflow)
-                const uint8Array = new Uint8Array(pdfArrayBuffer);
-                let binaryString = '';
-                const chunkSize = 8192; // Process in chunks to avoid stack overflow
-
-                for (let i = 0; i < uint8Array.length; i += chunkSize) {
-                    const chunk = uint8Array.subarray(i, i + chunkSize);
-                    binaryString += String.fromCharCode.apply(null, chunk);
+                // Add new page for each document (except the first one)
+                if (currentPage > 0) {
+                    pdf.addPage();
                 }
 
-                const pdfBase64 = btoa(binaryString);
+                // Add the document image to PDF
+                pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
 
-                pdfDataArray.push({
-                    filename: `${doc.name || 'Document'}.pdf`,
-                    base64Data: pdfBase64,
-                    mimetype: 'application/pdf',
-                    size: pdfArrayBuffer.byteLength,
-                    documentType: doc.type,
-                    documentName: doc.name
-                });
+                // Add document title as header
+                pdf.setFontSize(12);
+                pdf.setTextColor(100);
+                pdf.text(`Document: ${doc.name || 'Untitled'}`, 40, 30);
+
+                // Add page number
+                pdf.text(`Page ${currentPage + 1}`, pdfWidth - 60, 30);
+
+                currentPage++;
             }
 
-            // Send to n8n webhook with PDF binary data
+            // Get the combined PDF as binary data (ArrayBuffer)
+            const pdfArrayBuffer = pdf.output('arraybuffer');
+
+            // Convert ArrayBuffer to base64
+            const uint8Array = new Uint8Array(pdfArrayBuffer);
+            let binaryString = '';
+            const chunkSize = 8192;
+
+            for (let i = 0; i < uint8Array.length; i += chunkSize) {
+                const chunk = uint8Array.subarray(i, i + chunkSize);
+                binaryString += String.fromCharCode.apply(null, chunk);
+            }
+
+            const pdfBase64 = btoa(binaryString);
+
+            // Create single PDF file
+            const pdfDataArray = [{
+                filename: `Export_Documents_${new Date().toISOString().split('T')[0]}.pdf`,
+                base64Data: pdfBase64,
+                mimetype: 'application/pdf',
+                size: pdfArrayBuffer.byteLength,
+                documentType: 'combined',
+                documentName: 'All Export Documents'
+            }];
+
+            // Send to n8n webhook with combined PDF data
             const webhookUrl = 'https://snobbily-tombless-louisa.ngrok-free.dev/webhook/60c9760c-650d-471c-9d4f-e7d4e362980f';
 
             const payload = {
@@ -588,20 +699,22 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 pdfFiles: pdfDataArray,
                 companyData: companyData,
                 userInputs: userInputs,
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                documentCount: generatedDocuments.length,
+                isCombined: true
             };
 
-            console.log('Sending PDF binary data to webhook:', {
+            console.log('Sending combined PDF to webhook:', {
                 ...payload,
                 pdfFiles: payload.pdfFiles.map(pdf => ({
                     ...pdf,
-                    base64Data: `[${pdf.base64Data.length} characters]` // Don't log the full base64
+                    base64Data: `[${pdf.base64Data.length} characters]`
                 }))
             });
 
             // Add timeout to prevent hanging
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout for combined PDF
 
             const response = await fetch(webhookUrl, {
                 method: 'POST',
@@ -615,18 +728,18 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             clearTimeout(timeoutId);
 
             if (response.ok) {
-                alert('✅ PDFs sent successfully via email webhook!');
-                console.log('Successfully sent PDFs to webhook');
+                alert(`✅ ${generatedDocuments.length} documents combined and sent successfully via email!`);
+                console.log('Successfully sent combined PDF to webhook');
             } else {
                 console.error('Webhook response error:', response.status, response.statusText);
-                alert('❌ Failed to send PDFs via webhook. Check console for details.');
+                alert('❌ Failed to send documents via webhook. Check console for details.');
             }
         } catch (error) {
-            console.error('Error sending PDFs via webhook:', error);
+            console.error('Error sending combined PDF via webhook:', error);
             if (error.name === 'AbortError') {
                 alert('❌ Request timed out. Please try again.');
             } else {
-                alert('❌ Error sending PDFs. Check console for details.');
+                alert('❌ Error sending documents. Check console for details.');
             }
         } finally {
             setIsSendingEmail(false);

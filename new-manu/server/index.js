@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fetch = require('node-fetch');
-require('dotenv').config({ path: path.resolve(process.cwd(), '.env.server') });
+require('dotenv').config();
 
 const app = express();
 app.use(cors());
