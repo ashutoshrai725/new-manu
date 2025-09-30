@@ -140,15 +140,7 @@ const Header = ({ user, onLogout }) => {
                                 Generate Docs
                             </button>
 
-                            <button
-                                onClick={() => handleNavigation('/ai-agent-2')}
-                                className={`px-3 py-2 rounded-md font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green focus:ring-opacity-50 ${isActiveRoute('/ai-agent-2')
-                                    ? 'text-manu-green bg-green-50'
-                                    : 'text-manu-dark hover:text-manu-green'
-                                    }`}
-                            >
-                                ASK AI AGENT!!
-                            </button>
+
 
                             <button
                                 onClick={() => handleNavigation('/upload', true)}

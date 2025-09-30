@@ -217,17 +217,12 @@ const HeroSection = ({ isMobile, user }) => {
                             </button>
                             <button
                                 onClick={() => handleNavigation('/ai-agent', true)}
-                                className="border-2 border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-manu-dark transition-colors duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                                className="bg-manu-green text-white px-8 py-3 rounded-lg hover:bg-green-600 transition-colors duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
                             >
                                 {user ? 'Generate Documents' : 'Watch Demo'}
                             </button>
 
-                            <button
-                                onClick={() => handleNavigation('/ai-agent-2')}
-                                className="bg-gradient-to-r from-manu-green to-green-600 text-white px-8 py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 shadow-lg"
-                            >
-                                ASK AI AGENT!
-                            </button>
+
                         </div>
 
                         {/* Stats */}
