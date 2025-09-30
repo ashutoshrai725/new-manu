@@ -8,7 +8,8 @@ import html2canvas from 'html2canvas';
 import Header from '../LandingPage/Header';
 import './AIAgent2Page.css';
 
-const API_URL = `/api/ai/gemini`;
+const API_KEY = "AIzaSyDduRZiFh6oWz43BDQXPSsfU7pIuT8BNac";
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
 
 const AIAgent2Page = ({ user, onPageChange, onLogout, documentsUploaded = true }) => {
     const navigate = useNavigate();
@@ -40,14 +41,16 @@ const AIAgent2Page = ({ user, onPageChange, onLogout, documentsUploaded = true }
             const payload = {
                 contents: [{ parts: [{ text: userText }] }],
                 systemInstruction: {
-                    parts: [{ text: "You are a highly precise, to-the-point AI assistant. Answer questions concisely and factually, without conversational filler or pleasantries. Your goal is to provide genuine, direct answers." }]
+                    parts: [{
+                        text: "You are a highly precise, to-the-point AI assistant. Answer questions concisely and factually, without conversational filler or pleasantries. Your goal is to provide genuine, direct answers."
+                    }]
                 },
             };
 
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
             });
 
             if (!response.ok) {
@@ -91,7 +94,7 @@ const AIAgent2Page = ({ user, onPageChange, onLogout, documentsUploaded = true }
                     <button
                         onClick={handleBackToHome}
                         style={{
-                            allignItems: 'center', display: 'flex',
+                            alignItems: 'center', display: 'flex',
                             background: '#528a64',
                             color: '#fff',
                             padding: '8px 16px',
@@ -134,9 +137,7 @@ const AIAgent2Page = ({ user, onPageChange, onLogout, documentsUploaded = true }
                         <div
                             key={idx}
                             className={`ai2-message ${msg.sender === 'user' ? 'ai2-user-message' : 'ai2-ai-message'}`}
-                            dangerouslySetInnerHTML={{
-                                __html: msg.text.replace(/\n/g, '<br>')
-                            }}
+                            dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br>') }}
                         />
                     ))}
                     {loading && (
