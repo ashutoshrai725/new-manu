@@ -1092,15 +1092,23 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
                                     {/* Download Button */}
                                     {message.showDownloadButton && (
-                                        <button
-                                            className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"
-                                            onClick={() => {
-                                                console.log('Generated Documents:', generatedDocuments);
-                                                alert('Preview feature will be added next!');
-                                            }}
-                                        >
-                                            📥 Preview Documents
-                                        </button>
+                                        <div className="flex flex-col gap-2 mt-3">
+                                            <button
+                                                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                                                onClick={downloadAllPdfs}
+                                            >
+                                                📥 Download Documents
+                                            </button>
+                                            <button
+                                                className={`px-4 py-2 text-white rounded flex items-center justify-center gap-2 ${isSendingEmail ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+                                                    } text-sm`}
+                                                onClick={sendPdfViaEmail}
+                                                disabled={isSendingEmail}
+                                            >
+                                                <MessageCircle size={16} />
+                                                {isSendingEmail ? 'Sending...' : 'Send via Email'}
+                                            </button>
+                                        </div>
                                     )}
 
                                     <div className="text-xs opacity-70 mt-2">
@@ -1109,6 +1117,9 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                 </div>
                             </div>
                         ))}
+                        <div ref={messagesEndRef} />
+
+
                     </div>
 
                     {/* Input Area - Hidden during questionnaire */}
