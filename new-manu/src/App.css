@@ -339,3 +339,19 @@ body {
     margin-top: 8px;
   }
 }
+
+
+
+
+@media (max-width: 768px) {
+  .flex-1.p-4.overflow-y-auto.space-y-4 {
+    padding-bottom: 300px !important;
+    /* Extra space for keyboard */
+  }
+
+  /* Ensure smooth scrolling on iOS */
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+    overflow-anchor: none;
+  }
+}

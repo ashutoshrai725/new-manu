@@ -110,12 +110,24 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     }, [storageKey]);
 
     // Auto-scroll to bottom when messages change
+    // Enhanced Auto-scroll for mobile keyboard
     useEffect(() => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest'
-            });
+        const scrollToBottom = () => {
+            if (messagesEndRef.current) {
+                setTimeout(() => {
+                    messagesEndRef.current.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'end'
+                    });
+                }, 300); // Increased delay for mobile
+            }
+        };
+
+        scrollToBottom();
+
+        // Additional scroll on mobile when keyboard opens
+        if (window.innerWidth <= 768) {
+            setTimeout(scrollToBottom, 500);
         }
     }, [messages]);
 
