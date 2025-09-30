@@ -324,3 +324,18 @@ body {
     /* Override flex-grow and shrink if any */
   }
 }
+
+
+/* Remove the previous mobile CSS and use this */
+@media (max-width: 768px) {
+  .border.rounded.bg-white.shadow-md.max-h-48.overflow-y-auto.z-10.mb-2 {
+    max-height: 100px !important;
+    position: relative;
+    margin-bottom: 8px;
+  }
+
+  /* Ensure input field has space */
+  input[type="text"] {
+    margin-top: 8px;
+  }
+}

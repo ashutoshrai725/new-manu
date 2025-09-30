@@ -956,6 +956,35 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
                                             {message.inputType === 'products' && awaitingInput && (
                                                 <div className="space-y-2 mt-4">
+
+                                                    {showSuggestions && filteredItems.length > 0 && (
+                                                        <div className="border rounded bg-white shadow-md max-h-48 overflow-y-auto z-10 mb-2">
+                                                            {filteredItems.map(item => (
+                                                                <div
+                                                                    key={item.hsCode}
+                                                                    className="p-2 hover:bg-manu-green hover:text-white cursor-pointer"
+                                                                    onClick={() => {
+                                                                        setCurrentProduct({
+                                                                            ...currentProduct,
+                                                                            item: item.name,
+                                                                            description: item.description,
+                                                                            hsCode: item.hsCode
+                                                                        });
+                                                                        setShowSuggestions(false);
+                                                                        setProductEntryStep(1);
+                                                                    }}
+                                                                >
+                                                                    <div className="font-semibold">{item.name}</div>
+                                                                    <div className="text-xs text-gray-500">{item.description}</div>
+                                                                    <div className="text-xs text-blue-600">HS Code: {item.hsCode}</div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+
+
+
+
                                                     <input
                                                         type="text"
                                                         placeholder="Type item name..."
@@ -984,30 +1013,10 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
                                                         autoFocus
                                                     />
-                                                    {showSuggestions && filteredItems.length > 0 && (
-                                                        <div className="border rounded bg-white shadow-md max-h-48 overflow-y-auto z-10">
-                                                            {filteredItems.map(item => (
-                                                                <div
-                                                                    key={item.hsCode}
-                                                                    className="p-2 hover:bg-manu-green hover:text-white cursor-pointer"
-                                                                    onClick={() => {
-                                                                        setCurrentProduct({
-                                                                            ...currentProduct,
-                                                                            item: item.name,
-                                                                            description: item.description,
-                                                                            hsCode: item.hsCode
-                                                                        });
-                                                                        setShowSuggestions(false);
-                                                                        setProductEntryStep(1);
-                                                                    }}
-                                                                >
-                                                                    <div className="font-semibold">{item.name}</div>
-                                                                    <div className="text-xs text-gray-500">{item.description}</div>
-                                                                    <div className="text-xs text-blue-600">HS Code: {item.hsCode}</div>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    )}
+
+
+
+
                                                     {currentProduct.description && (
                                                         <div className="mt-2 p-2 bg-gray-50 border rounded">
                                                             <div><strong>Description:</strong> {currentProduct.description}</div>
