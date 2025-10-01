@@ -8,7 +8,7 @@ import html2canvas from 'html2canvas';
 import Header from '../LandingPage/Header';
 import './AIAgent2Page.css';
 
-const API_KEY = "AIzaSyDduRZiFh6oWz43BDQXPSsfU7pIuT8BNac";
+const API_KEY = "null";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
 
 const AIAgent2Page = ({ user, onPageChange, onLogout, documentsUploaded = true }) => {
