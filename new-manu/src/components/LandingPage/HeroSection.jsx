@@ -96,7 +96,7 @@ const HeroSection = ({ isMobile, user }) => {
                 ) : (
                     <video
                         ref={videoRef}
-                        className="w-full h-full object-cover opacity-25"
+                        className="w-full h-full object-cover opacity-30"
                         loop
                         muted
                         playsInline
@@ -110,6 +110,7 @@ const HeroSection = ({ isMobile, user }) => {
 
 
             </div>
+
 
             {/* Hero Content */}
             <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 w-full flex-1 px-4 py-12 mt-10">
@@ -237,36 +238,38 @@ const HeroSection = ({ isMobile, user }) => {
                 </motion.div>
             </div>
             {/* Auth Prompt Modal */}
-            {showAuthPrompt && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
-                    onClick={closeAuthPrompt}
-                >
+            {
+                showAuthPrompt && (
                     <motion.div
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.8, opacity: 0 }}
-                        className="bg-white rounded-lg p-8 text-center max-w-md mx-4 shadow-2xl"
-                        onClick={e => e.stopPropagation()}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+                        onClick={closeAuthPrompt}
                     >
-                        <div className="text-4xl mb-4">🤖</div>
-                        <h3 className="text-xl font-bold text-manu-dark mb-2">
-                            Hello! I'm E-CHA
-                        </h3>
-                        <p className="text-gray-600 mb-6">
-                            To help you with document processing, please sign up or log in first.
-                        </p>
-                        <div className="w-full bg-manu-green h-2 rounded-full animate-pulse mb-4"></div>
-                        <p className="text-sm text-gray-500">
-                            Redirecting to authentication...
-                        </p>
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            className="bg-white rounded-lg p-8 text-center max-w-md mx-4 shadow-2xl"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="text-4xl mb-4">🤖</div>
+                            <h3 className="text-xl font-bold text-manu-dark mb-2">
+                                Hello! I'm E-CHA
+                            </h3>
+                            <p className="text-gray-600 mb-6">
+                                To help you with document processing, please sign up or log in first.
+                            </p>
+                            <div className="w-full bg-manu-green h-2 rounded-full animate-pulse mb-4"></div>
+                            <p className="text-sm text-gray-500">
+                                Redirecting to authentication...
+                            </p>
+                        </motion.div>
                     </motion.div>
-                </motion.div>
-            )}
-        </section>
+                )
+            }
+        </section >
     );
 };
 
