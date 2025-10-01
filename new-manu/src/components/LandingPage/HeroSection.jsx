@@ -117,7 +117,7 @@ const HeroSection = ({ isMobile, user }) => {
             </div>
 
             {/* Hero Content */}
-            <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 w-full flex-1 px-4 py-12">
+            <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 w-full flex-1 px-4 py-12 mt-10">
                 {/* Left Side */}
                 <motion.div
                     initial="hidden"
