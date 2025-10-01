@@ -9,6 +9,8 @@ module.exports = {
         'manu-green': '#01C023',
         'manu-dark': '#000000ff',
         'manu-light': '#ffffffff',
+        'manu-custom': '#a4a4a4ff',
+
       }
     },
   },

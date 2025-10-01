@@ -106,9 +106,9 @@ const Header = ({ user, onLogout }) => {
 
     return (
         <>
-            <header className="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
+            <header className="fixed top-2 left-10 right-10  max-w-6xl mx-auto bg-blur/90 backdrop-blur-md z-50 shadow-sm rounded-3xl border opacity-85  " onPageChange="bg-manu-dark">
+                <div className="max-w-5xl mx-auto px-2 sm:px-6 lg:px-10 ">
+                    <div className="flex justify-between items-center h-12">
 
                         {/* Logo */}
                         <div className="flex-shrink-0 flex items-center space-x-3">
@@ -119,10 +119,10 @@ const Header = ({ user, onLogout }) => {
                                 <img
                                     src="https://i.postimg.cc/qhqjBrYN/mnuverse.jpg"
                                     alt="MANUDOCS Logo"
-                                    className="h-10 w-auto"
+                                    className="h-8 w-auto rounded-full"
                                     onError={handleImageError}
                                 />
-                                <span className="text-xl font-black text-manu-dark tracking-tight">
+                                <span className="text-lg font-black text-manu-green hover:text-manu-light tracking-tight opacity-100">
                                     ManuDocs
                                 </span>
                             </button>
@@ -132,9 +132,9 @@ const Header = ({ user, onLogout }) => {
                         <nav className="hidden md:flex items-center space-x-6">
                             <button
                                 onClick={() => handleNavigation('/ai-agent', true)}
-                                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50 ${isActiveRoute('/ai-agent')
-                                    ? 'text-manu-green bg-green-50'
-                                    : 'text-manu-dark hover:text-manu-green'
+                                className={`px-2 py-1 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50  ${isActiveRoute('/ai-agent')
+                                    ? 'text-manu-dark bg-green-50'
+                                    : 'text-manu-light hover:bg-manu-dark hover:text-manu-green'
                                     }`}
                             >
                                 Generate Docs
@@ -145,8 +145,8 @@ const Header = ({ user, onLogout }) => {
                             <button
                                 onClick={() => handleNavigation('/upload', true)}
                                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50 ${isActiveRoute('/upload')
-                                    ? 'text-manu-green bg-green-50'
-                                    : 'text-manu-dark hover:text-manu-green'
+                                    ? 'text-manu-dark bg-green-50'
+                                    : 'text-manu-light hover:bg-manu-dark hover:text-manu-green'
                                     }`}
                             >
                                 Upload Docs
@@ -154,14 +154,14 @@ const Header = ({ user, onLogout }) => {
 
                             <button
                                 onClick={handleHelpClick}
-                                className="px-3 py-2 rounded-md text-sm font-medium text-manu-dark hover:text-manu-green transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50"
+                                className="px-3 py-2 rounded-md text-sm font-medium text-manu-light hover:bg-manu-dark hover:text-manu-green transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50"
                             >
                                 Help
                             </button>
 
                             <button
                                 onClick={handleContactClick}
-                                className="px-3 py-2 rounded-md text-sm font-medium text-manu-dark hover:text-manu-green transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50"
+                                className="px-3 py-2 rounded-md text-sm font-medium text-manu-light hover:bg-manu-dark hover:text-manu-green transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50"
                             >
                                 Contact Us
                             </button>
@@ -172,7 +172,7 @@ const Header = ({ user, onLogout }) => {
                             {!user ? (
                                 <button
                                     onClick={() => navigate('/auth')}
-                                    className="bg-manu-green text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
+                                    className="bg-manu-green text-white px-3 py-1 rounded-3xl hover:bg-manu-dark transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
                                 >
                                     Sign Up / Login
                                 </button>
@@ -180,11 +180,11 @@ const Header = ({ user, onLogout }) => {
                                 <div className="relative" ref={profileRef}>
                                     <button
                                         onClick={handleProfileToggle}
-                                        className="flex items-center space-x-3 bg-gray-100 rounded-full px-4 py-2 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50"
+                                        className="flex items-center bg-manu-custom gap-2 text-white px-3 py-1 rounded-3xl hover:bg-manu-green transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
                                         aria-expanded={isProfileOpen}
                                         aria-haspopup="true"
                                     >
-                                        <div className="w-8 h-8 bg-manu-green rounded-full flex items-center justify-center">
+                                        <div className="w-8 h-8 bg-manu-dark rounded-full flex items-center justify-center">
                                             <User size={16} className="text-white" />
                                         </div>
                                         <span className="text-sm font-medium text-manu-dark max-w-32 truncate">

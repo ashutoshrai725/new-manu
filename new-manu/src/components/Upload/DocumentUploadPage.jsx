@@ -91,11 +91,17 @@ const DocumentUploadPage = ({ user, onPageChange, onLogout }) => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-manu-dark">
+
+
+
             <Header user={user} onPageChange={onPageChange} onLogout={onLogout} />
 
+
+
+
             <div className="pt-16">
-                <div className="max-w-4xl mx-auto px-4 py-8">
+                <div className="max-w-4xl mx-auto px-4 py-8 bg-gray-50">
 
 
 

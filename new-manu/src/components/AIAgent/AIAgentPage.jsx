@@ -759,7 +759,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen   bg-manu-dark opacity-90">
             <Header
                 user={user}
                 onPageChange={onPageChange}
@@ -767,7 +767,12 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 documentsUploaded={documentsUploaded}
             />
 
-            <div className="pt-16 h-screen flex">
+            <div className="pt-16 h-screen flex ">
+
+
+
+
+
                 {/* Left Panel - Chat Interface */}
                 <div className="w-1/2 bg-white border-r border-gray-200 flex flex-col">
                     {/* Chat Header */}

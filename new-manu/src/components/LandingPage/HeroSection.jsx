@@ -83,37 +83,32 @@ const HeroSection = ({ isMobile, user }) => {
                 {!isMobile ? (
                     <video
                         ref={videoRef}
-                        className="w-full h-full object-cover opacity-45"
+                        className="w-full h-full object-cover opacity-30"
                         loop
                         muted
                         playsInline
                         autoPlay
                         poster="/images/hero-fallback.jpg"
                     >
-                        <source src="/videos/hero-video-ship.mp4" type="video/mp4" />
+                        <source src="/videos/backed-by.mp4" type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 ) : (
-                    <div
-                        className="w-full h-full bg-cover bg-center opacity-40"
-                        style={{
-                            backgroundImage: "url('https://i.postimg.cc/14hxdY8M/generated-image-1.jpg')",
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                        }}
-                    />
+                    <video
+                        ref={videoRef}
+                        className="w-full h-full object-cover opacity-25"
+                        loop
+                        muted
+                        playsInline
+                        autoPlay
+                        poster="/images/hero-fallback.jpg"
+                    >
+                        <source src="/videos/backed-by.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
                 )}
 
-                {!isMobile && (
-                    <button
-                        onClick={toggleVideo}
-                        className="absolute bottom-4 right-4 z-10 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
-                        aria-label={isPlaying ? "Pause video" : "Play video"}
-                    >
-                        {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-                    </button>
-                )}
+
             </div>
 
             {/* Hero Content */}
@@ -195,7 +190,7 @@ const HeroSection = ({ isMobile, user }) => {
                             className="relative w-full flex justify-center"
                         >
                             <img
-                                src="https://i.postimg.cc/GhffpfzC/generated-image-3.jpg"
+                                src="https://i.postimg.cc/XJbWW8k4/e0chaaigent.png"
                                 alt="E-CHA AI Agent"
                                 className="w-full max-w-[350px] md:max-w-md-[400px] h-auto object-contain drop-shadow-2xl opacity-80 rounded-3xl mt-5"
                                 onError={handleImageError}
@@ -211,7 +206,7 @@ const HeroSection = ({ isMobile, user }) => {
                             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-xs px-2">
                                 <motion.div
                                     whileHover={{ scale: 1.05 }}
-                                    className="bg-white/90 backdrop-blur-md rounded-full p-1 shadow-2xl mb-20"
+                                    className="bg-blur/90 backdrop-blur-md rounded-full p-1 shadow-2xl mb-12 opacity-80 border border-manu-green"
                                 >
                                     <div className="flex items-center space-x-3">
                                         <Search className="text-manu-green flex-shrink-0" size={20} />
@@ -219,8 +214,8 @@ const HeroSection = ({ isMobile, user }) => {
                                             type="text"
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
-                                            placeholder={user ? "Generate invoice..." : "Try E-CHA - Sign up first!"}
-                                            className="flex-1 bg-transparent outline-none text-manu-dark placeholder-gray-500 text-sm"
+                                            placeholder={user ? "Generate Invoice..!" : "Try E-CHA & Generate Docs!!"}
+                                            className="flex-1 bg-transparent outline-none text-manu-light placeholder-green-500 text-sm"
                                             onClick={handleSearchClick}
                                             onKeyDown={handleKeyDown}
                                             readOnly

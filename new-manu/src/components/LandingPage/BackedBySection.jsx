@@ -66,8 +66,23 @@ const BackedBySection = () => {
     };
 
     return (
-        <section className="py-16 bg-manu-light" id="backed-by">
-            <div className="container mx-auto px-4">
+        <section className="relative py-16 bg-manu-light  overflow-hidden" id="backed-by">
+            {/* Background Video */}
+            <video
+                className="absolute top-0 left-0 w-full h-full object-cover opacity-100 "
+                autoPlay
+                loop
+                muted
+                playsInline
+                src="/videos/hero-video-ship.mp4"
+            >
+                Your browser does not support the video tag.
+            </video>
+
+            <div className="absolute inset-0 bg-gradient-to-br from-manu-green via-gray-800 to-manu-dark opacity-70 pointer-events-none"></div>
+
+            {/* Foreground Content */}
+            <div className="relative container mx-auto px-4 opacity-80">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
@@ -76,10 +91,10 @@ const BackedBySection = () => {
                     viewport={{ once: true, margin: "-100px" }}
                     className="text-center mb-12"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-manu-dark mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-manu-light mb-4  inline-block px-4 py-2 rounded-lg shadow-lg">
                         Backed By
                     </h2>
-                    <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+                    <p className="text-manu-light max-w-2xl mx-auto text-lg  px-3 py-1 rounded">
                         Supported by leading institutions and innovation programs
                     </p>
                 </motion.div>
@@ -102,7 +117,7 @@ const BackedBySection = () => {
                                 transition: { duration: 0.2 }
                             }}
                             whileTap={{ scale: 0.98 }}
-                            className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 text-center group cursor-pointer"
+                            className="bg-gray-200 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 text-center group cursor-pointer border border-gray-200"
                         >
                             <div className="mb-6 flex justify-center items-center h-16">
                                 <img
