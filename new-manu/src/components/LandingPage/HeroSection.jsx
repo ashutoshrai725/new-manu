@@ -77,7 +77,7 @@ const HeroSection = ({ isMobile, user }) => {
     };
 
     return (
-        <section className="relative py-16 bg-manu-light  overflow-hidden" id="backed-by">
+        <section className="relative py-20 bg-manu-light  overflow-hidden" id="backed-by">
             {/* Background Video */}
             <video
                 className="absolute top-0 left-0 w-full h-full object-cover opacity-100 "
@@ -89,6 +89,7 @@ const HeroSection = ({ isMobile, user }) => {
             >
                 Your browser does not support the video tag.
             </video>
+
 
             <div className="absolute inset-0 bg-gradient-to-br from-manu-dark via-gray-800 to-manu-green opacity-60 pointer-events-none"></div>
 
