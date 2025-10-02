@@ -82,7 +82,7 @@ const BackedBySection = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-manu-green via-gray-800 to-manu-dark opacity-70 pointer-events-none"></div>
 
             {/* Foreground Content */}
-            <div className="relative container mx-auto px-4 opacity-80">
+            <div className="relative container mx-auto px-4 opacity-100">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
@@ -91,7 +91,7 @@ const BackedBySection = () => {
                     viewport={{ once: true, margin: "-100px" }}
                     className="text-center mb-12"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-manu-light mb-4  inline-block px-4 py-2 rounded-lg shadow-lg">
+                    <h2 className="text-3xl md:text-4xl font-bold text-manu-light mb-4  inline-block px-4 py-2 rounded-lg shadow-lg opacity-100">
                         Backed By
                     </h2>
                     <p className="text-manu-light max-w-2xl mx-auto text-lg  px-3 py-1 rounded">
@@ -99,7 +99,7 @@ const BackedBySection = () => {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 opacity-70">
                     {partners.map((partner, index) => (
                         <motion.div
                             key={`${partner.name}-${index}`}
@@ -146,7 +146,7 @@ const BackedBySection = () => {
                     viewport={{ once: true }}
                     className="mt-12 text-center"
                 >
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-manu-light text-sm opacity-100 italic">
                         Trusted by leading academic institutions and innovation centers
                     </p>
                 </motion.div>

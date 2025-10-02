@@ -246,32 +246,24 @@ const Header = ({ user, onLogout }) => {
                     {/* Mobile Menu */}
                     {isMenuOpen && (
                         <div className="md:hidden">
-                            <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg rounded-lg mt-2 border border-gray-100">
+                            <div className="px-2 pt-2 pb-3 space-y-1  shadow-lg rounded-lg mt-2 border border-gray-100">
                                 <button
                                     onClick={() => handleNavigation('/ai-agent', true)}
                                     className={`block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActiveRoute('/ai-agent')
                                         ? 'text-manu-green bg-green-50'
-                                        : 'text-manu-dark hover:text-manu-green hover:bg-gray-50'
+                                        : 'bg-manu-light hover:text-manu-dark hover:bg-manu-green'
                                         }`}
                                 >
                                     Generate Docs
                                 </button>
 
-                                <button
-                                    onClick={() => handleNavigation('/ai-agent-2')}
-                                    className={`block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActiveRoute('/ai-agent-2')
-                                        ? 'bg-green-600 text-white'
-                                        : 'bg-manu-green text-white hover:bg-green-600'
-                                        }`}
-                                >
-                                    ASK AI AGENT!!
-                                </button>
+
 
                                 <button
                                     onClick={() => handleNavigation('/upload', true)}
                                     className={`block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActiveRoute('/upload')
-                                        ? 'text-manu-green bg-green-50'
-                                        : 'text-manu-dark hover:text-manu-green hover:bg-gray-50'
+                                        ? 'text-manu-green bg-green-500'
+                                        : 'bg-manu-light hover:text-manu-dark hover:bg-manu-green'
                                         }`}
                                 >
                                     Upload Docs
@@ -279,20 +271,20 @@ const Header = ({ user, onLogout }) => {
 
                                 <button
                                     onClick={handleHelpClick}
-                                    className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-manu-dark hover:text-manu-green hover:bg-gray-50 transition-colors duration-200"
+                                    className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-manu-dark bg-manu-light hover:text-manu-dark hover:bg-manu-green transition-colors duration-200"
                                 >
                                     Help
                                 </button>
 
                                 <button
                                     onClick={handleContactClick}
-                                    className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-manu-dark hover:text-manu-green hover:bg-gray-50 transition-colors duration-200"
+                                    className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-manu-dark bg-manu-light hover:text-manu-dark hover:bg-manu-green transition-colors duration-200"
                                 >
                                     Contact Us
                                 </button>
 
                                 {/* Mobile Auth Section */}
-                                <div className="border-t border-gray-200 pt-2 mt-2">
+                                <div className="border-t border-gray-200 pt-2 mt-2 bg">
                                     {!user ? (
                                         <button
                                             onClick={() => handleNavigation('/auth')}
@@ -302,24 +294,24 @@ const Header = ({ user, onLogout }) => {
                                         </button>
                                     ) : (
                                         <div>
-                                            <div className="px-3 py-2">
-                                                <p className="text-sm font-medium text-gray-900 truncate">
+                                            <div className="px-3 py-2 gap-2 bg-manu-dark rounded-lg mb-2">
+                                                <p className="text-sm font-medium text-manu-light  truncate rounded-lg px-2 py-1">
                                                     {getUserDisplayName()}
                                                 </p>
-                                                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                                                <p className="text-xs text-manu-light  truncate rounded-lg px-2 py-1">{user.email}</p>
                                             </div>
                                             <button
                                                 onClick={() => {
                                                     setIsMenuOpen(false);
                                                     navigate('/profile');
                                                 }}
-                                                className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                                                className="block w-full text-left px-3 py-2 text-sm text-manu-dark bg-manu-light hover:text-manu-dark hover:bg-manu-green transition-colors duration-200 rounded-lg font-medium"
                                             >
                                                 Profile & Settings
                                             </button>
                                             <button
                                                 onClick={handleLogout}
-                                                className="block w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200"
+                                                className="block w-full text-left px-3 py-2 text-sm text-manu-dark bg-manu-light hover:text-manu-dark hover:bg-manu-green transition-colors duration-200 rounded-lg font-medium mt-2"
                                             >
                                                 Sign out
                                             </button>
