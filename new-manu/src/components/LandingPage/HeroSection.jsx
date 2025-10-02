@@ -85,7 +85,7 @@ const HeroSection = ({ isMobile, user }) => {
                 loop
                 muted
                 playsInline
-                src="/videos/backed-by.mp4"
+                src="/videos/hero-video-ship.mp4"
             >
                 Your browser does not support the video tag.
             </video>
