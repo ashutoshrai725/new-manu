@@ -106,7 +106,7 @@ const Header = ({ user, onLogout }) => {
 
     return (
         <>
-            <header className="fixed top-2 left-10 right-10  max-w-6xl mx-auto bg-blur/90 backdrop-blur-md z-50 shadow-sm rounded-3xl border opacity-85  " onPageChange="bg-manu-dark">
+            <header className="fixed top-2 left-10 right-10  max-w-6xl mx-auto bg-blur/90 backdrop-blur-md z-50 shadow-sm rounded-3xl border opacity-80  " onPageChange="bg-manu-dark">
                 <div className="max-w-5xl mx-auto px-2 sm:px-6 lg:px-10 ">
                     <div className="flex justify-between items-center h-12">
 
@@ -234,7 +234,7 @@ const Header = ({ user, onLogout }) => {
                         <div className="md:hidden">
                             <button
                                 onClick={handleMobileMenuToggle}
-                                className="text-manu-dark hover:text-manu-green p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50"
+                                className="text-manu-dark hover:text-manu-green p-2 rounded-3xl focus:outline-none focus:ring-2 focus:ring-manu-green focus:ring-opacity-50"
                                 aria-expanded={isMenuOpen}
                                 aria-label="Toggle menu"
                             >
