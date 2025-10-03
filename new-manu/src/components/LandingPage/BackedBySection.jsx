@@ -74,7 +74,7 @@ const BackedBySection = () => {
                 loop
                 muted
                 playsInline
-                src="/videos/hero-video-ship.mp4"
+                src="/videos/backed-by.mp4"
             >
                 Your browser does not support the video tag.
             </video>
