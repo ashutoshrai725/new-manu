@@ -13,7 +13,7 @@ const Footer = () => {
                 window.location.href = 'mailto:manudocs.ai@gmail.com';
                 break;
             case 'phone':
-                window.location.href = 'tel:+918949522947';
+                window.location.href = 'tel:+917697546063';
                 break;
             default:
                 break;
@@ -100,10 +100,9 @@ const Footer = () => {
             <>
                 <h2 className="text-xl font-semibold text-manu-green mb-2">Get in Touch</h2>
                 <p>Email: manudocs.ai@gmail.com</p>
-                <p>Phone: +91 89495 22947</p>
                 <p>phone: +91 7697546063</p>
                 <p>phone: +91 9958889387</p>
-                <p>phone: +91 6376400524</p>
+
 
 
             </>

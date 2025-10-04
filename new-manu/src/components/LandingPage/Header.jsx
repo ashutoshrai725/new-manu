@@ -336,10 +336,10 @@ const Header = ({ user, onLogout }) => {
             {infoVisible === 'contact' && (
                 <div className="fixed top-16 left-0 right-0 bg-manu-green text-white p-4 z-40 text-center text-sm font-semibold space-y-1">
                     <p>Email: manudocs.ai@gmail.com</p>
-                    <p>Phone: +91 89495 22947</p>
+
                     <p>Phone: +91 7697546063</p>
                     <p>Phone: +91 9958889387</p>
-                    <p>Phone: +91 6376400524</p>
+
                 </div>
             )}
         </>
