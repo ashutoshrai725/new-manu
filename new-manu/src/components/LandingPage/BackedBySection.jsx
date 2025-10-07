@@ -16,7 +16,7 @@ const BackedBySection = () => {
         {
             name: 'IIT PATNA',
             logo: 'https://i.postimg.cc/qtj1dqmC/IIT-PATNA.jpg',
-            description: 'Top Indian Institute of Technology'
+            description: 'Top National Institute'
         },
         {
             name: 'PIEDS',
