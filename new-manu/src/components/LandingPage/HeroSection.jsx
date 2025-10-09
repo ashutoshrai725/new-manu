@@ -138,15 +138,7 @@ const HeroSection = ({ isMobile, user }) => {
             <div className="absolute inset-0 bg-gradient-to-t from-manu-dark/60 via-transparent to-transparent"></div>
 
             {/* Video Controls */}
-            <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.8 }}
-                onClick={toggleVideo}
-                className="absolute top-4 right-4 z-20 bg-black/40 text-white p-2 rounded-xl backdrop-blur-md border border-white/20 hover:bg-black/60 transition-all duration-300 hover:scale-110"
-            >
-                {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-            </motion.button>
+
 
             {/* Hero Content */}
             <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between min-h-screen w-full px-4 sm:px-6 lg:px-8 py-6 mt-8">

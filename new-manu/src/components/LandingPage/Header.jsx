@@ -114,7 +114,7 @@ const Header = ({ user, onLogout }) => {
                                     <span className="text-2xl font-black bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-transparent tracking-tight">
                                         ManuDocs
                                     </span>
-                                    <span className="text-xs text-gray-400 font-medium -mt-1">Export Document AI</span>
+                                    <span className="text-xs text-gray-400 font-medium -mt-1"></span>
                                 </div>
                             </button>
                         </div>

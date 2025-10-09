@@ -35,7 +35,7 @@ const BackedBySection = () => {
         {
             name: 'PIEDS',
             logo: 'https://i.postimg.cc/CB5mM0tz/pieds-logo.jpg',
-            description: 'Incubation Program',
+            description: 'Incubation Centre BITS Pilani',
             type: 'Incubator',
             achievements: ['Startup Support', 'Mentorship', 'Guidance', 'Networking'],
             color: 'from-manu-light to-manu-light'
