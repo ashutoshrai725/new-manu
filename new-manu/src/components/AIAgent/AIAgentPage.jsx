@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { MessageCircle, FileText } from 'lucide-react';
+import { MessageCircle, FileText, Edit3 } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -28,9 +28,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     const [activeDocIndex, setActiveDocIndex] = useState(0);
     const [manualFillRequired, setManualFillRequired] = useState(false);
     const [showContinueButton, setShowContinueButton] = useState(false);
-    // Refs for auto-scroll
-    const messagesEndRef = useRef(null);
-
+    const [isEditing, setIsEditing] = useState(false);
 
     // Product entry states
     const [productEntryStep, setProductEntryStep] = useState(0);
@@ -45,6 +43,9 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     const [filteredItems, setFilteredItems] = useState([]);
     const [products, setProducts] = useState([]);
     const [isSendingEmail, setIsSendingEmail] = useState(false);
+
+    // Refs for auto-scroll
+    const messagesEndRef = useRef(null);
 
     // Storage key for persistence
     const storageKey = useMemo(() => `manudocs.aiagent.chat.${user?.id || 'guest'}`, [user?.id]);
@@ -63,8 +64,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         { field: 'port_loading', question: 'Which is the Port of Loading?', type: 'text' },
         { field: 'port_discharge', question: 'Which is the Port of Discharge?', type: 'text' },
         { field: 'transport_mode', question: 'What is the mode of transport?', type: 'select', options: ['Sea', 'Air', 'Road'] },
-        { field: 'credit_note_amount', question: 'What is the amount for the Credit Note?', type: 'text' },
-        { field: 'debit_note_amount', question: 'What is the amount for the Debit Note?', type: 'text' },
     ], []);
 
     // Load saved chat state on mount or when user changes
@@ -110,7 +109,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     }, [storageKey]);
 
     // Auto-scroll to bottom when messages change
-    // Enhanced Auto-scroll for mobile keyboard
     useEffect(() => {
         const scrollToBottom = () => {
             if (messagesEndRef.current) {
@@ -119,13 +117,12 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                         behavior: 'smooth',
                         block: 'end'
                     });
-                }, 300); // Increased delay for mobile
+                }, 300);
             }
         };
 
         scrollToBottom();
 
-        // Additional scroll on mobile when keyboard opens
         if (window.innerWidth <= 768) {
             setTimeout(scrollToBottom, 500);
         }
@@ -225,11 +222,10 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         }
     }, [selectedTemplates, companyData, userInputs, generateUniqueId]);
 
-    // Ask questions one by one - FIXED VERSION
+    // Ask questions one by one
     const askNextQuestion = useCallback(() => {
         console.log('askNextQuestion called - currentQuestion:', currentQuestion, 'questions length:', questions.length);
 
-        // Check if we've completed all questions
         if (currentQuestion >= questions.length) {
             console.log('🎉 All questions completed, calling completeDataCollection');
             completeDataCollection();
@@ -239,7 +235,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         const question = questions[currentQuestion];
         console.log('Asking question:', question.field, 'type:', question.type);
 
-        // If it's the products step, trigger product entry UI
         if (question.field === 'products') {
             setMessages(prev => [...prev, {
                 id: generateUniqueId(),
@@ -254,7 +249,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             return;
         }
 
-        // Default question UI
         setMessages(prev => [...prev, {
             id: generateUniqueId(),
             type: 'bot',
@@ -268,7 +262,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         setAwaitingInput(true);
     }, [currentQuestion, questions, completeDataCollection, generateUniqueId]);
 
-    // Handle continue button click - FIXED
+    // Handle continue button click
     const handleContinueClick = useCallback(() => {
         console.log('Continue button clicked, starting questions');
         setShowContinueButton(false);
@@ -276,17 +270,15 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         setCurrentQuestion(0);
         setAwaitingInput(false);
 
-        // Clear any stuck state by forcing a refresh
         setTimeout(() => {
             askNextQuestion();
         }, 100);
     }, [askNextQuestion]);
 
-    // FIXED: Enhanced useEffect to handle question flow with navigation recovery AND completion
+    // Enhanced useEffect to handle question flow
     useEffect(() => {
         console.log('useEffect - currentStep:', currentStep, 'currentQuestion:', currentQuestion, 'awaitingInput:', awaitingInput);
 
-        // Check if we're stuck (in data_collection but no questions showing)
         const isStuck = currentStep === 'data_collection' &&
             currentQuestion === 0 &&
             !awaitingInput &&
@@ -301,7 +293,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             return () => clearTimeout(timer);
         }
 
-        // Check if all questions are completed
         if (currentStep === 'data_collection' && !awaitingInput && currentQuestion >= questions.length) {
             console.log('✅ All questions completed, triggering document generation');
             const timer = setTimeout(() => {
@@ -310,25 +301,21 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             return () => clearTimeout(timer);
         }
 
-        // Normal flow: trigger when we're in data_collection, not awaiting input, and have questions to ask
         if (currentStep === 'data_collection' && !awaitingInput && currentQuestion < questions.length) {
             console.log('✅ Conditions met for asking question');
-
             const timer = setTimeout(() => {
                 askNextQuestion();
             }, 100);
-
             return () => clearTimeout(timer);
         }
     }, [currentStep, currentQuestion, awaitingInput, askNextQuestion, questions.length, selectedTemplates, companyData, completeDataCollection]);
 
-    // Detect when user navigates away and comes back - FIX FOR PRODUCTION ISSUE
+    // Detect when user navigates away and comes back
     useEffect(() => {
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
                 console.log('📱 User returned to page, checking state...');
 
-                // If we're stuck in data_collection without active questions, force recovery
                 if (currentStep === 'data_collection' &&
                     currentQuestion === 0 &&
                     !awaitingInput &&
@@ -345,7 +332,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                             timestamp: new Date()
                         }]);
 
-                        // Force restart the question flow
                         setAwaitingInput(false);
                         askNextQuestion();
                     }, 500);
@@ -360,13 +346,10 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         };
     }, [currentStep, currentQuestion, awaitingInput, selectedTemplates, companyData, askNextQuestion, generateUniqueId]);
 
-
-
     // Initialize the chat on component mount
     useEffect(() => {
         if (initialized) return;
 
-        // If saved state exists and indicates initialized, skip re-initialization
         try {
             const raw = typeof window !== 'undefined' ? localStorage.getItem(storageKey) : null;
             if (raw) {
@@ -415,7 +398,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
     const fetchCompanyData = async () => {
         try {
-            setManualFillRequired(false); // reset on every attempt
+            setManualFillRequired(false);
             setMessages(prev => [...prev, {
                 id: generateUniqueId(),
                 type: 'bot',
@@ -423,23 +406,19 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 timestamp: new Date()
             }]);
 
-            // First try to fetch existing profile without .single() to avoid error when no rows exist
             const { data, error } = await supabase
                 .from('user_profiles')
                 .select('*')
                 .eq('user_id', user.id)
                 .limit(1);
 
-            // Check if we got data
             if (error) {
                 console.error('Supabase query error:', error);
                 throw error;
             }
 
             if (!data || data.length === 0) {
-                // No user profile found - prompt manual fill without defaults
                 console.log('No user profile found for user:', user.id);
-
                 setManualFillRequired(true);
                 setMessages(prev => [...prev, {
                     id: generateUniqueId(),
@@ -448,13 +427,10 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                     manualFill: true,
                     timestamp: new Date()
                 }]);
-
-                // Show continue button after manual fill
                 setShowContinueButton(true);
                 return null;
             }
 
-            // Use the found profile data
             const profileData = data[0];
             setCompanyData(profileData);
 
@@ -465,16 +441,11 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 timestamp: new Date(),
                 showContinueButton: true
             }]);
-
-            // Show continue button
             setShowContinueButton(true);
-
             return profileData;
 
         } catch (error) {
             console.error('Supabase fetch error:', error);
-
-            // Fallback to manual entry on any error
             setManualFillRequired(true);
             setMessages(prev => [...prev, {
                 id: generateUniqueId(),
@@ -483,8 +454,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 manualFill: true,
                 timestamp: new Date()
             }]);
-
-            // Show continue button after manual fill
             setShowContinueButton(true);
             return null;
         }
@@ -504,7 +473,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         }
 
         setSelectedTemplates(selected);
-
         setMessages(prev => [...prev,
         {
             id: generateUniqueId(),
@@ -514,7 +482,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         }
         ]);
 
-        // Fetch company data
         await fetchCompanyData();
     };
 
@@ -544,7 +511,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         setShowContinueButton(true);
     };
 
-    // Handle user input - FIXED VERSION
+    // Handle user input
     const handleUserInput = useCallback((inputValue, field) => {
         console.log('handleUserInput called - field:', field, 'value:', inputValue);
 
@@ -560,7 +527,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             timestamp: new Date()
         }]);
 
-        // Disable the input in the previous message
         setMessages(prevMessages =>
             prevMessages.map(msg =>
                 msg.showInput && msg.expectedField === field
@@ -569,7 +535,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             )
         );
 
-        // Set awaitingInput to false and increment question
         setAwaitingInput(false);
         setCurrentQuestion(prev => {
             const newQuestion = prev + 1;
@@ -592,11 +557,9 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             document.body.appendChild(container);
 
             const canvas = await html2canvas(container, { scale: 2 });
-
             document.body.removeChild(container);
 
             const imgData = canvas.toDataURL('image/png');
-
             const pdf = new jsPDF('p', 'pt', 'a4');
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
@@ -606,8 +569,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
         }
     };
 
-    // Function to generate PDF binary data and send via email webhook
-    // Function to generate PDF binary data and send via email webhook
     const sendPdfViaEmail = async () => {
         if (generatedDocuments.length === 0) {
             alert("No documents generated to send.");
@@ -620,62 +581,46 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             const userEmail = user?.email || user?.user_metadata?.email || 'unknown@example.com';
             console.log('Generating combined PDF and sending via email webhook for user:', userEmail);
 
-            // Create a single PDF that contains all documents
             const pdf = new jsPDF('p', 'pt', 'a4');
             let currentPage = 0;
 
             for (let i = 0; i < generatedDocuments.length; i++) {
                 const doc = generatedDocuments[i];
-
-                // Create container for each document
                 const container = document.createElement('div');
                 container.style.position = 'fixed';
                 container.style.left = '-9999px';
-                container.style.width = '794px'; // A4 width in pixels at 96 DPI
+                container.style.width = '794px';
                 container.style.padding = '20px';
                 container.style.backgroundColor = 'white';
                 container.innerHTML = doc.html;
                 document.body.appendChild(container);
 
-                // Convert to canvas
                 const canvas = await html2canvas(container, {
-                    scale: 1.5, // Reduced scale for better performance
+                    scale: 1.5,
                     useCORS: true,
                     allowTaint: true,
-                    width: 794, // A4 width
+                    width: 794,
                     windowWidth: 794
                 });
 
                 document.body.removeChild(container);
-
-                const imgData = canvas.toDataURL('image/jpeg', 0.7); // Use JPEG with compression
-
+                const imgData = canvas.toDataURL('image/jpeg', 0.7);
                 const pdfWidth = pdf.internal.pageSize.getWidth();
                 const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-                // Add new page for each document (except the first one)
                 if (currentPage > 0) {
                     pdf.addPage();
                 }
 
-                // Add the document image to PDF
                 pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
-
-                // Add document title as header
                 pdf.setFontSize(12);
                 pdf.setTextColor(100);
                 pdf.text(`Document: ${doc.name || 'Untitled'}`, 40, 30);
-
-                // Add page number
                 pdf.text(`Page ${currentPage + 1}`, pdfWidth - 60, 30);
-
                 currentPage++;
             }
 
-            // Get the combined PDF as binary data (ArrayBuffer)
             const pdfArrayBuffer = pdf.output('arraybuffer');
-
-            // Convert ArrayBuffer to base64
             const uint8Array = new Uint8Array(pdfArrayBuffer);
             let binaryString = '';
             const chunkSize = 8192;
@@ -686,8 +631,6 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
             }
 
             const pdfBase64 = btoa(binaryString);
-
-            // Create single PDF file
             const pdfDataArray = [{
                 filename: `Export_Documents_${new Date().toISOString().split('T')[0]}.pdf`,
                 base64Data: pdfBase64,
@@ -697,9 +640,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 documentName: 'All Export Documents'
             }];
 
-            // Send to n8n webhook with combined PDF data
             const webhookUrl = 'https://snobbily-tombless-louisa.ngrok-free.dev/webhook/60c9760c-650d-471c-9d4f-e7d4e362980f';
-
             const payload = {
                 action: 'send_email',
                 userEmail: userEmail,
@@ -716,17 +657,8 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 isCombined: true
             };
 
-            console.log('Sending combined PDF to webhook:', {
-                ...payload,
-                pdfFiles: payload.pdfFiles.map(pdf => ({
-                    ...pdf,
-                    base64Data: `[${pdf.base64Data.length} characters]`
-                }))
-            });
-
-            // Add timeout to prevent hanging
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout for combined PDF
+            const timeoutId = setTimeout(() => controller.abort(), 60000);
 
             const response = await fetch(webhookUrl, {
                 method: 'POST',
@@ -759,7 +691,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
     };
 
     return (
-        <div className="min-h-screen   bg-manu-dark opacity-90">
+        <div className="min-h-screen bg-gray-900 text-white">
             <Header
                 user={user}
                 onPageChange={onPageChange}
@@ -767,16 +699,13 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 documentsUploaded={documentsUploaded}
             />
 
-            <div className="pt-16 h-screen flex ">
 
 
-
-
-
+            <div className="pt-16 h-screen flex flex-col md:flex-row">
                 {/* Left Panel - Chat Interface */}
-                <div className="w-1/2 bg-white border-r border-gray-200 flex flex-col">
+                <div className="w-full md:w-1/2 bg-gray-800 border-r border-gray-700 flex flex-col">
                     {/* Chat Header */}
-                    <div className="p-4 border-b border-gray-200 bg-manu-green text-white">
+                    <div className="p-4 border-b border-gray-700 bg-gray-900">
                         <div className="flex items-center space-x-3">
                             <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                                 <MessageCircle className="text-manu-green" size={20} />
@@ -797,13 +726,13 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                             >
                                 <div className={`max-w-[80%] rounded-lg p-3 ${message.type === 'user'
                                     ? 'bg-manu-green text-white'
-                                    : 'bg-gray-100 text-gray-800'
+                                    : 'bg-gray-700 text-gray-100'
                                     }`}>
                                     <div className="whitespace-pre-wrap">{message.content}</div>
 
                                     {/* Manual fill form */}
                                     {message.manualFill && manualFillRequired && (
-                                        <div className="manual-fill-form p-4 border rounded bg-white mt-4">
+                                        <div className="manual-fill-form p-4 border border-gray-600 rounded bg-gray-700 mt-4">
                                             <input
                                                 type="text"
                                                 placeholder="Company Name"
@@ -811,7 +740,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                 onChange={(e) =>
                                                     setCompanyData((prev) => ({ ...prev, company_name: e.target.value }))
                                                 }
-                                                className="mb-2 p-2 border rounded w-full"
+                                                className="mb-2 p-2 border border-gray-600 rounded w-full bg-gray-600 text-white placeholder-gray-400"
                                             />
                                             <input
                                                 type="text"
@@ -820,7 +749,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                 onChange={(e) =>
                                                     setCompanyData((prev) => ({ ...prev, comp_reg_address: e.target.value }))
                                                 }
-                                                className="mb-2 p-2 border rounded w-full"
+                                                className="mb-2 p-2 border border-gray-600 rounded w-full bg-gray-600 text-white placeholder-gray-400"
                                             />
                                             <button
                                                 onClick={handleManualFormSubmit}
@@ -854,7 +783,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                     {/* Template Selector */}
                                     {message.showTemplateSelector && (
                                         <div className="mt-4 space-y-2">
-                                            <p className="text-sm font-medium text-gray-700 mb-2">
+                                            <p className="text-sm font-medium text-gray-200 mb-2">
                                                 Select documents to generate:
                                             </p>
 
@@ -867,7 +796,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                     { id: 'credit_note', name: 'Credit Note', desc: 'Amount adjustment' },
                                                     { id: 'debit_note', name: 'Debit Note', desc: 'Additional charges' }
                                                 ].map((template) => (
-                                                    <label key={template.id} className="flex items-center space-x-2 p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                                    <label key={template.id} className="flex items-center space-x-2 p-2 border border-gray-600 rounded-lg hover:bg-gray-700 cursor-pointer">
                                                         <input
                                                             type="checkbox"
                                                             value={template.id}
@@ -875,8 +804,8 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                             className="text-manu-green"
                                                         />
                                                         <div className="flex-1">
-                                                            <div className="font-medium text-sm">📄 {template.name}</div>
-                                                            <div className="text-xs text-gray-500">{template.desc}</div>
+                                                            <div className="font-medium text-sm text-white">📄 {template.name}</div>
+                                                            <div className="text-xs text-gray-400">{template.desc}</div>
                                                         </div>
                                                     </label>
                                                 ))}
@@ -899,7 +828,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                     <input
                                                         type="text"
                                                         placeholder="Enter your answer..."
-                                                        className="w-full p-2 border border-gray-200 rounded-lg"
+                                                        className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400"
                                                         autoFocus
                                                         onKeyDown={(e) => {
                                                             if (e.key === 'Enter' && e.target.value.trim()) {
@@ -929,7 +858,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                     <textarea
                                                         placeholder="Enter complete address..."
                                                         rows="3"
-                                                        className="w-full p-2 border border-gray-200 rounded-lg"
+                                                        className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400"
                                                         autoFocus
                                                         onKeyDown={(e) => {
                                                             if (e.key === 'Enter' && e.ctrlKey && e.target.value.trim()) {
@@ -951,7 +880,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                     >
                                                         Send Answer
                                                     </button>
-                                                    <p className="text-xs text-gray-500">Press Ctrl+Enter or click button</p>
+                                                    <p className="text-xs text-gray-400">Press Ctrl+Enter or click button</p>
                                                 </div>
                                             )}
 
@@ -962,7 +891,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                             <button
                                                                 key={option}
                                                                 onClick={() => handleUserInput(option, message.expectedField)}
-                                                                className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 text-sm hover:border-manu-green"
+                                                                className="p-2 border border-gray-600 rounded-lg hover:bg-gray-700 text-sm hover:border-manu-green text-white"
                                                             >
                                                                 {option}
                                                             </button>
@@ -973,150 +902,171 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
                                             {message.inputType === 'products' && awaitingInput && (
                                                 <div className="space-y-2 mt-4">
-
                                                     {showSuggestions && filteredItems.length > 0 && (
-                                                        <div className="border rounded bg-white shadow-md max-h-48 overflow-y-auto z-10 mb-2">
+                                                        <div className="border border-gray-600 rounded bg-gray-700 shadow-md max-h-48 overflow-y-auto z-10 mb-2">
                                                             {filteredItems.map(item => (
                                                                 <div
                                                                     key={item.hsCode}
                                                                     className="p-2 hover:bg-manu-green hover:text-white cursor-pointer"
                                                                     onClick={() => {
                                                                         setCurrentProduct({
-                                                                            ...currentProduct,
                                                                             item: item.name,
                                                                             description: item.description,
-                                                                            hsCode: item.hsCode
+                                                                            hsCode: item.hsCode,
+                                                                            quantity: '',
+                                                                            unitPrice: ''
                                                                         });
                                                                         setShowSuggestions(false);
-                                                                        setProductEntryStep(1);
                                                                     }}
                                                                 >
-                                                                    <div className="font-semibold">{item.name}</div>
-                                                                    <div className="text-xs text-gray-500">{item.description}</div>
-                                                                    <div className="text-xs text-blue-600">HS Code: {item.hsCode}</div>
+                                                                    <div className="font-semibold text-white">{item.name}</div>
+                                                                    <div className="text-xs text-gray-300">{item.description}</div>
+                                                                    <div className="text-xs text-blue-400">HS Code: {item.hsCode}</div>
                                                                 </div>
                                                             ))}
                                                         </div>
                                                     )}
 
-
-
-
                                                     <input
                                                         type="text"
-                                                        placeholder="Type item name..."
-                                                        className="w-full p-2 border border-gray-200 rounded-lg"
+                                                        placeholder="Type item name to search..."
+                                                        className="w-full p-2 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400"
                                                         value={currentProduct.item}
                                                         onChange={e => {
                                                             const val = e.target.value;
-
-                                                            // Show suggestions only if input length > 0
                                                             setShowSuggestions(val.length > 0);
-
-                                                            // Filter ITEM_DATABASE based on full current input (name or description)
                                                             const filtered = val.length > 0
                                                                 ? ITEM_DATABASE.filter(item =>
                                                                     item.name.toLowerCase().includes(val.toLowerCase()) ||
                                                                     item.description.toLowerCase().includes(val.toLowerCase())
                                                                 )
                                                                 : [];
-
-                                                            // Update filtered items list
                                                             setFilteredItems(filtered);
-
-                                                            // Update currentProduct state with new item name
                                                             setCurrentProduct(prev => ({ ...prev, item: val }));
                                                         }}
-
                                                         autoFocus
                                                     />
 
-
-
-
                                                     {currentProduct.description && (
-                                                        <div className="mt-2 p-2 bg-gray-50 border rounded">
-                                                            <div><strong>Description:</strong> {currentProduct.description}</div>
-                                                            <div><strong>HS Code:</strong> {currentProduct.hsCode}</div>
+                                                        <div className="mt-2 p-2 bg-gray-600 border border-gray-500 rounded">
+                                                            <div className="text-white"><strong>Description:</strong> {currentProduct.description}</div>
+                                                            <div className="text-white"><strong>HS Code:</strong> {currentProduct.hsCode}</div>
                                                         </div>
                                                     )}
-                                                    {productEntryStep === 1 && (
+
+                                                    {currentProduct.description && (
                                                         <>
                                                             <input
                                                                 type="number"
                                                                 placeholder="Quantity"
-                                                                className="w-full p-2 border border-gray-200 rounded-lg mt-2"
+                                                                className="w-full p-2 border border-gray-600 rounded-lg mt-2 bg-gray-700 text-white placeholder-gray-400"
                                                                 value={currentProduct.quantity}
-                                                                onChange={e => setCurrentProduct({ ...currentProduct, quantity: e.target.value })}
+                                                                onChange={e => setCurrentProduct(prev => ({ ...prev, quantity: e.target.value }))}
                                                             />
                                                             <input
                                                                 type="number"
                                                                 placeholder="Unit Price"
-                                                                className="w-full p-2 border border-gray-200 rounded-lg mt-2"
+                                                                className="w-full p-2 border border-gray-600 rounded-lg mt-2 bg-gray-700 text-white placeholder-gray-400"
                                                                 value={currentProduct.unitPrice}
-                                                                onChange={e => setCurrentProduct({ ...currentProduct, unitPrice: e.target.value })}
+                                                                onChange={e => setCurrentProduct(prev => ({ ...prev, unitPrice: e.target.value }))}
                                                             />
+                                                        </>
+                                                    )}
+
+                                                    {(currentProduct.item && currentProduct.quantity && currentProduct.unitPrice) && (
+                                                        <div className="flex gap-2 mt-3">
                                                             <button
-                                                                className="w-full bg-manu-green text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm mt-2"
+                                                                className="flex-1 bg-manu-green text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm"
                                                                 onClick={() => {
-                                                                    if (!currentProduct.quantity || !currentProduct.unitPrice) {
-                                                                        alert("Please enter quantity and unit price.");
-                                                                        return;
-                                                                    }
-                                                                    // Save product
-                                                                    setProducts([currentProduct]); // Only one product
-                                                                    setUserInputs(prev => ({
-                                                                        ...prev,
-                                                                        products: [currentProduct]
-                                                                    }));
-
-                                                                    const productSummary = `Added: ${currentProduct.item} | ${currentProduct.description} | ${currentProduct.hsCode} | Qty: ${currentProduct.quantity} | Price: ${currentProduct.unitPrice}`;
-
+                                                                    const newProduct = { ...currentProduct };
+                                                                    setProducts(prev => [...prev, newProduct]);
+                                                                    const productSummary = `Added: ${newProduct.item} | Qty: ${newProduct.quantity} | Price: ${newProduct.unitPrice}`;
                                                                     setMessages(prev => [...prev, {
                                                                         id: generateUniqueId(),
                                                                         type: 'user',
                                                                         content: productSummary,
                                                                         timestamp: new Date()
                                                                     }]);
+                                                                    setCurrentProduct({ item: '', description: '', hsCode: '', quantity: '', unitPrice: '' });
+                                                                    setShowSuggestions(false);
+                                                                    setFilteredItems([]);
+                                                                    setTimeout(() => {
+                                                                        const searchInput = document.querySelector('input[placeholder="Type item name to search..."]');
+                                                                        if (searchInput) searchInput.focus();
+                                                                    }, 100);
+                                                                }}
+                                                            >
+                                                                Add Product & Continue Adding
+                                                            </button>
 
-                                                                    // Disable the products input in the previous message
+                                                            <button
+                                                                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                                                                onClick={() => {
+                                                                    let finalProducts = [...products];
+                                                                    if (currentProduct.item && currentProduct.quantity && currentProduct.unitPrice) {
+                                                                        finalProducts.push({ ...currentProduct });
+                                                                    }
+                                                                    if (finalProducts.length === 0) {
+                                                                        alert("Please add at least one product before finishing.");
+                                                                        return;
+                                                                    }
+                                                                    setUserInputs(prev => ({
+                                                                        ...prev,
+                                                                        products: finalProducts
+                                                                    }));
+                                                                    const productsSummary = `Added ${finalProducts.length} product(s):\n${finalProducts.map((p, i) => `${i + 1}. ${p.item} - Qty: ${p.quantity} @ ${p.unitPrice}`).join('\n')}`;
+                                                                    setMessages(prev => [...prev, {
+                                                                        id: generateUniqueId(),
+                                                                        type: 'user',
+                                                                        content: productsSummary,
+                                                                        timestamp: new Date()
+                                                                    }]);
                                                                     setMessages(prevMessages =>
                                                                         prevMessages.map(msg =>
                                                                             msg.showInput && msg.expectedField === 'products'
-                                                                                ? { ...msg, showInput: false, inputDisabled: true, userAnswer: productSummary }
+                                                                                ? { ...msg, showInput: false, inputDisabled: true, userAnswer: `Added ${finalProducts.length} product(s)` }
                                                                                 : msg
                                                                         )
                                                                     );
-
-                                                                    // Reset for next question
                                                                     setCurrentProduct({ item: '', description: '', hsCode: '', quantity: '', unitPrice: '' });
-                                                                    setProductEntryStep(0);
                                                                     setShowSuggestions(false);
                                                                     setFilteredItems([]);
+                                                                    setProducts([]);
                                                                     setAwaitingInput(false);
-                                                                    setCurrentQuestion(prev => prev + 1); // Move to next question
+                                                                    setCurrentQuestion(prev => prev + 1);
                                                                 }}
                                                             >
-                                                                Add Product
+                                                                Finish Adding Products ({products.length + (currentProduct.item && currentProduct.quantity && currentProduct.unitPrice ? 1 : 0)})
                                                             </button>
-                                                        </>
+                                                        </div>
+                                                    )}
+
+                                                    {products.length > 0 && (
+                                                        <div className="mt-4 p-3 bg-gray-600 border border-gray-500 rounded">
+                                                            <h4 className="font-semibold mb-2 text-white">Products Added ({products.length}):</h4>
+                                                            {products.map((product, index) => (
+                                                                <div key={index} className="text-sm border-b border-gray-500 pb-2 mb-2 last:border-b-0">
+                                                                    <div className="text-white"><strong>{product.item}</strong></div>
+                                                                    <div className="text-gray-300">Qty: {product.quantity} | Unit Price: {product.unitPrice}</div>
+                                                                    {product.description && <div className="text-xs text-gray-400">{product.description}</div>}
+                                                                </div>
+                                                            ))}
+                                                        </div>
                                                     )}
                                                 </div>
                                             )}
                                         </div>
                                     )}
 
-                                    {/* Show disabled input state with user's answer */}
                                     {message.inputDisabled && (
-                                        <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                                            <div className="text-sm text-gray-600 mb-1">Your answer:</div>
-                                            <div className="text-sm font-medium text-gray-800">
+                                        <div className="mt-4 p-3 bg-gray-600 border border-gray-500 rounded-lg">
+                                            <div className="text-sm text-gray-300 mb-1">Your answer:</div>
+                                            <div className="text-sm font-medium text-white">
                                                 ✓ {message.userAnswer}
                                             </div>
                                         </div>
                                     )}
 
-                                    {/* Download Button */}
                                     {message.showDownloadButton && (
                                         <div className="flex flex-col gap-2 mt-3">
                                             <button
@@ -1126,7 +1076,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                                 📥 Download Documents
                                             </button>
                                             <button
-                                                className={`px-4 py-2 text-white rounded flex items-center justify-center gap-2 ${isSendingEmail ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+                                                className={`px-4 py-2 text-white rounded flex items-center justify-center gap-2 ${isSendingEmail ? 'bg-gray-600 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
                                                     } text-sm`}
                                                 onClick={sendPdfViaEmail}
                                                 disabled={isSendingEmail}
@@ -1137,25 +1087,22 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                         </div>
                                     )}
 
-                                    <div className="text-xs opacity-70 mt-2">
+                                    <div className="text-xs opacity-70 mt-2 text-gray-400">
                                         {new Date(message.timestamp).toLocaleTimeString()}
                                     </div>
                                 </div>
                             </div>
                         ))}
                         <div ref={messagesEndRef} />
-
-
                     </div>
 
-                    {/* Input Area - Hidden during questionnaire */}
                     {!awaitingInput && (
-                        <div className="p-4 border-t border-gray-200">
+                        <div className="p-4 border-t border-gray-700">
                             <div className="flex space-x-2">
                                 <input
                                     type="text"
                                     placeholder="Type your message..."
-                                    className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-manu-green"
+                                    className="flex-1 px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-manu-green"
                                 />
                                 <button className="bg-manu-green text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
                                     Send
@@ -1166,14 +1113,14 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                 </div>
 
                 {/* Right Panel - Template Preview */}
-                <div className="w-1/2 bg-gray-100 flex flex-col">
+                <div className="w-full md:w-1/2 bg-gray-800 flex flex-col">
                     {/* Preview Header */}
-                    <div className="p-4 border-b border-gray-200 bg-white">
+                    <div className="p-4 border-b border-gray-700 bg-gray-900">
                         <div className="flex items-center space-x-3">
                             <FileText className="text-manu-green" size={20} />
                             <div>
-                                <h3 className="font-semibold">Document Preview</h3>
-                                <p className="text-sm text-gray-600">Live preview of your documents</p>
+                                <h3 className="font-semibold text-white">Document Preview</h3>
+                                <p className="text-sm text-gray-400">Live preview of your documents</p>
                             </div>
                         </div>
                     </div>
@@ -1190,13 +1137,13 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                             { icon: '📦', name: 'Packing' },
                                             { icon: '🚛', name: 'Challan' }
                                         ].map((item, idx) => (
-                                            <div key={idx} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                                            <div key={idx} className="bg-gray-700 p-4 rounded-lg shadow-sm border border-gray-600">
                                                 <div className="text-2xl mb-2">{item.icon}</div>
-                                                <div className="text-sm font-medium text-gray-700">{item.name}</div>
+                                                <div className="text-sm font-medium text-white">{item.name}</div>
                                             </div>
                                         ))}
                                     </div>
-                                    <p className="text-gray-500 text-sm">
+                                    <p className="text-gray-400 text-sm">
                                         Choose your documents from the chat panel
                                     </p>
                                 </div>
@@ -1209,13 +1156,13 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                     <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <span className="text-white text-xl">📝</span>
                                     </div>
-                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    <h3 className="text-lg font-semibold text-white mb-2">
                                         Collecting Information
                                     </h3>
-                                    <p className="text-gray-500 mb-4">
+                                    <p className="text-gray-400 mb-4">
                                         Question {currentQuestion + 1} of {questions.length}
                                     </p>
-                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                    <div className="w-full bg-gray-700 rounded-full h-2">
                                         <div
                                             className="bg-blue-500 h-2 rounded-full transition-all duration-500"
                                             style={{ width: `${((currentQuestion) / questions.length) * 100}%` }}
@@ -1231,10 +1178,10 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                     <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
                                         <span className="text-white text-xl">⚡</span>
                                     </div>
-                                    <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                                    <h3 className="text-lg font-semibold text-white mb-2">
                                         Generating Documents...
                                     </h3>
-                                    <p className="text-gray-500">
+                                    <p className="text-gray-400">
                                         Please wait while we create your professional export documents
                                     </p>
                                 </div>
@@ -1242,8 +1189,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                         )}
 
                         {currentStep === 'completed' && (
-                            <div className="bg-white rounded-lg p-6 shadow-sm h-full">
-
+                            <div className="bg-gray-700 rounded-lg p-6 shadow-sm h-full flex flex-col">
                                 <div className="flex gap-3 mb-3">
                                     <button
                                         className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
@@ -1255,7 +1201,7 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
 
                                     <button
                                         className={`px-4 py-2 text-white rounded flex items-center gap-2 ${isSendingEmail
-                                            ? 'bg-gray-400 cursor-not-allowed'
+                                            ? 'bg-gray-600 cursor-not-allowed'
                                             : 'bg-green-600 hover:bg-green-700'
                                             }`}
                                         onClick={sendPdfViaEmail}
@@ -1264,17 +1210,23 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                         <MessageCircle size={16} />
                                         {isSendingEmail ? 'Sending...' : 'Send via Email'}
                                     </button>
+
+                                    <button
+                                        className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 flex items-center gap-2"
+                                        onClick={() => setIsEditing(!isEditing)}
+                                    >
+                                        <Edit3 size={16} />
+                                        {isEditing ? 'Save Edits' : 'Edit Text'}
+                                    </button>
                                 </div>
 
-
-                                {/* Tabs for each template */}
                                 {generatedDocuments.length > 1 && (
-                                    <div className="flex space-x-2 border-b pb-2 mb-3">
+                                    <div className="flex space-x-2 border-b border-gray-600 pb-2 mb-3">
                                         {generatedDocuments.map((doc, i) => (
                                             <button
                                                 key={doc.id}
                                                 onClick={() => setActiveDocIndex(i)}
-                                                className={`px-4 py-1 rounded-t ${activeDocIndex === i ? 'bg-manu-green text-white' : 'bg-gray-200 text-gray-700'} text-sm font-semibold`}
+                                                className={`px-4 py-1 rounded-t ${activeDocIndex === i ? 'bg-manu-green text-white' : 'bg-gray-600 text-gray-300'} text-sm font-semibold`}
                                             >
                                                 {doc.name}
                                             </button>
@@ -1282,21 +1234,124 @@ const AIAgentPage = ({ user, onPageChange, onLogout, documentsUploaded = true })
                                     </div>
                                 )}
 
-                                {/* Preview HTML */}
-                                <div style={{ minHeight: 500 }}>
+                                <div className="flex-1 overflow-auto" style={{ minHeight: 500 }}>
                                     {generatedDocuments.length > 0 && (
-                                        <div
-                                            className="document-html-preview"
-                                            dangerouslySetInnerHTML={{ __html: generatedDocuments[activeDocIndex]?.html }}
-                                        />
+                                        <div className="document-preview-container relative">
+                                            {isEditing ? (
+                                                <div
+                                                    className="editable-document p-6 border-2 border-purple-400 rounded-lg bg-white"
+                                                    contentEditable
+                                                    suppressContentEditableWarning
+                                                    onBlur={(e) => {
+                                                        const editedHtml = e.currentTarget.innerHTML;
+                                                        const updatedDocuments = [...generatedDocuments];
+                                                        updatedDocuments[activeDocIndex] = {
+                                                            ...updatedDocuments[activeDocIndex],
+                                                            html: editedHtml
+                                                        };
+                                                        setGeneratedDocuments(updatedDocuments);
+                                                    }}
+                                                    style={{
+                                                        minHeight: '500px',
+                                                        outline: 'none',
+                                                        fontFamily: 'Arial, Helvetica, sans-serif !important'
+                                                    }}
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: `<div style="font-family: Arial, Helvetica, sans-serif !important">${generatedDocuments[activeDocIndex]?.html}</div>`
+                                                    }}
+                                                />
+                                            ) : (
+                                                <div
+                                                    className="document-html-preview p-6 border border-gray-600 rounded-lg bg-white"
+                                                    style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: `<div style="font-family: Arial, Helvetica, sans-serif !important; font-size: 12px;">${generatedDocuments[activeDocIndex]?.html}</div>`
+                                                    }}
+                                                />
+                                            )}
+
+                                            {isEditing && (
+                                                <div className="absolute top-2 right-2 bg-purple-600 text-white px-3 py-1 rounded-lg text-sm">
+                                                    ✏️ Click any text to edit
+                                                </div>
+                                            )}
+                                        </div>
                                     )}
                                     {generatedDocuments.length === 0 && (
-                                        <div className="text-gray-500">No preview available.</div>
+                                        <div className="text-gray-400">No preview available.</div>
                                     )}
                                 </div>
+
+                                {isEditing && (
+                                    <div className="mt-4 p-4 bg-gray-600 border border-gray-500 rounded-lg">
+                                        <h4 className="font-semibold mb-2 text-white">Quick Edit Tools</h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            <button
+                                                className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+                                                onClick={() => document.execCommand('bold', false, null)}
+                                            >
+                                                <strong>B</strong>
+                                            </button>
+                                            <button
+                                                className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+                                                onClick={() => document.execCommand('italic', false, null)}
+                                            >
+                                                <em>I</em>
+                                            </button>
+                                            <button
+                                                className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+                                                onClick={() => document.execCommand('underline', false, null)}
+                                            >
+                                                <u>U</u>
+                                            </button>
+                                            <select
+                                                className="px-2 py-1 border border-gray-500 rounded text-sm bg-gray-700 text-white"
+                                                onChange={(e) => document.execCommand('fontSize', false, e.target.value)}
+                                            >
+                                                <option value="">Size</option>
+                                                <option value="1">Small</option>
+                                                <option value="3">Medium</option>
+                                                <option value="5">Large</option>
+                                                <option value="7">X-Large</option>
+                                            </select>
+                                            <select
+                                                className="px-2 py-1 border border-gray-500 rounded text-sm bg-gray-700 text-white"
+                                                onChange={(e) => document.execCommand('foreColor', false, e.target.value)}
+                                            >
+                                                <option value="">Color</option>
+                                                <option value="#000000">Black</option>
+                                                <option value="#FF0000">Red</option>
+                                                <option value="#0000FF">Blue</option>
+                                                <option value="#008000">Green</option>
+                                            </select>
+                                            <button
+                                                className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700"
+                                                onClick={() => {
+                                                    const editableDiv = document.querySelector('.editable-document');
+                                                    if (editableDiv) {
+                                                        const updatedDocuments = [...generatedDocuments];
+                                                        updatedDocuments[activeDocIndex] = {
+                                                            ...updatedDocuments[activeDocIndex],
+                                                            html: editableDiv.innerHTML
+                                                        };
+                                                        setGeneratedDocuments(updatedDocuments);
+                                                        setIsEditing(false);
+                                                    }
+                                                }}
+                                            >
+                                                Save & Exit
+                                            </button>
+                                            <button
+                                                className="px-3 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600"
+                                                onClick={() => setIsEditing(false)}
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         )}
-
                     </div>
                 </div>
             </div>
