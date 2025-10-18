@@ -249,7 +249,7 @@ const HeroSection = ({ isMobile, user }) => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.8, duration: 0.6 }}
-                            className="text-sm sm:text-base md:text-lg text-gray-200 max-w-lg leading-relaxed"
+                            className="text-sm sm:text-base md:text-lg text-gray-200 max-w-lg leading-relaxed lg:ml-8"
                         >
                             Transform your export documentation process with AI. Upload invoices, extract data automatically, and generate professional export documents in minutes.
                         </motion.p>
@@ -260,7 +260,7 @@ const HeroSection = ({ isMobile, user }) => {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
-                        className="flex flex-wrap gap-4 sm:gap-6 pt-2 lg:ml-16"
+                        className="flex flex-wrap gap-4 sm:gap-6 pt-2 lg:ml-20"
                     >
                         {[
                             { value: "100%", label: "Accuracy Rate" },
@@ -289,7 +289,7 @@ const HeroSection = ({ isMobile, user }) => {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.8 }}
-                        className="flex flex-col sm:flex-row gap-3 pt-4"
+                        className="flex flex-col sm:flex-row gap-3 pt-4 lg:ml-16"
                     >
                         <motion.button
                             whileHover={{ scale: 1.02 }}
