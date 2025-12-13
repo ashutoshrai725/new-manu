@@ -13,6 +13,7 @@ const Header = ({ user, onLogout }) => {
     const helpRef = useRef(null);
     const contactRef = useRef(null);
 
+
     // Close mobile menu when route changes
     useEffect(() => {
         setIsMenuOpen(false);
