@@ -51,7 +51,7 @@ const BackedBySection = () => {
         {
             name: 'IOI',
             logo: 'https://i.postimg.cc/phrqVv7T/IOI-B.jpg',
-            description: 'Innovation Centre Bengaluru',
+            description: 'PW Innovation Centre Bengaluru',
             type: 'Tech Hub',
             achievements: ['Bengaluru Base', 'Tech Innovation', 'Startup Ecosystem'],
             color: 'from-manu-light to-manu-light'
