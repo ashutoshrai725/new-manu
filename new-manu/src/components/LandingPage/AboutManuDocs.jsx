@@ -306,265 +306,36 @@ const AboutManuDocs = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, ease: 'easeOut' }}
                     viewport={{ once: true }}
-                    className="text-center mb-16 md:mb-20 pt-6"
+                    className="mb-16 md:mb-20 pt-6"
                 >
-                    <motion.div
-                        variants={floatVariant}
-                        initial="initial"
-                        animate="animate"
-                        className="inline-flex items-center gap-3 bg-slate-900/80 border border-slate-600/40 rounded-2xl px-5 py-2.5 mb-6 backdrop-blur-md shadow-[0_0_0_1px_rgba(15,23,42,0.8)]"
-                    >
-                        <Rocket className="w-5 h-5 text-cyan-400" />
-                        <span className="text-xs font-semibold tracking-[0.18em] text-cyan-300 uppercase">
-                            About ManuDocs
-                        </span>
-                    </motion.div>
-
-                    <div className="flex flex-col items-center gap-6 mb-8">
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-slate-50 leading-tight">
-                            India&apos;s{' '}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400">
-                                Unified Trade Interface
-                            </span>
-                        </h1>
-
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 mb-8">
                         {/* UTI Logo */}
-                        <div className="relative group mt-4">
+                        <div className="relative group">
                             <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-indigo-500 rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-500" />
-                            <div className="relative bg-slate-900/900 border border-slate-700/60 rounded-3xl p-6 backdrop-blur-xl shadow-4xl">
+                            <div className="relative bg-slate-900/900 border border-slate-700/60 rounded-3xl p-3 backdrop-blur-xl shadow-4xl">
                                 <img
                                     src="https://i.postimg.cc/FsJ1rRg6/UTI-logo.jpg"
                                     alt="UTI Logo"
-                                    className="w-80 h-auto"
+                                    className="w-40 md:w-44 h-auto"
                                 />
                             </div>
                         </div>
-                    </div>
 
-                    <p className="text-base md:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed mb-8">
-                        ManuDocs unifies export documentation, compliance, logistics, shipment
-                        visibility, and buyer collaboration into one intelligent operating
-                        system for Indian exporters.
-                    </p>
-
-                    <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs md:text-sm text-slate-300">
-                        <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/50 bg-emerald-500/10 px-3 py-1">
-                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-300" />
-                            As simple for exports as UPI is for payments — fast, simple, low-cost, and secure.
-                        </span>
-                    </div>
-                </motion.div>
-
-                {/* Platform capabilities */}
-                <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    viewport={{ once: true }}
-                    className="mb-20"
-                >
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-50 mb-4">
-                            Platform{' '}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-sky-400">
-                                Capabilities
-                            </span>
-                        </h2>
-                        <p className="text-slate-400 max-w-2xl mx-auto">
-                            A connected stack for documentation, compliance, logistics, and finance.
-                        </p>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {platformFeatures.map((feature, index) => (
-                            <motion.div
-                                key={feature.title}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.08 }}
-                                viewport={{ once: true, margin: '-60px' }}
-                                whileHover={{ y: -8, scale: 1.02 }}
-                                className="group relative"
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-br from-slate-800/60 to-slate-900/60 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                <div className="relative bg-slate-900/70 border border-slate-700/50 rounded-2xl p-6 backdrop-blur-xl hover:border-slate-600/70 transition-all duration-300 h-full">
-                                    <div
-                                        className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${feature.color} bg-opacity-10 mb-4`}
-                                    >
-                                        <feature.icon className="w-6 h-6 text-slate-100" />
-                                    </div>
-                                    <h3 className="text-xl font-semibold text-slate-50 mb-2">
-                                        {feature.title}
-                                    </h3>
-                                    <p className="text-slate-400 text-sm">{feature.description}</p>
-                                    <div className="mt-4 pt-4 border-t border-slate-700/50">
-                                        <span className="text-xs text-slate-500 group-hover:text-slate-300 transition-colors">
-                                            Learn more →
-                                        </span>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </motion.div>
-
-                {/* Feature cards */}
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-80px' }}
-                    className="grid md:grid-cols-3 gap-6 md:gap-8 mb-16 md:mb-20"
-                >
-                    {features.map((item) => (
-                        <motion.div
-                            key={item.title}
-                            variants={itemVariants}
-                            whileHover={{
-                                y: -6,
-                                rotateX: 2,
-                                rotateY: -2,
-                                transition: { type: 'spring', stiffness: 220, damping: 18 }
-                            }}
-                        >
-                            <div className="group relative h-full overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-900/70 px-6 py-7 shadow-[0_18px_45px_rgba(15,23,42,0.65)] backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/60 hover:shadow-[0_25px_60px_rgba(8,47,73,0.85)]">
-                                <div
-                                    className={`pointer-events-none absolute inset-px rounded-2xl bg-gradient-to-br ${item.color} opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-20`}
-                                />
-                                <div className="relative flex flex-col gap-5">
-                                    <div
-                                        className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-lg shadow-slate-900/70`}
-                                    >
-                                        <item.icon className="w-6 h-6 text-white" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-xl md:text-2xl font-semibold text-slate-50 mb-2">
-                                            {item.title}
-                                        </h3>
-
-                                        {/* description vs bullets */}
-                                        {item.bullets ? (
-                                            <div className="space-y-3">
-                                                {item.subtitle && (
-                                                    <p className="text-sm md:text-base text-slate-300 leading-relaxed">
-                                                        {item.subtitle}
-                                                    </p>
-                                                )}
-                                                <ul className="space-y-1.5 text-sm md:text-base text-slate-300">
-                                                    {item.bullets.map((point) => (
-                                                        <li key={point} className="flex gap-2">
-                                                            <span className="mt-1 h-1.5 w-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
-                                                            <span>{point}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        ) : (
-                                            <p className="text-sm md:text-base text-slate-300 leading-relaxed">
-                                                {item.description}
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
-
-
-                {/* Impact stats */}
-                <div className="mb-16 md:mb-20">
-                    <div className="text-center mb-8">
-                        <h3 className="text-2xl md:text-3xl font-semibold text-slate-50 mb-3">
-                            Our Impact
-                        </h3>
-                        <p className="text-slate-300 text-sm md:text-base">
-                            Built with real exporter workflows, compliance demands, and logistics
-                            constraints in mind.
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
-                        {impactStats.map((stat, i) => (
-                            <motion.div
-                                key={stat.label}
-                                initial={{ opacity: 0, y: 18 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{
-                                    duration: 0.45,
-                                    delay: i * 0.06,
-                                    ease: 'easeOut'
-                                }}
-                                viewport={{ once: true, margin: '-60px' }}
-                                whileHover={{
-                                    y: -4,
-                                    scale: 1.02,
-                                    transition: { type: 'spring', stiffness: 220, damping: 18 }
-                                }}
-                                className="relative overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-900/70 px-4 py-5 text-center shadow-[0_14px_38px_rgba(15,23,42,0.75)] backdrop-blur-xl transition-all duration-300 hover:border-cyan-300/60"
-                            >
-                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-50/[0.03] to-transparent opacity-80" />
-                                <div className="relative flex flex-col items-center gap-1.5">
-                                    <div className="mb-3 w-11 h-11 flex items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 shadow-md shadow-slate-900/70">
-                                        <stat.icon className="w-5 h-5 text-white" />
-                                    </div>
-                                    <div className="text-2xl md:text-3xl font-semibold text-slate-50">
-                                        {stat.value}
-                                    </div>
-                                    <div className="text-xs md:text-sm font-medium text-slate-200">
-                                        {stat.label}
-                                    </div>
-                                    <div className="text-[11px] md:text-xs text-slate-400 mt-1">
-                                        {stat.description}
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-
-                    {/* Extra metrics */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: '-60px' }}
-                    >
-                        <div className="bg-gradient-to-r from-slate-900/80 to-slate-800/80 border border-slate-700/50 rounded-2xl p-8 backdrop-blur-xl">
-                            <div className="grid md:grid-cols-3 gap-8">
-                                {extraMetrics.map((metric) => (
-                                    <div key={metric.label} className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-slate-800/50 flex items-center justify-center">
-                                            <metric.icon className={`w-6 h-6 ${metric.color}`} />
-                                        </div>
-                                        <div>
-                                            <div className="text-2xl font-bold text-slate-50 mb-1">
-                                                {metric.value}
-                                            </div>
-                                            <div className="text-sm text-slate-300 mb-1">
-                                                {metric.label}
-                                            </div>
-                                            <div className="text-xs text-slate-500">
-                                                {metric.hint}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                        {/* Text Content */}
+                        <div className="text-center md:text-left">
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-slate-50 leading-tight">
+                                India&apos;s{' '}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400">
+                                    Unified Trade Interface
+                                </span>
+                            </h1>
                         </div>
-                    </motion.div>
-                </div>
+                    </div>
+                </motion.div>
 
                 {/* Enhanced Trade Rail Animation */}
                 <div className="mb-16 md:mb-20">
-                    <div className="text-center mb-8">
-                        <h3 className="text-2xl md:text-3xl font-semibold text-slate-50 mb-3">
-                            From factory floor to buyer warehouse
-                        </h3>
-                        <p className="text-slate-300 text-sm md:text-base max-w-3xl mx-auto">
-                            ManuDocs connects every hop in the export journey — documentation,
-                            customs, logistics, shipping lines, banks, and buyers — into one
-                            continuous, real-time trade rail.
-                        </p>
-                    </div>
+
 
                     <div className="relative rounded-3xl border border-slate-700/60 bg-slate-950/80 px-4 py-6 md:px-6 md:py-8 shadow-[0_22px_55px_rgba(8,47,73,0.8)] backdrop-blur-xl overflow-hidden">
                         {/* Glow */}
@@ -582,7 +353,7 @@ const AboutManuDocs = () => {
                             <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
                                 <div>
                                     <p className="text-xs uppercase tracking-[0.28em] text-cyan-300 mb-1">
-                                        Unified export rail
+                                        Unified export workflow
                                     </p>
                                     <h4 className="text-lg md:text-xl font-semibold text-slate-50">
                                         One continuous line of sight from first document to final delivery
@@ -727,6 +498,94 @@ const AboutManuDocs = () => {
                     </div>
                 </div>
 
+
+
+
+
+
+                {/* Impact stats */}
+                <div className="mb-16 md:mb-20">
+                    <div className="text-center mb-8">
+                        <h3 className="text-2xl md:text-3xl font-semibold text-slate-50 mb-3">
+                            Our Impact
+                        </h3>
+                        <p className="text-slate-300 text-sm md:text-base">
+                            Built with real exporter workflows, compliance demands, and logistics
+                            constraints in mind.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+                        {impactStats.map((stat, i) => (
+                            <motion.div
+                                key={stat.label}
+                                initial={{ opacity: 0, y: 18 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{
+                                    duration: 0.45,
+                                    delay: i * 0.06,
+                                    ease: 'easeOut'
+                                }}
+                                viewport={{ once: true, margin: '-60px' }}
+                                whileHover={{
+                                    y: -4,
+                                    scale: 1.02,
+                                    transition: { type: 'spring', stiffness: 220, damping: 18 }
+                                }}
+                                className="relative overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-900/70 px-4 py-5 text-center shadow-[0_14px_38px_rgba(15,23,42,0.75)] backdrop-blur-xl transition-all duration-300 hover:border-cyan-300/60"
+                            >
+                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-50/[0.03] to-transparent opacity-80" />
+                                <div className="relative flex flex-col items-center gap-1.5">
+                                    <div className="mb-3 w-11 h-11 flex items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 shadow-md shadow-slate-900/70">
+                                        <stat.icon className="w-5 h-5 text-white" />
+                                    </div>
+                                    <div className="text-2xl md:text-3xl font-semibold text-slate-50">
+                                        {stat.value}
+                                    </div>
+                                    <div className="text-xs md:text-sm font-medium text-slate-200">
+                                        {stat.label}
+                                    </div>
+                                    <div className="text-[11px] md:text-xs text-slate-400 mt-1">
+                                        {stat.description}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Extra metrics */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-60px' }}
+                    >
+                        <div className="bg-gradient-to-r from-slate-900/80 to-slate-800/80 border border-slate-700/50 rounded-2xl p-8 backdrop-blur-xl">
+                            <div className="grid md:grid-cols-3 gap-8">
+                                {extraMetrics.map((metric) => (
+                                    <div key={metric.label} className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-xl bg-slate-800/50 flex items-center justify-center">
+                                            <metric.icon className={`w-6 h-6 ${metric.color}`} />
+                                        </div>
+                                        <div>
+                                            <div className="text-2xl font-bold text-slate-50 mb-1">
+                                                {metric.value}
+                                            </div>
+                                            <div className="text-sm text-slate-300 mb-1">
+                                                {metric.label}
+                                            </div>
+                                            <div className="text-xs text-slate-500">
+                                                {metric.hint}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+
+
+
                 {/* Vision */}
                 <div className="mb-16 md:mb-20">
                     <div className="text-center mb-8">
@@ -786,45 +645,7 @@ const AboutManuDocs = () => {
                     </div>
                 </div>
 
-                {/* CTA */}
-                <motion.div
-                    initial={{ opacity: 0, y: 26 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeOut' }}
-                    viewport={{ once: true, margin: '-80px' }}
-                    className="pb-10 md:pb-14"
-                >
-                    <div className="relative mx-auto flex max-w-4xl flex-col md:flex-row items-center justify-between gap-6 rounded-3xl border border-cyan-500/40 bg-gradient-to-r from-cyan-500/10 via-sky-500/10 to-indigo-500/10 px-7 py-7 md:px-10 md:py-8 backdrop-blur-xl shadow-[0_22px_55px_rgba(8,47,73,0.85)] overflow-hidden">
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/6 via-transparent to-white/4 opacity-80" />
-                        <div className="pointer-events-none absolute -right-10 -bottom-10 h-40 w-40 rounded-full bg-cyan-400/30 blur-3xl" />
-                        <div className="pointer-events-none absolute -left-16 -top-16 h-32 w-32 rounded-full bg-sky-400/25 blur-3xl" />
 
-                        <div className="relative flex items-center gap-4 md:gap-5">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900/70 border border-cyan-400/60 shadow-md shadow-slate-900/80">
-                                <Lightbulb className="w-6 h-6 text-cyan-300" />
-                            </div>
-                            <div className="text-left">
-                                <h4 className="text-xl md:text-2xl font-semibold text-slate-50 mb-1.5">
-                                    Build, ship, and scale globally without friction.
-                                </h4>
-                                <p className="text-sm md:text-base text-slate-200 max-w-xl">
-                                    ManuDocs removes paperwork chaos, agent dependency, and visibility
-                                    gaps so exporters can run compliant, predictable exports with
-                                    confidence.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="relative flex items-center gap-4">
-                            <button className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300">
-                                Start Free Trial
-                            </button>
-                            <button className="px-6 py-3 bg-slate-900/70 text-slate-200 font-semibold rounded-xl border border-slate-700 hover:bg-slate-800/80 transition-all duration-300">
-                                Schedule Demo
-                            </button>
-                        </div>
-                    </div>
-                </motion.div>
             </div>
         </section>
     );
