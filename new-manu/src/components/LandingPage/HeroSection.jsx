@@ -318,7 +318,6 @@ const HeroSection = ({ isMobile, user }) => {
                     </motion.div>
                 </motion.div>
 
-                {/* Right Side - AI Agent */}
                 <motion.div
                     initial="hidden"
                     animate="visible"
@@ -345,71 +344,17 @@ const HeroSection = ({ isMobile, user }) => {
                                 />
 
                                 <img
-                                    src="https://i.postimg.cc/XJbWW8k4/e0chaaigent.png"
+                                    src="https://i.postimg.cc/5yRMXBMM/image.png"
                                     alt="E-CHA AI Agent"
                                     className="relative w-full max-w-[260px] sm:max-w-[240px] lg:max-w-[280px] h-auto object-contain drop-shadow-xl opacity-90 rounded-2xl z-10 "
                                     onError={handleImageError}
                                     loading="eager"
                                 />
 
-                                <div className="e-cha-fallback hidden w-full h-[200px] sm:h-[240px] lg:h-[280px] bg-gradient-to-br from-manu-green to-green-600 rounded-2xl flex items-center justify-center shadow-xl z-10">
-                                    <div className="text-white text-center">
-                                        <div className="text-4xl mb-3">🤖</div>
-                                        <div className="text-xl font-bold">E-CHA</div>
-                                        <div className="text-xs opacity-80 mt-1">AI Agent</div>
-                                    </div>
-                                </div>
+
                             </div>
 
-                            {/* Search Bar - Overlay on top of image */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                transition={{ delay: 1 }}
-                                className="absolute -bottom-4 left-1/6 transform -translate-x-1/2 w-full max-w-[260px] sm:max-w-[300px] px-4 z-20  py-4 mb-5"
-                            >
-                                <motion.div
-                                    whileHover={{ scale: 1.01 }}
-                                    whileTap={{ scale: 0.99 }}
-                                    className="bg-black/50 backdrop-blur-xl rounded-xl p-2 shadow-2xl border border-manu-green/40 relative overflow-hidden"
-                                >
-                                    {/* Animated border */}
-                                    <motion.div
-                                        animate={{
-                                            background: [
-                                                'linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.4), transparent)',
-                                                'linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.8), transparent)',
-                                                'linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.4), transparent)'
-                                            ]
-                                        }}
-                                        transition={{ duration: 2, repeat: Infinity }}
-                                        className="absolute inset-0 rounded-xl"
-                                    />
 
-                                    <div className="relative flex items-center space-x-2 z-10 ">
-                                        <Search className="text-manu-green flex-shrink-0" size={16} />
-                                        <input
-                                            type="text"
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                            placeholder={user ? "Generate Invoice..!" : "Try E-CHA & Generate Docs!!"}
-                                            className="flex-1 bg-transparent outline-none text-white placeholder-green-200 text-sm font-medium min-w-0"
-                                            onClick={handleSearchClick}
-                                            onKeyDown={handleKeyDown}
-                                            readOnly
-                                        />
-                                        <motion.button
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            onClick={handleSearchClick}
-                                            className="bg-gradient-to-r from-manu-green to-green-500 text-white p-2 rounded-lg hover:from-green-500 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 shadow-md transition-all duration-200 flex-shrink-0"
-                                            aria-label="Search or access AI agent"
-                                        >
-                                            <Search size={14} />
-                                        </motion.button>
-                                    </div>
-                                </motion.div>
-                            </motion.div>
                         </motion.div>
                     </div>
                 </motion.div>
