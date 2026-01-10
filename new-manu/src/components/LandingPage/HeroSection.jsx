@@ -325,6 +325,7 @@ const HeroSection = ({ isMobile, user }) => {
                     className="flex-1 w-full flex justify-center lg:justify-end items-center py-6 lg:py-0 lg:pl-4"
                 >
                     <div className="relative flex flex-col items-center w-full max-w-xs sm:max-w-sm lg:max-w-md">
+                        {/* Video Section */}
                         <motion.div
                             animate={floatingAnimation.animate}
                             transition={floatingAnimation.transition}
@@ -332,32 +333,54 @@ const HeroSection = ({ isMobile, user }) => {
                             onHoverStart={() => setIsHovered(true)}
                             onHoverEnd={() => setIsHovered(false)}
                         >
-                            {/* Main Image Container */}
-                            <div className="relative">
-                                {/* Glow Effect */}
+                            <div className="relative w-full">
+                                {/* Ring animation */}
                                 <motion.div
                                     animate={{
-                                        opacity: isHovered ? 0.4 : 0.2,
+                                        scale: [1, 1.05, 1],
+                                        opacity: isHovered ? [0.3, 0.5, 0.3] : [0.2, 0.3, 0.2]
                                     }}
-                                    transition={{ duration: 0.3 }}
-                                    className="absolute inset-0 bg-manu-green/30 blur-lg rounded-2xl -inset-2"
+                                    transition={{
+                                        duration: 3,
+                                        repeat: Infinity,
+                                        ease: "easeInOut"
+                                    }}
+                                    className="absolute -inset-4 bg-gradient-to-r from-manu-green/20 via-manu-green/10 to-manu-green/20 rounded-3xl blur-xl"
                                 />
 
-                                <img
-                                    src="https://i.postimg.cc/5yRMXBMM/image.png"
-                                    alt="E-CHA AI Agent"
-                                    className="relative w-full max-w-[260px] sm:max-w-[240px] lg:max-w-[280px] h-auto object-contain drop-shadow-xl opacity-90 rounded-2xl z-10 "
-                                    onError={handleImageError}
-                                    loading="eager"
-                                />
-
-
+                                {/* Video container */}
+                                <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-manu-green/20 z-10">
+                                    <iframe
+                                        className="w-full aspect-video"
+                                        src="https://www.youtube.com/embed/AKcC0XKgtPM?controls=1&modestbranding=1&rel=0&showinfo=0"
+                                        title="ManuDocs Platform Demo"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
                             </div>
+                        </motion.div>
 
-
+                        {/* Invest Button */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.4 }}
+                            className="mt-6 w-full flex justify-center"
+                        >
+                            <motion.a
+                                href="https://payments.cashfree.com/forms?code=manudocs"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="px-8 py-3 bg-manu-green text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-manu-green/90"
+                            >
+                                Invest in ManuDocs!
+                            </motion.a>
                         </motion.div>
                     </div>
                 </motion.div>
+
             </div>
 
             {/* Auth Prompt Modal */}
