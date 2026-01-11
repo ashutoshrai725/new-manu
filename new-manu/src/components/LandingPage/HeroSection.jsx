@@ -11,19 +11,26 @@ const HeroSection = ({ isMobile, user }) => {
     const [isHovered, setIsHovered] = useState(false);
     const videoRef = useRef(null);
 
+    // Ab video background use hi nahi ho raha,
+    // agar tu chaahe to yeh pura effect bhi hata sakta hai.
     useEffect(() => {
         if (videoRef.current) {
             if (isMobile) {
                 videoRef.current.muted = true;
                 videoRef.current.playsInline = true;
-                videoRef.current.play().then(() => {
-                    setIsPlaying(true);
-                }).catch((error) => {
-                    console.log('Mobile video play failed:', error);
-                    setIsPlaying(false);
-                });
+                videoRef.current
+                    .play()
+                    .then(() => {
+                        setIsPlaying(true);
+                    })
+                    .catch(() => {
+                        setIsPlaying(false);
+                    });
             } else {
-                videoRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+                videoRef.current
+                    .play()
+                    .then(() => setIsPlaying(true))
+                    .catch(() => setIsPlaying(false));
             }
         }
     }, [isMobile]);
@@ -34,7 +41,10 @@ const HeroSection = ({ isMobile, user }) => {
                 videoRef.current.pause();
                 setIsPlaying(false);
             } else {
-                videoRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+                videoRef.current
+                    .play()
+                    .then(() => setIsPlaying(true))
+                    .catch(() => setIsPlaying(false));
             }
         }
     };
@@ -59,7 +69,8 @@ const HeroSection = ({ isMobile, user }) => {
         if (e.key === 'Enter') handleSearchClick();
     };
 
-    const getUserDisplayName = () => user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+    const getUserDisplayName = () =>
+        user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
 
     const handleImageError = (e) => {
         e.target.style.display = 'none';
@@ -69,7 +80,6 @@ const HeroSection = ({ isMobile, user }) => {
 
     const closeAuthPrompt = () => setShowAuthPrompt(false);
 
-    // Optimized animations
     const containerVariants = {
         hidden: { opacity: 0, x: -20 },
         visible: {
@@ -77,8 +87,8 @@ const HeroSection = ({ isMobile, user }) => {
             x: 0,
             transition: {
                 duration: 0.5,
-                ease: "easeOut"
-            }
+                ease: 'easeOut',
+            },
         },
     };
 
@@ -91,8 +101,8 @@ const HeroSection = ({ isMobile, user }) => {
             transition: {
                 duration: 0.5,
                 delay: 0.15,
-                ease: "easeOut"
-            }
+                ease: 'easeOut',
+            },
         },
     };
 
@@ -103,8 +113,8 @@ const HeroSection = ({ isMobile, user }) => {
         transition: {
             duration: 3,
             repeat: Infinity,
-            ease: "easeInOut"
-        }
+            ease: 'easeInOut',
+        },
     };
 
     const textGlowAnimation = {
@@ -114,34 +124,25 @@ const HeroSection = ({ isMobile, user }) => {
         transition: {
             duration: 4,
             repeat: Infinity,
-            ease: "linear"
-        }
+            ease: 'linear',
+        },
     };
 
     return (
-        <section className="relative min-h-screen w-full bg-manu-light overflow-hidden" id="backed-by">
-            {/* Background Video */}
-            <video
-                ref={videoRef}
-                className="absolute top-0 left-0 w-full h-full object-cover opacity-100"
-                autoPlay
-                loop
-                muted
-                playsInline
-                src="/videos/4KVIDE.mp4"
-            >
-                Your browser does not support the video tag.
-            </video>
+        <section
+            className="relative min-h-screen w-full bg-cover bg-center bg-no-repeat overflow-hidden"
+            id="backed-by"
+            style={{
+                backgroundImage: "url('/images/001.jpg')", // Yahan apna image path daal
+            }}
+        >
 
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-manu-dark/80 via-gray-900/70 to-manu-green/50"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-manu-dark/60 via-transparent to-transparent"></div>
-
-            {/* Video Controls */}
-
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-black/30"></div>
 
             {/* Hero Content */}
-            <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between min-h-screen w-full px-4 sm:px-6 lg:px-8 py-6 mt-8">
+            <div className="relative z-10 flex flex-col lg:flex-row items-center justify-start min-h-screen w-full px-4 sm:px-6 lg:px-12 py-6 mt-8">
+
                 {/* Left Side - Content */}
                 <motion.div
                     initial="hidden"
@@ -149,35 +150,22 @@ const HeroSection = ({ isMobile, user }) => {
                     variants={containerVariants}
                     className="flex-1 w-full text-white space-y-4 lg:space-y-6 mt-12 lg:mt-0 lg:pr-4"
                 >
-                    {user && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 15 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="inline-flex items-center gap-2 bg-manu-green/20 border border-manu-green/40 rounded-xl px-3 py-2 backdrop-blur-sm"
-                        >
-                            <Sparkles size={14} className="text-manu-green" />
-                            <p className="text-manu-green text-xs font-medium">
-                                Welcome back, {getUserDisplayName()}!
-                            </p>
-                        </motion.div>
-                    )}
+
 
                     <div className="space-y-3">
                         <motion.h1
-                            className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-bold leading-tight"
+                            className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-bold leading-tight text-left"
                             initial="hidden"
                             animate="visible"
                             variants={{
                                 hidden: {},
                                 visible: {
                                     transition: {
-                                        staggerChildren: 0.15
-                                    }
-                                }
+                                        staggerChildren: 0.15,
+                                    },
+                                },
                             }}
                         >
-                            {/* AI-Powered */}
                             <motion.div
                                 variants={{
                                     hidden: { opacity: 0, y: 30 },
@@ -186,16 +174,15 @@ const HeroSection = ({ isMobile, user }) => {
                                         y: 0,
                                         transition: {
                                             duration: 0.8,
-                                            ease: [0.25, 0.46, 0.45, 0.94]
-                                        }
-                                    }
+                                            ease: [0.25, 0.46, 0.45, 0.94],
+                                        },
+                                    },
                                 }}
                                 className="overflow-hidden"
                             >
                                 AI-Powered
                             </motion.div>
 
-                            {/* Export Documentation */}
                             <motion.div
                                 variants={{
                                     hidden: { opacity: 0, scale: 0.9 },
@@ -204,28 +191,21 @@ const HeroSection = ({ isMobile, user }) => {
                                         scale: 1,
                                         transition: {
                                             duration: 0.8,
-                                            ease: [0.25, 0.46, 0.45, 0.94]
-                                        }
-                                    }
+                                            ease: [0.25, 0.46, 0.45, 0.94],
+                                        },
+                                    },
                                 }}
                                 className="overflow-hidden"
                             >
                                 <motion.span
-                                    className="text-manu-green bg-gradient-to-r from-manu-green via-green-300 to-green-500 bg-clip-text text-transparent bg-[length:200%_auto]"
-                                    animate={{
-                                        backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                                    }}
-                                    transition={{
-                                        duration: 4,
-                                        repeat: Infinity,
-                                        ease: "linear"
-                                    }}
+                                    className="text-manu-green bg-manu-green bg-clip-text text-transparent bg-[length:200%_auto]"
+                                    animate={textGlowAnimation.animate}
+                                    transition={textGlowAnimation.transition}
                                 >
                                     Export Documentation
                                 </motion.span>
                             </motion.div>
 
-                            {/* for Global Trade */}
                             <motion.div
                                 variants={{
                                     hidden: { opacity: 0, x: -40 },
@@ -235,9 +215,9 @@ const HeroSection = ({ isMobile, user }) => {
                                         transition: {
                                             duration: 0.8,
                                             ease: [0.25, 0.46, 0.45, 0.94],
-                                            delay: 0.3
-                                        }
-                                    }
+                                            delay: 0.3,
+                                        },
+                                    },
                                 }}
                                 className="overflow-hidden"
                             >
@@ -251,56 +231,33 @@ const HeroSection = ({ isMobile, user }) => {
                             transition={{ delay: 0.8, duration: 0.6 }}
                             className="text-sm sm:text-base md:text-lg text-gray-200 max-w-lg leading-relaxed lg:ml-8"
                         >
-                            Transform your export documentation process with AI. Upload invoices, extract data automatically, and generate professional export documents in minutes.
+
                         </motion.p>
                     </div>
 
-                    {/* Stats */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
-                        className="flex flex-wrap gap-4 sm:gap-6 pt-2 lg:ml-20"
-                    >
-                        {[
-                            { value: "100%", label: "Accuracy Rate" },
-                            { value: "3 Min", label: "Avg. Processing" },
-                            { value: "1000+", label: "Documents Generated" }
-                        ].map((stat, index) => (
-                            <motion.div
-                                key={stat.value}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: 0.7 + index * 0.1 }}
-                                className="flex flex-col items-start"
-                            >
-                                <div className="text-lg sm:text-xl md:text-2xl font-bold text-white">
-                                    {stat.value}
-                                </div>
-                                <div className="text-xs sm:text-sm text-gray-300 font-medium">
-                                    {stat.label}
-                                </div>
-                            </motion.div>
-                        ))}
-                    </motion.div>
+
 
                     {/* Action Buttons */}
                     <motion.div
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.8 }}
-                        className="flex flex-col sm:flex-row gap-3 pt-4 lg:ml-16"
+                        className="flex flex-col sm:flex-row gap-3 pt-4 justify-start w-full"
+
                     >
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => handleNavigation('/upload', true)}
-                            className="group relative bg-gradient-to-r from-manu-green to-green-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg overflow-hidden min-w-[140px]"
+                            className="group relative bg-manu-green text-white px-6 py-3 rounded-xl font-semibold shadow-lg overflow-hidden min-w-[140px]"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-manu-green opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div className="absolute inset-0 bg-manu-green opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             <span className="relative flex items-center justify-center gap-2 text-sm">
                                 {user ? 'Upload Documents' : 'Get Started Free'}
-                                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+                                <ArrowRight
+                                    size={16}
+                                    className="group-hover:translate-x-1 transition-transform duration-300"
+                                />
                             </span>
                         </motion.button>
 
@@ -318,6 +275,7 @@ const HeroSection = ({ isMobile, user }) => {
                     </motion.div>
                 </motion.div>
 
+                {/* Right Side - Video/iframe card */}
                 <motion.div
                     initial="hidden"
                     animate="visible"
@@ -325,7 +283,6 @@ const HeroSection = ({ isMobile, user }) => {
                     className="flex-1 w-full flex justify-center lg:justify-end items-center py-6 lg:py-0 lg:pl-4"
                 >
                     <div className="relative flex flex-col items-center w-full max-w-xs sm:max-w-sm lg:max-w-md">
-                        {/* Video Section */}
                         <motion.div
                             animate={floatingAnimation.animate}
                             transition={floatingAnimation.transition}
@@ -334,21 +291,19 @@ const HeroSection = ({ isMobile, user }) => {
                             onHoverEnd={() => setIsHovered(false)}
                         >
                             <div className="relative w-full">
-                                {/* Ring animation */}
                                 <motion.div
                                     animate={{
                                         scale: [1, 1.05, 1],
-                                        opacity: isHovered ? [0.3, 0.5, 0.3] : [0.2, 0.3, 0.2]
+                                        opacity: isHovered ? [0.3, 0.5, 0.3] : [0.2, 0.3, 0.2],
                                     }}
                                     transition={{
                                         duration: 3,
                                         repeat: Infinity,
-                                        ease: "easeInOut"
+                                        ease: 'easeInOut',
                                     }}
-                                    className="absolute -inset-4 bg-gradient-to-r from-manu-green/20 via-manu-green/10 to-manu-green/20 rounded-3xl blur-xl"
+                                    className="absolute -inset-4 bg-manu-green rounded-3xl blur-xl"
                                 />
 
-                                {/* Video container */}
                                 <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-manu-green/20 z-10">
                                     <iframe
                                         className="w-full aspect-video"
@@ -362,7 +317,6 @@ const HeroSection = ({ isMobile, user }) => {
                             </div>
                         </motion.div>
 
-                        {/* Invest Button */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -380,7 +334,6 @@ const HeroSection = ({ isMobile, user }) => {
                         </motion.div>
                     </div>
                 </motion.div>
-
             </div>
 
             {/* Auth Prompt Modal */}
@@ -398,7 +351,7 @@ const HeroSection = ({ isMobile, user }) => {
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 10 }}
                             className="bg-gradient-to-br from-gray-900 to-manu-dark rounded-2xl p-6 text-center max-w-sm mx-4 shadow-2xl border border-manu-green/20"
-                            onClick={e => e.stopPropagation()}
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <motion.div
                                 animate={{
@@ -413,13 +366,14 @@ const HeroSection = ({ isMobile, user }) => {
                                 Hello! I'm E-CHA
                             </h3>
                             <p className="text-gray-300 mb-4 text-sm">
-                                To help you with document processing, please sign up or log in first.
+                                To help you with document processing, please sign up or log in
+                                first.
                             </p>
                             <div className="w-full bg-manu-green/30 h-1.5 rounded-full overflow-hidden mb-3">
                                 <motion.div
-                                    initial={{ width: "0%" }}
-                                    animate={{ width: "100%" }}
-                                    transition={{ duration: 1.5, ease: "easeInOut" }}
+                                    initial={{ width: '0%' }}
+                                    animate={{ width: '100%' }}
+                                    transition={{ duration: 1.5, ease: 'easeInOut' }}
                                     className="h-full bg-manu-green rounded-full"
                                 />
                             </div>
@@ -430,7 +384,7 @@ const HeroSection = ({ isMobile, user }) => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </section>
+        </section >
     );
 };
 

@@ -112,7 +112,7 @@ const Header = ({ user, onLogout }) => {
                                     <div className="absolute -inset-1 bg-green-500/10 rounded-xl blur-sm -z-10"></div>
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="text-2xl font-black bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-transparent tracking-tight">
+                                    <span className="text-2xl font-black bg-manu-green bg-clip-text text-transparent tracking-tight">
                                         ManuDocs
                                     </span>
                                     <span className="text-xs text-gray-400 font-medium -mt-1"></span>
@@ -177,7 +177,7 @@ const Header = ({ user, onLogout }) => {
                                                 <div className="flex items-start space-x-3 p-3 bg-green-900/20 rounded-xl border border-green-800/30">
                                                     <div className="w-6 h-6 bg-green-500 text-gray-900 rounded-full flex items-center justify-center text-xs font-bold mt-0.5">1</div>
                                                     <div>
-                                                        <p className="font-semibold text-green-300">Sign Up / Login</p>
+                                                        <p className="font-semibold text-manu-green">Sign Up / Login</p>
                                                         <p className="text-sm text-green-200/80">Create your account or sign in</p>
                                                     </div>
                                                 </div>
@@ -270,7 +270,7 @@ const Header = ({ user, onLogout }) => {
                             {!user ? (
                                 <button
                                     onClick={() => navigate('/auth')}
-                                    className="bg-gradient-to-r from-green-500 to-green-600 text-gray-900 px-6 py-2.5 rounded-xl hover:shadow-lg hover:shadow-green-500/25 transition-all duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 hover:scale-105"
+                                    className="bg-manu-green text-gray-900 px-6 py-2.5 rounded-xl hover:shadow-lg hover:shadow-green-500/25 transition-all duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 hover:scale-105"
                                 >
                                     Sign Up / Login
                                 </button>
@@ -380,7 +380,7 @@ const Header = ({ user, onLogout }) => {
                                     {!user ? (
                                         <button
                                             onClick={() => navigate('/auth')}
-                                            className="block w-full text-center px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-gray-900 rounded-xl hover:shadow-lg font-semibold transition-all duration-200"
+                                            className="block w-full text-center px-4 py-3 bg-manu-green text-gray-900 rounded-xl hover:shadow-lg font-semibold transition-all duration-200"
                                         >
                                             Sign Up / Login
                                         </button>

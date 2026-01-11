@@ -169,7 +169,7 @@ const Footer = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-4"
             >
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                <h2 className="text-2xl font-bold text-manu-green-400 mb-4">
                     About MANUDOCS
                 </h2>
                 <p className="text-gray-300 leading-relaxed">
@@ -178,22 +178,12 @@ const Footer = () => {
                     import-export processes for businesses worldwide.
                 </p>
                 <div className="grid grid-cols-2 gap-4 mt-6">
-                    <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                        <span className="text-sm text-gray-300">AI-Powered Automation</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                        <span className="text-sm text-gray-300">Global Compliance</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                        <span className="text-sm text-gray-300">Real-time Processing</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                        <span className="text-sm text-gray-300">Enterprise Security</span>
-                    </div>
+                    {['AI-Powered Automation', 'Global Compliance', 'Real-time Processing', 'Enterprise Security'].map((item, index) => (
+                        <div key={index} className="flex items-center space-x-3">
+                            <div className="w-3 h-3 bg-manu-green-400 rounded-full"></div>
+                            <span className="text-sm text-gray-300">{item}</span>
+                        </div>
+                    ))}
                 </div>
             </motion.div>
         ),
@@ -203,7 +193,7 @@ const Footer = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-6"
             >
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                <h2 className="text-2xl font-bold text-manu-green-400 mb-4">
                     Get in Touch
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6">
@@ -213,10 +203,10 @@ const Footer = () => {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="flex items-center space-x-4 p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-green-400/30 transition-all duration-300"
+                            className="flex items-center space-x-4 p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-manu-green-500/30 hover:border-manu-green-400/50 transition-all duration-300"
                         >
-                            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
-                                <contact.icon className="w-6 h-6 text-white" />
+                            <div className="w-12 h-12 bg-manu-green-500/20 rounded-xl flex items-center justify-center border border-manu-green-500/30">
+                                <contact.icon className="w-6 h-6 text-manu-green-400" />
                             </div>
                             <div>
                                 <p className="font-semibold text-white">{contact.label}</p>
@@ -225,8 +215,8 @@ const Footer = () => {
                         </motion.div>
                     ))}
                 </div>
-                <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-                    <p className="text-blue-300 text-sm text-center">
+                <div className="p-4 bg-manu-green-500/10 border border-manu-green-500/20 rounded-xl">
+                    <p className="text-manu-green-300 text-sm text-center">
                         📞 Additional Numbers: +91 7697546063, +91 9958889387, +91 6376400524
                     </p>
                 </div>
@@ -238,7 +228,7 @@ const Footer = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-4"
             >
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                <h2 className="text-2xl font-bold text-manu-green-400 mb-4">
                     Help Center
                 </h2>
                 <p className="text-gray-300 leading-relaxed">
@@ -247,8 +237,8 @@ const Footer = () => {
                 </p>
                 <div className="grid gap-3 mt-6">
                     {['Document Upload Guide', 'AI Processing FAQ', 'Compliance Standards', 'API Integration'].map((item, index) => (
-                        <div key={index} className="flex items-center space-x-3 p-3 bg-gray-800/30 rounded-lg">
-                            <CheckCircle className="w-4 h-4 text-green-400" />
+                        <div key={index} className="flex items-center space-x-3 p-3 bg-white/5 backdrop-blur-sm rounded-lg border border-gray-700/30">
+                            <CheckCircle className="w-4 h-4 text-manu-green-400" />
                             <span className="text-gray-300 text-sm">{item}</span>
                         </div>
                     ))}
@@ -261,15 +251,15 @@ const Footer = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-4"
             >
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                <h2 className="text-2xl font-bold text-manu-green-400 mb-4">
                     Privacy Policy
                 </h2>
                 <p className="text-gray-300 leading-relaxed">
                     We are committed to protecting your privacy and ensuring the security of your data.
                     Our comprehensive privacy policy outlines how we collect, use, and protect your information.
                 </p>
-                <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl mt-4">
-                    <p className="text-green-300 text-sm">
+                <div className="p-4 bg-manu-green-500/10 border border-manu-green-500/20 rounded-xl mt-4">
+                    <p className="text-manu-green-300 text-sm">
                         🔒 Your data is encrypted and protected with enterprise-grade security measures.
                     </p>
                 </div>
@@ -284,7 +274,7 @@ const Footer = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-4"
             >
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                <h2 className="text-2xl font-bold text-manu-green-400 mb-4">
                     Import Documentation
                 </h2>
                 <p className="text-gray-300 leading-relaxed">
@@ -294,7 +284,7 @@ const Footer = () => {
                 <div className="grid grid-cols-2 gap-4 mt-6">
                     {['Customs Declarations', 'Import Licenses', 'Bill of Entry', 'Certificate of Origin'].map((doc, index) => (
                         <div key={index} className="flex items-center space-x-2">
-                            <FileText className="w-4 h-4 text-green-400" />
+                            <FileText className="w-4 h-4 text-manu-green-400" />
                             <span className="text-gray-300 text-sm">{doc}</span>
                         </div>
                     ))}
@@ -307,7 +297,7 @@ const Footer = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-4"
             >
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                <h2 className="text-2xl font-bold text-manu-green-400 mb-4">
                     Export Documentation
                 </h2>
                 <p className="text-gray-300 leading-relaxed">
@@ -322,7 +312,7 @@ const Footer = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-4"
             >
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                <h2 className="text-2xl font-bold text-manu-green-400 mb-4">
                     AI Document Processing
                 </h2>
                 <p className="text-gray-300 leading-relaxed">
@@ -337,7 +327,7 @@ const Footer = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-4"
             >
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                <h2 className="text-2xl font-bold text-manu-green-400 mb-4">
                     Compliance Check
                 </h2>
                 <p className="text-gray-300 leading-relaxed">
@@ -350,13 +340,16 @@ const Footer = () => {
 
     return (
         <>
-            <footer className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
-                {/* Background Elements */}
-                <div className="absolute inset-0">
-                    <div className="absolute -top-20 -right-20 w-40 h-40 bg-green-500/10 rounded-full blur-3xl"></div>
-                    <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-purple-500/5 rounded-full blur-3xl"></div>
-                </div>
+            <footer className="relative bg-black text-white overflow-hidden">
+                {/* Background Image */}
+                <div
+                    className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat opacity-60"
+                    style={{
+                        backgroundImage: "url('/images/009.jpg')" // Replace with your image path
+                    }}
+                />
+                {/* Dark overlay */}
+                <div className="absolute inset-0 bg-black/85"></div>
 
                 <div className="relative container mx-auto px-4 py-16">
                     {/* Main Footer Content */}
@@ -373,13 +366,13 @@ const Footer = () => {
                                     <img
                                         src="https://i.postimg.cc/qhqjBrYN/mnuverse.jpg"
                                         alt="MANUDOCS Logo"
-                                        className="h-14 w-14 rounded-xl shadow-lg border-2 border-green-400/30"
+                                        className="h-14 w-14 rounded-xl shadow-lg border-2 border-manu-green-400/30"
                                         onError={handleImageError}
                                     />
-                                    <div className="absolute -inset-1 bg-green-500/10 rounded-xl blur-sm -z-10"></div>
+                                    <div className="absolute -inset-1 bg-manu-green-500/10 rounded-xl blur-sm -z-10"></div>
                                 </div>
                                 <div>
-                                    <h3 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
+                                    <h3 className="text-2xl font-bold text-manu-green-400">
                                         ManuDocs
                                     </h3>
                                     <p className="text-gray-400 text-sm">AI-Powered Export Documentation</p>
@@ -400,9 +393,9 @@ const Footer = () => {
                                         whileInView={{ opacity: 1, scale: 1 }}
                                         viewport={{ once: true }}
                                         transition={{ delay: index * 0.1 }}
-                                        className="text-center p-3 bg-white/5 rounded-xl border border-white/10"
+                                        className="text-center p-3 bg-white/5  rounded-xl border border-white/10 shadow-lg"
                                     >
-                                        <div className="text-lg font-bold text-green-400">{stat.number}</div>
+                                        <div className="text-lg font-bold text-manu-green-400">{stat.number}</div>
                                         <div className="text-xs text-gray-400">{stat.label}</div>
                                     </motion.div>
                                 ))}
@@ -420,11 +413,11 @@ const Footer = () => {
                                             viewport={{ once: true }}
                                             transition={{ delay: index * 0.2 }}
                                             onClick={contact.action}
-                                            className="group p-3 bg-white/5 rounded-xl border border-white/10 hover:border-green-400/50 hover:bg-green-500/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
+                                            className="group p-3 bg-white/5  rounded-xl border border-white/10 hover:border-manu-green-400/50 hover:bg-manu-green-500/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-manu-green-400 focus:ring-opacity-50 shadow-lg"
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
                                         >
-                                            <IconComponent className="w-5 h-5 text-gray-400 group-hover:text-green-400 transition-colors" />
+                                            <IconComponent className="w-5 h-5 text-gray-400 group-hover:text-manu-green-400 transition-colors" />
                                         </motion.button>
                                     );
                                 })}
@@ -439,7 +432,7 @@ const Footer = () => {
                             transition={{ delay: 0.2 }}
                         >
                             <h3 className="text-lg font-semibold mb-6 text-white flex items-center space-x-2">
-                                <Rocket className="w-5 h-5 text-green-400" />
+                                <Rocket className="w-5 h-5 text-manu-green-400" />
                                 <span>Services</span>
                             </h3>
                             <ul className="space-y-3">
@@ -455,9 +448,9 @@ const Footer = () => {
                                         >
                                             <button
                                                 onClick={() => handleServiceClick(service.name)}
-                                                className="flex items-center space-x-3 w-full p-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-200 group text-left focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
+                                                className="flex items-center space-x-3 w-full p-3 text-gray-400 hover:text-white hover:bg-white/5  rounded-xl transition-all duration-200 group text-left focus:outline-none focus:ring-2 focus:ring-manu-green-400 focus:ring-opacity-50"
                                             >
-                                                <IconComponent className="w-4 h-4 text-green-400 group-hover:scale-110 transition-transform" />
+                                                <IconComponent className="w-4 h-4 text-manu-green-400 group-hover:scale-110 transition-transform" />
                                                 <span className="flex-1">{service.name}</span>
                                             </button>
                                         </motion.li>
@@ -474,7 +467,7 @@ const Footer = () => {
                             transition={{ delay: 0.3 }}
                         >
                             <h3 className="text-lg font-semibold mb-6 text-white flex items-center space-x-2">
-                                <Users className="w-5 h-5 text-blue-400" />
+                                <Users className="w-5 h-5 text-manu-blue-400" />
                                 <span>Company</span>
                             </h3>
                             <ul className="space-y-3">
@@ -490,9 +483,9 @@ const Footer = () => {
                                         >
                                             <button
                                                 onClick={() => handleCompanyClick(page.name)}
-                                                className="flex items-center space-x-3 w-full p-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-200 group text-left focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
+                                                className="flex items-center space-x-3 w-full p-3 text-gray-400 hover:text-white hover:bg-white/5  rounded-xl transition-all duration-200 group text-left focus:outline-none focus:ring-2 focus:ring-manu-green-400 focus:ring-opacity-50"
                                             >
-                                                <IconComponent className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                                                <IconComponent className="w-4 h-4 text-manu-blue-400 group-hover:scale-110 transition-transform" />
                                                 <span className="flex-1">{page.name}</span>
                                                 {page.name === 'Privacy Policy' && (
                                                     <Shield className="w-3 h-3 opacity-60" />
@@ -510,7 +503,7 @@ const Footer = () => {
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
-                        className="border-t border-gray-700 pt-8"
+                        className="border-t border-gray-700/50 pt-8"
                     >
                         <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
                             <div className="flex items-center space-x-2 text-gray-400">
@@ -554,7 +547,7 @@ const Footer = () => {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0 }}
                             onClick={scrollToTop}
-                            className="fixed bottom-8 right-8 z-50 p-3 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
+                            className="fixed bottom-8 right-8 z-50 p-3 bg-manu-green-500 text-white rounded-xl shadow-lg hover:shadow-xl hover:bg-manu-green-600 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-manu-green-400 focus:ring-opacity-50"
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                         >
@@ -571,7 +564,7 @@ const Footer = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
                         onClick={() => { setActivePage(null); setActiveType(null); }}
                     >
                         <motion.div
@@ -580,7 +573,7 @@ const Footer = () => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-gray-700/50"
+                            className="bg-black/90 backdrop-blur-xl rounded-3xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-manu-green-500/30"
                         >
                             <div className="flex justify-between items-start mb-6">
                                 <div className="flex-1">
@@ -589,7 +582,7 @@ const Footer = () => {
                                 </div>
                                 <button
                                     onClick={() => { setActivePage(null); setActiveType(null); }}
-                                    className="ml-4 p-2 text-gray-400 hover:text-white transition-colors duration-200 rounded-lg hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-green-400"
+                                    className="ml-4 p-2 text-gray-400 hover:text-white transition-colors duration-200 rounded-lg hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-manu-green-400"
                                 >
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
