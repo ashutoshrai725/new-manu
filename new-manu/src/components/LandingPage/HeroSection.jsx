@@ -373,9 +373,9 @@ const HeroSection = ({ isMobile, user }) => {
                                 href="https://payments.cashfree.com/forms?code=manudocs"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="px-8 py-3 bg-manu-green text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-manu-green/90"
+                                className="px-10 py-6 bg-manu-green text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-manu-green/90"
                             >
-                                Invest in ManuDocs!
+                                Support Us / Invest in ManuDocs!
                             </motion.a>
                         </motion.div>
                     </div>
