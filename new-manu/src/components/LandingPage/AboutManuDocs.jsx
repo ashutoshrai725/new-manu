@@ -77,7 +77,7 @@ const AboutManuDocs = () => {
                 }}
             />
             {/* Dark overlay */}
-            <div className="absolute inset-0 bg-black/90"></div>
+            <div className="absolute inset-0 bg-black/75"></div>
 
             {/* Main container with manu-green styling */}
             <div className="relative container mx-auto px-4 max-w-7xl z-10">

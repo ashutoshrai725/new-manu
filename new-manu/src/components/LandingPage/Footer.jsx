@@ -343,13 +343,13 @@ const Footer = () => {
             <footer className="relative bg-black text-white overflow-hidden">
                 {/* Background Image */}
                 <div
-                    className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat opacity-60"
+                    className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat opacity-100"
                     style={{
                         backgroundImage: "url('/images/009.jpg')" // Replace with your image path
                     }}
                 />
                 {/* Dark overlay */}
-                <div className="absolute inset-0 bg-black/85"></div>
+                <div className="absolute inset-0 bg-black/75"></div>
 
                 <div className="relative container mx-auto px-4 py-16">
                     {/* Main Footer Content */}

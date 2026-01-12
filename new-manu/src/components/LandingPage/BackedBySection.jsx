@@ -166,7 +166,7 @@ const BackedBySection = () => {
                 }}
             />
             {/* Dark overlay for better text readability - EXACTLY LIKE FOOTER */}
-            <div className="absolute inset-0 bg-black/95"></div>
+            <div className="absolute inset-0 bg-black/75"></div>
 
             <div className="relative container mx-auto px-4 sm:px-6 max-w-7xl">
                 {/* Header Section */}
