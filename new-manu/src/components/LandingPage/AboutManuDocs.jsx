@@ -104,7 +104,7 @@ const AboutManuDocs = () => {
                 {/* Trade Rail Container - manu-green styling */}
                 <div className="mb-16 md:mb-20">
                     <div
-                        className="relative rounded-3xl px-4 py-6 md:px-6 md:py-8 overflow-hidden bg-manu-green-500/10 border border-manu-green-500/30 shadow-2xl"
+                        className="relative rounded-3xl px-4 py-6 md:px-6 md:py-8 overflow-hidden  border-2 border-manu-green "
                     >
                         {/* Rail */}
                         <motion.div
@@ -117,7 +117,7 @@ const AboutManuDocs = () => {
                             {/* Header */}
                             <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
                                 <div>
-                                    <p className=" uppercase tracking-[0.28em] text-manu-green mb-1 font-bold">
+                                    <p className=" uppercase tracking-[0.28em] text-white mb-2 font-bold text-xl">
                                         Unified export workflow
                                     </p>
                                     <h4 className="text-lg md:text-xl font-semibold text-white">
@@ -243,7 +243,7 @@ const AboutManuDocs = () => {
 
                                                     {/* Connector arrow */}
                                                     {index < railSteps.length - 1 && (
-                                                        <ChevronRight className="absolute -right-6 top-7 w-5 h-5 text-manu-green-400/70" />
+                                                        <ChevronRight className="absolute -right-6 top-7 w-5 h-5 text-white" />
                                                     )}
                                                 </motion.div>
                                             ))}
