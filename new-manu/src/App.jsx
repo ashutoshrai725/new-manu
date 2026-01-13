@@ -52,7 +52,7 @@ function App() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         console.log('Auth state changed:', event, session?.user?.email);
-        
+
         if (session) {
           setUser(session.user);
         } else {
@@ -108,29 +108,29 @@ function App() {
       <div className="App">
         <Routes>
           {/* Landing Page - Accessible to all */}
-          <Route 
-            path="/" 
+          <Route
+            path="/"
             element={
               <LandingPage
                 user={user}
                 onLogout={handleLogout}
               />
-            } 
+            }
           />
 
           {/* Auth Page - Only accessible when not logged in */}
-          <Route 
-            path="/auth" 
+          <Route
+            path="/auth"
             element={
               <PublicRoute user={user}>
                 <AuthPage onUserAuth={handleUserAuth} />
               </PublicRoute>
-            } 
+            }
           />
 
           {/* Protected Routes - Only accessible when logged in */}
-          <Route 
-            path="/upload" 
+          <Route
+            path="/upload"
             element={
               <ProtectedRoute user={user}>
                 <DocumentUploadPage
@@ -138,11 +138,11 @@ function App() {
                   onLogout={handleLogout}
                 />
               </ProtectedRoute>
-            } 
+            }
           />
 
-          <Route 
-            path="/ai-agent" 
+          <Route
+            path="/ai-agent"
             element={
               <ProtectedRoute user={user}>
                 <AIAgentPage
@@ -150,21 +150,21 @@ function App() {
                   onLogout={handleLogout}
                 />
               </ProtectedRoute>
-            } 
+            }
           />
 
-          <Route 
-            path="/ai-agent-2" 
+          <Route
+            path="/ai-agent-2"
             element={
               <ProtectedRoute user={user}>
-                <AIAgent2Page 
+                <AIAgent2Page
                   user={user}
                   onPageChange={handlePageChange}
                   onLogout={handleLogout}
                   documentsUploaded={documentsUploaded}
                 />
               </ProtectedRoute>
-            } 
+            }
           />
 
           {/* Catch all route - redirect to landing */}
