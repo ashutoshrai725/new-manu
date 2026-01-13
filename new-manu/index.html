@@ -2,58 +2,92 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="./src/logo.svg" />
+  <!-- =========================
+       BASIC CONFIGURATION
+  ========================== -->
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#000000" />
+  <meta name="theme-color" content="#0B0F1A" />
 
-  <!-- SEO Meta -->
-  <title>ManuDocs – AI Export Documentation Platform</title>
-  <meta name="title" content="ManuDocs – AI Export Documentation Platform" />
+  <!-- =========================
+       TITLE & CORE SEO
+  ========================== -->
+  <title>
+    ManuDocs – Unified Digital Trade Interface | End-to-End Import & Export Automation
+  </title>
+
   <meta name="description"
-    content="Transform your export documentation process with AI. Upload invoices, extract data automatically, and generate DGFT, ICEGATE & customs-compliant export documents in minutes with 100% accuracy." />
+    content="ManuDocs is a Unified Digital Trade Interface that automates the complete global trade lifecycle. From buyer discovery and product sourcing to manufacturing coordination, import-export workflows, documentation, customs clearance, freight forwarding, shipping lines, airlines, banking, payments, and compliance — ManuDocs connects every trade stakeholder on one AI-powered platform." />
 
-  <!-- Open Graph Meta -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://manudocs-ai.vercel.app/" />
-  <meta property="og:title" content="ManuDocs – AI Export Documentation Platform" />
-  <meta property="og:description"
-    content="Automate your export documentation, DGFT, ICEGATE, and customs paperwork using AI. 3-minute average turnaround." />
-  <meta property="og:image" content="https://i.postimg.cc/k4FZcXvv/mnuverse.jpg" />
+  <meta name="keywords"
+    content="import export automation, digital trade platform, global trade automation, buyer seller platform, customs clearance automation, freight forwarding software, shipping line integration, trade finance automation, DGFT ICEGATE automation, unified digital trade interface" />
 
-  <!-- Twitter Meta -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="ManuDocs – AI Export Documentation Platform" />
-  <meta name="twitter:description"
-    content="Automate export paperwork, DGFT & ICEGATE docs in minutes with AI-powered accuracy." />
-  <meta name="twitter:image" content="https://i.postimg.cc/k4FZcXvv/mnuverse.jpg" />
+  <meta name="author" content="ManuDocs" />
+  <meta name="application-name" content="ManuDocs" />
 
-  <!-- App and Favicon -->
-  <link rel="apple-touch-icon" href="https://i.postimg.cc/k4FZcXvv/mnuverse.jpg" />
-  <link rel="manifest" href="/manifest.json" />
-
-  <!-- Canonical link for SEO -->
+  <!-- =========================
+       CANONICAL
+  ========================== -->
   <link rel="canonical" href="https://manudocs.com/" />
 
-  <!-- Google Translate -->
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'as,bn,gu,hi,kn,ml,mr,ne,or,pa,ta,te,ur',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        autoDisplay: false
-      }, 'google_translate_element');
-    }
-  </script>
-  <script type="text/javascript"
-    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <!-- =========================
+       FAVICON & APP ICONS
+  ========================== -->
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/logo192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/logo512.png" />
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- =========================
+       OPEN GRAPH (SOCIAL)
+  ========================== -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://manudocs.com/" />
+  <meta property="og:title" content="ManuDocs – Unified Digital Trade Interface" />
+  <meta property="og:description"
+    content="A single AI-powered platform to automate buyer discovery, import-export workflows, documentation, customs clearance, freight forwarding, shipping lines, airlines, banking, and compliance. ManuDocs unifies the entire global trade ecosystem." />
+  <meta property="og:image" content="https://manudocs.com/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- =========================
+       TWITTER / X
+  ========================== -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ManuDocs – Unified Digital Trade Interface" />
+  <meta name="twitter:description"
+    content="Automate the complete import-export lifecycle — buyers, sellers, logistics, customs, shipping lines, airlines, banks, and compliance — on one unified digital trade platform." />
+  <meta name="twitter:image" content="https://manudocs.com/og-image.jpg" />
+
+  <!-- =========================
+       SEARCH ENGINE DIRECTIVES
+  ========================== -->
+  <meta name="robots" content="index, follow" />
+  <meta name="googlebot" content="index, follow" />
+
 </head>
 
-
 <body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <!-- =========================
+       NO SCRIPT FALLBACK
+  ========================== -->
+  <noscript>
+    ManuDocs is a Unified Digital Trade Interface designed to automate the entire
+    import-export ecosystem — including buyers, sellers, manufacturers, logistics,
+    customs, shipping lines, airlines, and banks.
+    Please enable JavaScript to access the full platform.
+  </noscript>
+
+  <!-- =========================
+       REACT ROOT
+  ========================== -->
   <div id="root"></div>
+
+  <!-- =========================
+       APP ENTRY
+  ========================== -->
   <script type="module" src="/src/index.jsx"></script>
 </body>
 
