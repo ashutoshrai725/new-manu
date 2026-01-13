@@ -106,6 +106,7 @@ function App() {
 
   return (
     <Router>
+      <SpeedInsights />
       <div className="App">
         <Routes>
           {/* Landing Page - Accessible to all */}
