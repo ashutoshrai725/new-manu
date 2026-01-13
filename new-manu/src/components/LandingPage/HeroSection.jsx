@@ -73,13 +73,13 @@ const HeroSection = ({ isMobile, user }) => {
                 playsInline
                 autoPlay
             >
-                <source src="/videos/005.mp4" type="video/mp4" />
+                <source src="/videos/1.mp4" type="video/mp4" />
 
                 Your browser does not support video.
             </video>
 
             {/* ✅ DARK OVERLAY */}
-            <div className="absolute inset-0 bg-black/90" />
+            <div className="absolute inset-0 bg-black/80" />
 
             {/* ✅ Hero Content */}
             <div className="relative z-20 flex flex-col lg:flex-row items-center justify-start min-h-screen w-full px-4 sm:px-6 lg:px-12 py-6 mt-8">
@@ -93,7 +93,7 @@ const HeroSection = ({ isMobile, user }) => {
                 >
                     <div className="space-y-3">
                         <motion.h1
-                            className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-bold leading-tight text-left"
+                            className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-extrabold leading-tight text-left"
                             initial="hidden"
                             animate="visible"
                             variants={{
@@ -124,14 +124,14 @@ const HeroSection = ({ isMobile, user }) => {
                                         transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
                                     }
                                 }}
-                                className="overflow-hidden"
+                                className=""
                             >
                                 <motion.span
                                     className="text-manu-green bg-manu-green bg-clip-text text-transparent bg-[length:200%_auto]"
                                     animate={textGlowAnimation.animate}
                                     transition={textGlowAnimation.transition}
                                 >
-                                    Export Documentation
+                                    Trade Documentation
                                 </motion.span>
                             </motion.div>
 
@@ -146,7 +146,7 @@ const HeroSection = ({ isMobile, user }) => {
                                 }}
                                 className="overflow-hidden"
                             >
-                                for Global Trade
+                                & Compliance
                             </motion.div>
                         </motion.h1>
 
@@ -154,10 +154,11 @@ const HeroSection = ({ isMobile, user }) => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.8, duration: 0.6 }}
-                            className="text-sm sm:text-base md:text-lg text-gray-200 max-w-lg leading-relaxed"
+                            className="text-sm sm:text-base md:text-lg text-gray-200 max-w-lg leading-relaxed text-left"
                         >
-                            Automate your export-import documentation with AI-powered compliance for Indian MSMEs.
+                            Designed for Indian MSMEs, ManuDocs handles the entire export-import process-end to end  documentation, compliance, and customs readiness on a single platform.
                         </motion.p>
+
                     </div>
 
                     {/* Action Buttons */}
@@ -239,7 +240,7 @@ const HeroSection = ({ isMobile, user }) => {
                                 href="https://payments.cashfree.com/forms?code=manudocs"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="px-10 py-6 bg-manu-green text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-manu-green/90"
+                                className="px-10 py-6 bg-manu-green text-white font-extrabold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-manu-green/90"
                             >
                                 Support Us / Invest in ManuDocs!
                             </motion.a>

@@ -89,16 +89,24 @@ const AboutManuDocs = () => {
                     viewport={{ once: true }}
                     className="mb-16 md:mb-20 pt-6"
                 >
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 mb-8">
-                        <div className="text-center md:text-left">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-manu-green leading-tight">
-                                India&apos;s{' '}
-                                <span className="text-manu-green">
-                                    Unified Trade Interface
-                                </span>
-                            </h1>
-                        </div>
+                    <div className="flex flex-col items-center justify-center mb-8 text-center">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-center">
+                            <span
+                                className="bg-clip-text text-transparent"
+                                style={{
+                                    backgroundImage:
+                                        "linear-gradient(90deg, #f97316 0%, #f97316 35%, #f5f5f5 60%, #16a34a 100%)",
+                                }}
+                            >
+                                India&apos;s
+                            </span>{' '}
+                            <span className="text-manu-green">
+                                Unified Trade Interface
+                            </span>
+                        </h1>
+
                     </div>
+
                 </motion.div>
 
                 {/* Trade Rail Container - manu-green styling */}
