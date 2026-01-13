@@ -73,7 +73,7 @@ const HeroSection = ({ isMobile, user }) => {
                 playsInline
                 autoPlay
             >
-                <source src="/videos/1.mp4" type="video/mp4" />
+                <source src="/videos/005.mp4" type="video/mp4" />
 
                 Your browser does not support video.
             </video>
@@ -144,7 +144,7 @@ const HeroSection = ({ isMobile, user }) => {
                                         transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.3 }
                                     }
                                 }}
-                                className="overflow-hidden"
+                                className=""
                             >
                                 & Compliance
                             </motion.div>
