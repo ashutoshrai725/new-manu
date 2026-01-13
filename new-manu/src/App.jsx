@@ -8,6 +8,7 @@ import DocumentUploadPage from './components/Upload/DocumentUploadPage.jsx';
 import AIAgentPage from './components/AIAgent/AIAgentPage.jsx';
 import AIAgent2Page from './components/AIAgent/AIAgent2Page.jsx';
 import LoadingSpinner from './components/common/LoadingSpinner.jsx'; // You can create this component
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL || import.meta.env.REACT_APP_SUPABASE_URL,
