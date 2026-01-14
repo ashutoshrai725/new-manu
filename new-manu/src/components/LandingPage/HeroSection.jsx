@@ -73,13 +73,13 @@ const HeroSection = ({ isMobile, user }) => {
                 playsInline
                 autoPlay
             >
-                <source src="/videos/005.mp4" type="video/mp4" />
+                <source src="/videos/90.mp4" type="video/mp4" />
 
                 Your browser does not support video.
             </video>
 
             {/* ✅ DARK OVERLAY */}
-            <div className="absolute inset-0 bg-black/80" />
+            <div className="absolute inset-0 bg-black/50" />
 
             {/* ✅ Hero Content */}
             <div className="relative z-20 flex flex-col lg:flex-row items-center justify-start min-h-screen w-full px-4 sm:px-6 lg:px-12 py-6 mt-8">
