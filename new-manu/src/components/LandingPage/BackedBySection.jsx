@@ -179,7 +179,7 @@ const BackedBySection = () => {
                 >
 
 
-                    <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-manu-green mb-4 md:mb-6 px-2">
+                    <h2 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-manu-green mb-4 md:mb-6 px-2">
                         Backed By <span className="text-transparent bg-clip-text bg-manu-green">Excellence</span>
                     </h2>
 
