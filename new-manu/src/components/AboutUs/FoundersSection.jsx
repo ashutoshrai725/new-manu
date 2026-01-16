@@ -74,7 +74,7 @@ I believe that when we simplify compliance and documentation, we unlock human po
                 linkedin: "https://www.linkedin.com/in/mohitjangirworks/",
                 twitter: "https://x.com/mohiit_jangid",
                 instagram: "https://www.instagram.com/mohiit.jangid/",
-                email: "mohitjangirworks@gmail.com"
+                email: "mohitjangidworks@gmail.com"
             },
             photoPosition: "left"
         },
