@@ -52,7 +52,7 @@ My approach to problem solving has always been rooted in first understanding the
 I believe that with deep research, clear thinking, and the right technological advancements, every complex problem can be broken down and solved step by step. ManuDocs is a reflection of that belief.`,
             socials: {
                 linkedin: "https://www.linkedin.com/in/ashutoshrai725/",
-                twitter: "https://x.com/mohiit_jangid",
+                twitter: "https://x.com/AshutoshRa77518",
                 instagram: "https://www.instagram.com/a5hutoshrai/",
                 email: "ashutoshrai7205@gmail.com"
             },
@@ -73,7 +73,7 @@ I believe that when we simplify compliance and documentation, we unlock human po
             socials: {
                 linkedin: "https://www.linkedin.com/in/mohitjangirworks/",
                 twitter: "https://x.com/mohiit_jangid",
-                instagram: "https://www.instagram.com/mohitjangirworks/",
+                instagram: "https://www.instagram.com/mohiit.jangid/",
                 email: "mohitjangirworks@gmail.com"
             },
             photoPosition: "left"
@@ -92,7 +92,7 @@ ManuDocs bridges this gap. We're building systems that democratize access to wor
 Our goal is operational excellence – where every document is perfect, every deadline is met, and every shipment clears customs smoothly.`,
             socials: {
                 linkedin: "https://www.linkedin.com/in/rudrra-purohit-4a59a1312/",
-                twitter: "https://www.instagram.com/rudrra_purohit/",
+                twitter: "https://x.com/rudrapurohit72",
                 instagram: "https://www.instagram.com/rudrra_purohit/",
                 email: "rudrapurohit72@gmail.com"
             },

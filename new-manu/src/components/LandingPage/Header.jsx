@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, User, LogOut, Settings, HelpCircle, Phone, Mail, MessageCircle, ChevronDown, ExternalLink, Sun, Moon } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings, HelpCircle, Phone, Mail, MessageCircle, ChevronDown, ExternalLink, Sun, Moon, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Info } from 'lucide-react';
-
 
 const Header = ({ user, onLogout }) => {
     const navigate = useNavigate();
@@ -11,11 +9,10 @@ const Header = ({ user, onLogout }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [infoVisible, setInfoVisible] = useState(null);
-    const [darkMode, setDarkMode] = useState(true); // Default to dark mode
+    const [darkMode, setDarkMode] = useState(true);
     const profileRef = useRef(null);
     const helpRef = useRef(null);
     const contactRef = useRef(null);
-
 
     // Close mobile menu when route changes
     useEffect(() => {
@@ -99,8 +96,8 @@ const Header = ({ user, onLogout }) => {
                 <div className="px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
 
-                        {/* Logo Section */}
-                        <div className="flex items-center space-x-3">
+                        {/* Logo Section with Info Icon on Mobile */}
+                        <div className="flex items-center space-x-2">
                             <button
                                 onClick={() => navigate('/')}
                                 className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 rounded-xl p-2 transition-all duration-200 hover:scale-105"
@@ -120,6 +117,15 @@ const Header = ({ user, onLogout }) => {
                                     </span>
                                     <span className="text-xs text-gray-400 font-medium -mt-1"></span>
                                 </div>
+                            </button>
+
+                            {/* About Us Icon - Mobile Only */}
+                            <button
+                                onClick={() => navigate('/about_us')}
+                                className="lg:hidden p-4 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-green-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
+                                aria-label="About Us"
+                            >
+                                <Info size={18} />
                             </button>
                         </div>
 
@@ -149,9 +155,6 @@ const Header = ({ user, onLogout }) => {
                                 <span>Upload Docs</span>
                             </button>
 
-
-
-
                             <Link
                                 to="/about_us"
                                 className="flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 hover:bg-gray-800 hover:text-green-400 transition-all duration-200"
@@ -159,8 +162,6 @@ const Header = ({ user, onLogout }) => {
                                 <Info size={16} />
                                 <span>About Us</span>
                             </Link>
-
-
 
                             {/* Contact Dropdown */}
                             <div className="relative" ref={contactRef}>
@@ -318,9 +319,6 @@ const Header = ({ user, onLogout }) => {
                                 >
                                     Upload Documents
                                 </button>
-
-
-
 
                                 <button
                                     onClick={() => setInfoVisible('contact')}
