@@ -82,14 +82,17 @@ I believe that when we simplify compliance and documentation, we unlock human po
             name: "Rudra Purohit",
             role: "Co-Founder & COO",
             image: "https://i.postimg.cc/N06jqFmg/1000071098.jpg",
-            quote: "Simplifying global trade operations",
-            bio: `Operations and logistics have been my forte for over a decade. I've witnessed firsthand the pain points exporters face daily.
+            quote: "I Question Assumptions and Build with Intent.",
+            bio: `I see the world through observation...how systems function, how value is created, and why execution fails more often than vision. Growing up, dhanda was a word used casually in my family, but over time it became central to how I think about building anything meaningful.
 
-Documentation delays, compliance rejections, and operational inefficiencies create massive bottlenecks. Small and medium enterprises suffer the most, often lacking resources for dedicated compliance teams.
+            That way of thinking naturally pulled me toward understanding people how they think, how decisions are made, and how real knowledge is formed through practice rather than assumptions. For me, identifying a problem is only the beginning. What matters equally is explaining it clearly, earning trust around it, and taking responsibility for how it is carried forward. Sales, partnerships, and growth are not separate functions in my mind they are ways of validating whether a solution actually works in the real world. At the same time, understanding how processes operate on the ground is essential, because growth without operational clarity only scales confusion.
 
-ManuDocs bridges this gap. We're building systems that democratize access to world-class compliance tools, making global trade accessible to businesses of all sizes.
+            This perspective also shapes how I view the trade industry. I believe meaningful change comes from those who enter an industry with fresh eyes and question accepted norms, not from those who understand every loop but grow comfortable saying, “this is how it works.” Knowing the system explains problems; challenging assumptions creates progress.
 
-Our goal is operational excellence – where every document is perfect, every deadline is met, and every shipment clears customs smoothly.`,
+            ManuDocs emerged from this way of thinking. Our North Star is to bring clarity, structure, and trust to a trade ecosystem that has long operated through fragmentation and manual effort. Our aim is to make export and import processes as clear and accessible as operating in the domestic market by increasing transparency, reducing dependency, and removing unnecessary complexity. We focus on building systems that work within real world constraints and are practical to adopt, rather than imagining solutions disconnected from how trade actually functions today.
+
+            I believe meaningful progress comes from asking the right questions, respecting reality, and executing with discipline. When trade systems become clearer and more reliable, businesses operate with greater confidence and that strength compounds at a national level. ManuDocs is being built with this mindset: strengthening self reliance through better systems, reducing dependency through clarity, and contributing to a more resilient and capable trade ecosystem over time.
+`,
             socials: {
                 linkedin: "https://www.linkedin.com/in/rudrra-purohit-4a59a1312/",
                 twitter: "https://x.com/rudrapurohit72",
