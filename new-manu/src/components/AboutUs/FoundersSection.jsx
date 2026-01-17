@@ -14,7 +14,7 @@ const FoundersSection = () => {
     const founders = [
         {
             name: "Sumit Singh Rahar",
-            role: "Co-Founder & CEO",
+            role: "Founder & CEO",
             image: "https://i.postimg.cc/Gm2kGrQz/rkic3.jpg",
             quote: "I don’t build for quarters or years...I build systems meant to shape nations, industries, and governments over decades",
             bio: `I am a long term thinker and a visionary observer who plans in decades, not years. My work is driven by the belief that nations are not transformed by shortterm products, but by systems that reshape how people, industries, and governments operate together.
