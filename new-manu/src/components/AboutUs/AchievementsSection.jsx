@@ -19,9 +19,42 @@ const AchievementsSection = () => {
             title: "MOPSW",
             image: "https://i.postimg.cc/2yQTLmW2/mopsw.jpg"
         },
+
         {
-            title: "MoPSW Director Meeting",
+            title: "OPESH SHARMA SIR - MoPSW Director Meeting",
             image: "https://i.postimg.cc/tJ3Dny6h/mopsw_opesh_sh_arma_sir.jpg"
+        },
+        {
+            title: "South Park Commons",
+            image: "https://i.postimg.cc/ZYBDTMw4/SPCs.jpg"
+        },
+        {
+            title: "Rakesh Verma Sir - MAPPLS",
+            image: "https://i.postimg.cc/nVjwHP3n/MAPPLS.jpg"
+        },
+        {
+            title: "Ishan Bansal - Groww",
+            image: "https://i.postimg.cc/v8gSQN0Z/ISHAN_SIR_GROWW.jpg"
+        },
+        {
+            title: "Kanwal Rekhi Sir - TIE GLOBAL, INVENTUS CAPITAL PARTNERS",
+            image: "https://i.postimg.cc/VsrHYVKs/TIE_GLOBAL_KANWAL_REKHI_SIR.jpg"
+        },
+        {
+            title: "Phanindra Sama - RedBus",
+            image: "https://i.postimg.cc/SQ2tyvgy/REDBUS.jpg"
+        },
+        {
+            title: "CO-WORKING in BITS Pilani",
+            image: "https://i.postimg.cc/Bt9z0SxZ/office.jpg"
+        },
+        {
+            title: "Shailendra Nath Jha - INVENTION ENGINE",
+            image: "https://i.postimg.cc/CL8y6tjx/Whats_App_Image_2026_01_17_at_1_22_36_PM.jpg"
+        },
+        {
+            title: "PW EXPERTS",
+            image: "https://i.postimg.cc/KvTXsVnc/Whats_App_Image_2026_01_17_at_1_24_43_PM.jpg"
         },
         {
             title: "Sagarmala Office Visit",
@@ -56,7 +89,7 @@ const AchievementsSection = () => {
             image: "https://i.postimg.cc/dQj8C5Xk/Screenshot_2025_11_21_171344.png"
         },
         {
-            title: "Strategic Advisory from Mao Sir",
+            title: "Strategic Advisory from Mao Sir-COMVIVA",
             image: "https://i.postimg.cc/Zqv8y4tF/Screenshot_2025_11_28_093557.png"
         },
         {
@@ -64,7 +97,7 @@ const AchievementsSection = () => {
             image: "https://i.postimg.cc/wjG15FHz/Whats_App_Image_2025_10_30_at_14_10_21_7e2b9f1b.jpg"
         },
         {
-            title: "Team Meeting",
+            title: "CONCOR DRY PORT BLR",
             image: "https://i.postimg.cc/bJYfs9nn/IMG_20251030_WA0714.jpg"
         },
         {

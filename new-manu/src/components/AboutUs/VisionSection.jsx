@@ -43,7 +43,7 @@ const VisionSection = () => {
                         {/* Main Vision Statement - Hero */}
                         <div className="bg-gradient-to-r from-blue-600/20 to-manu-green/20 border-l-4 border-manu-green p-4 md:p-6 rounded-r-xl">
                             <p className="text-base md:text-xl lg:text-2xl text-white leading-relaxed font-bold mb-2">
-                                Making India a global trade powerhouse
+                                Making India a GLOBAL TRADE POWERHOUSE
                             </p>
                             <p className="text-sm md:text-lg lg:text-xl text-gray-200 leading-relaxed font-semibold">
                                 Transforming India from a trade-deficit nation into a trade-surplus nation.
@@ -68,7 +68,7 @@ const VisionSection = () => {
                                     AI-Driven Discovery
                                 </h3>
                                 <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
-                                    Access globally trusted buyers through deep AI research, personalized insights, and intelligent product-buyer matching.
+                                    Access globally trusted buyers through deep AI research, personalized insights, and intelligent product-buyer matching and reducing dependency from a single nation for exports.
                                 </p>
                             </div>
 
@@ -78,7 +78,7 @@ const VisionSection = () => {
                                     One-Click Exports
                                 </h3>
                                 <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
-                                    Any business — small or large — can export securely, compliantly, and effortlessly with a single click.
+                                    Any business — small or large — can export securely, compliantly, and effortlessly with a single click and compliantly with all the government regulations and compliances.
                                 </p>
                             </div>
                         </div>

@@ -74,14 +74,14 @@ I believe that when we simplify compliance and documentation, we unlock human po
                 linkedin: "https://www.linkedin.com/in/mohitjangirworks/",
                 twitter: "https://x.com/mohiit_jangid",
                 instagram: "https://www.instagram.com/mohiit.jangid/",
-                email: "mohitjangidworks@gmail.com"
+                email: "mohitjangirworks@gmail.com"
             },
             photoPosition: "left"
         },
         {
             name: "Rudra Purohit",
             role: "Co-Founder & COO",
-            image: "https://i.postimg.cc/BvZQXQBZ/rudra.png",
+            image: "https://i.postimg.cc/N06jqFmg/1000071098.jpg",
             quote: "Simplifying global trade operations",
             bio: `Operations and logistics have been my forte for over a decade. I've witnessed firsthand the pain points exporters face daily.
 
