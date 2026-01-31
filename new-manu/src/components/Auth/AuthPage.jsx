@@ -15,7 +15,9 @@ const AuthPage = ({ onUserAuth }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const [session, setSession] = useState(null);
+    const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
     // Form data
     const [formData, setFormData] = useState({
@@ -81,9 +83,12 @@ const AuthPage = ({ onUserAuth }) => {
             ...prev,
             [name]: value
         }));
-        // Clear error when user starts typing
+        // Clear error and success message when user starts typing
         if (error) {
             setError('');
+        }
+        if (successMessage) {
+            setSuccessMessage('');
         }
     };
 
@@ -138,6 +143,16 @@ const AuthPage = ({ onUserAuth }) => {
                 });
 
                 if (error) throw error;
+
+                // Show success dialog
+                setShowSuccessDialog(true);
+                setLoading(false);
+
+                // Dialog will auto-close and navigation will happen via auth state change
+                setTimeout(() => {
+                    setShowSuccessDialog(false);
+                }, 2000);
+                return;
             } else {
                 // Signup with custom metadata
                 const { data, error } = await supabase.auth.signUp({
@@ -394,6 +409,13 @@ const AuthPage = ({ onUserAuth }) => {
                         )}
                     </div>
 
+                    {/* Success Message */}
+                    {successMessage && (
+                        <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md text-sm" role="alert">
+                            {successMessage}
+                        </div>
+                    )}
+
                     {/* Error Message */}
                     {error && (
                         <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm" role="alert">
@@ -429,6 +451,40 @@ const AuthPage = ({ onUserAuth }) => {
                     </div>
                 </form>
             </div>
+
+            {/* Success Dialog */}
+            {showSuccessDialog && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fadeIn">
+                    <div className="bg-white rounded-lg shadow-2xl p-8 max-w-sm w-full mx-4 transform animate-scaleIn">
+                        <div className="text-center">
+                            {/* Success Icon */}
+                            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+                                <svg
+                                    className="h-10 w-10 text-green-600"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M5 13l4 4L19 7"
+                                    />
+                                </svg>
+                            </div>
+
+                            {/* Success Message */}
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                                Sign In Successful!
+                            </h3>
+                            <p className="text-gray-600">
+                                Welcome back! Redirecting you to the dashboard...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

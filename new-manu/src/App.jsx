@@ -121,12 +121,12 @@ function App() {
 
           <Route
             path="/about_us"
-            element={<AboutUs />}
+            element={<AboutUs user={user} onLogout={handleLogout} />}
           />
 
           <Route
             path="/about_us/:section"
-            element={<AboutUs />}
+            element={<AboutUs user={user} onLogout={handleLogout} />}
           />
 
           {/* Auth Page - Only accessible when not logged in */}

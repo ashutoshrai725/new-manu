@@ -10,6 +10,7 @@ const Header = ({ user, onLogout }) => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [infoVisible, setInfoVisible] = useState(null);
     const [darkMode, setDarkMode] = useState(true);
+    const [showSignOutDialog, setShowSignOutDialog] = useState(false);
     const profileRef = useRef(null);
     const helpRef = useRef(null);
     const contactRef = useRef(null);
@@ -66,11 +67,21 @@ const Header = ({ user, onLogout }) => {
         setInfoVisible(null);
     };
 
+
+    const handleSignOutClick = () => {
+        setShowSignOutDialog(true);
+    };
+
     const handleLogout = async () => {
+        setShowSignOutDialog(false);
         setIsProfileOpen(false);
         setIsMenuOpen(false);
         setInfoVisible(null);
         await onLogout();
+    };
+
+    const handleCancelSignOut = () => {
+        setShowSignOutDialog(false);
     };
 
     const getUserDisplayName = () => {
@@ -240,7 +251,7 @@ const Header = ({ user, onLogout }) => {
                                             <hr className="border-gray-700" />
 
                                             <button
-                                                onClick={handleLogout}
+                                                onClick={handleSignOutClick}
                                                 className="flex items-center space-x-3 w-full px-4 py-3 text-left text-sm text-red-400 hover:bg-red-900/20 transition-all duration-200 focus:outline-none"
                                             >
                                                 <LogOut size={16} />
@@ -333,7 +344,7 @@ const Header = ({ user, onLogout }) => {
                                                 Profile & Settings
                                             </button>
                                             <button
-                                                onClick={handleLogout}
+                                                onClick={handleSignOutClick}
                                                 className="block w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-red-400 bg-red-900/20 hover:bg-red-900/30 transition-all duration-200"
                                             >
                                                 Sign out
@@ -405,6 +416,44 @@ const Header = ({ user, onLogout }) => {
                                 </div>
                             </div>
                         )}
+                    </div>
+                </div>
+            )}
+
+            {/* Sign Out Confirmation Dialog */}
+            {showSignOutDialog && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fadeIn">
+                    <div className="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform animate-scaleIn border border-gray-700">
+                        <div className="text-center">
+                            {/* Warning Icon */}
+                            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-900/30 mb-4">
+                                <LogOut className="h-8 w-8 text-red-400" />
+                            </div>
+
+                            {/* Question */}
+                            <h3 className="text-2xl font-bold text-white mb-2">
+                                Sign Out?
+                            </h3>
+                            <p className="text-gray-400 mb-6">
+                                Do you want to sign out from your account?
+                            </p>
+
+                            {/* Action Buttons */}
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={handleCancelSignOut}
+                                    className="flex-1 px-6 py-3 rounded-xl text-sm font-semibold bg-gray-700 text-gray-300 hover:bg-gray-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleLogout}
+                                    className="flex-1 px-6 py-3 rounded-xl text-sm font-semibold bg-red-600 text-white hover:bg-red-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                >
+                                    Yes, Sign Out
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}

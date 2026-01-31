@@ -7,7 +7,7 @@ import VisionSection from './VisionSection';
 import FoundersSection from './FoundersSection';
 import AchievementsSection from './AchievementsSection';
 
-const AboutUs = () => {
+const AboutUs = ({ user, onLogout }) => {
     const { section } = useParams();
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const AboutUs = () => {
     return (
         <div className="bg-black min-h-screen text-white">
             {/* Header */}
-            <Header />
+            <Header user={user} onLogout={onLogout} />
 
             {/* Main container - Mobile compact spacing */}
             <div className="pt-24 md:pt-32 px-4 md:px-8 lg:px-12 pb-8 md:pb-12 space-y-8 md:space-y-16">

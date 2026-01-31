@@ -1,23 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Play, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import EarthBackground from './EarthBackground';
 
 const HeroSection = ({ isMobile, user }) => {
     const navigate = useNavigate();
     const [showAuthPrompt, setShowAuthPrompt] = useState(false);
-    const videoRef = useRef(null);
-
-    // Video autoplay
-    useEffect(() => {
-        if (videoRef.current) {
-            videoRef.current.muted = true;
-            videoRef.current.playsInline = true;
-            videoRef.current
-                .play()
-                .catch(() => { });
-        }
-    }, [isMobile]);
 
     const handleNavigation = (path, requiresAuth = false) => {
         if (requiresAuth && !user) {
@@ -63,23 +52,12 @@ const HeroSection = ({ isMobile, user }) => {
     };
 
     return (
-        <section className="relative min-h-screen w-full overflow-hidden">
-            {/* ✅ VIDEO BACKGROUND */}
-            <video
-                ref={videoRef}
-                className="absolute inset-0 w-full h-full object-cover"
-                loop
-                muted
-                playsInline
-                autoPlay
-            >
-                <source src="/videos/90.mp4" type="video/mp4" />
+        <section className="relative min-h-screen w-full overflow-hidden bg-black">
+            {/* ✅ INTERACTIVE 3D EARTH BACKGROUND - SEO Friendly */}
+            <EarthBackground />
 
-                Your browser does not support video.
-            </video>
-
-            {/* ✅ DARK OVERLAY */}
-            <div className="absolute inset-0 bg-black/50" />
+            {/* Subtle dark overlay for better text readability */}
+            <div className="absolute inset-0 bg-black/40 z-10" />
 
             {/* ✅ Hero Content */}
             <div className="relative z-20 flex flex-col lg:flex-row items-center justify-start min-h-screen w-full px-4 sm:px-6 lg:px-12 py-6 mt-8">
