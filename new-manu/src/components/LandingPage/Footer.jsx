@@ -168,7 +168,7 @@ const Footer = () => {
     ];
 
     const stats = [
-        { number: '100%', label: 'Accuracy' },
+        { number: '99%', label: 'Accuracy' },
         { number: '24/7', label: 'Support' },
         { number: '50+', label: 'Countries' },
         { number: '10x', label: 'Faster' }
