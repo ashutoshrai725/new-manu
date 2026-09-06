@@ -13,37 +13,14 @@ const FoundersSection = () => {
 
     const founders = [
         {
-            name: "Sumit Singh Rahar",
-            role: "Founder & CEO",
-            image: "https://i.postimg.cc/Gm2kGrQz/rkic3.jpg",
-            quote: "I don’t build for quarters or years...I build systems meant to shape nations, industries, and governments over decades",
-            bio: `I am a long term thinker and a visionary observer who plans in decades, not years. My work is driven by the belief that nations are not transformed by shortterm products, but by systems that reshape how people, industries, and governments operate together.
-
-I naturally observe systems and structures—how people behave, how societies evolve, how cultures and religions influence decision making, how nations rise or fall through politics, geopolitics, philosophy, and technology. This deep curiosity across disciplines allows me to see patterns others miss and design solutions that are not limited to one industry or one moment in time.
-
-By temperament, I am introverted with the unknown and extroverted with the known. I prefer deep thinking over noise, clarity over speed, and structured execution over hype. This balance helps me operate both as a strategic planner and a hands on builder.
-
-From class 11, I began conceptualizing a platform with a single ambition: to transform the manufacturing ecosystem at a national and global level. That vision was named Manuverse—short for Manufacturing Universe—an ecosystem designed to strengthen manufacturing, trade, and economic resilience across nations.
-
-With mentorship and strategic guidance, I deliberately narrowed this vision into a focused, execution ready platform-ManuDocs. Instead of attempting to solve everything at once, ManuDocs was created to solve one critical bottleneck first, and then expand systematically. This approach reflects how real infrastructure is built: layer by layer, problem by problem, nation by nation.`,
-            socials: {
-                linkedin: "https://www.linkedin.com/in/sumit-singh-rahar/",
-                twitter: "https://twitter.com/founder1",
-                instagram: "https://www.instagram.com/sumitrahar2025?igsh=Zmc2MHg2cTJldTI5",
-                email: "rahar1919sumit@gmail.com"
-            },
-            photoPosition: "left"
-        },
-        {
             name: "Ashutosh Rai",
-            role: "Co-Founder & CTO",
+            role: "Founder",
             image: "https://i.postimg.cc/9fXFrFYW/ashutoshrai.png",
             quote: "Empowering MSMEs with the right technology isn’t just business...it’s how economies grow and nations move forward",
             bio: `I believe in understanding problems at their deepest level and then building solutions that solve the entire challenge in a simple, intuitive, and user friendly way. From a very young age, I’ve been deeply fascinated by technology...not just using digital systems, but exploring how they actually work beneath the surface.
 
 I’ve always enjoyed diving into emerging technologies and studying how they can disrupt existing industries and create entirely new ecosystems. When I talk about building ecosystems, that’s where ManuDocs comes into the picture. Along with my co-founder, I’m building ManuDocs to create a unified trade ecosystem that connects every stakeholder involved in global trade, while eliminating delays, fragmentation, and manual workflows.
 
-I’m a deep thinker by nature...largely introverted, but highly expressive and collaborative with people I trust. Long, in depth discussions with my co-founder, Sumit, eventually led to the birth of ManuDocs. What started as conversations around inefficiencies in trade gradually evolved into a shared mission: to build a unified digital trade ecosystem for India that empowers MSMEs and strengthens the country’s economic foundation.
 
 I strongly believe that the backbone of any nation’s economy lies in its MSMEs, businesses, and enterprises that export globally...bringing foreign capital into the country and strengthening the value of its currency. Empowering these businesses with the right technology is key to sustainable economic growth.
 
